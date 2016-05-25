@@ -14,7 +14,9 @@ public:
     // Default constructor of the lsit.
     linked_list() : adt_list()
     {
-        // STUB
+        list_size = 0;
+        list_head = nullptr;
+        list_tail = nullptr;
     }
     
     // Build a list based on a given array of elements.
