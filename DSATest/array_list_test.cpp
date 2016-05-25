@@ -246,7 +246,7 @@ namespace DSATest
             Assert::AreEqual((string)"String 7", test_list.get(5));
 
             test_list.clear();
-            // Testing remove(const T & element)
+            // Testing remove(const T & entry)
             for (size_t i = 0; i < 10; i++)
             {
                 test_list.add("String " + to_string(i));

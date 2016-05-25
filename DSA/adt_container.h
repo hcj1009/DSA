@@ -17,14 +17,14 @@ public:
     // Get the size of the container.
     virtual size_t size() const = 0;
 
-    // Add a given element to the container.
-    virtual void add(const T &element) = 0;
+    // Add a given entry to the container.
+    virtual void add(const T &entry) = 0;
 
-    // Remove all the elements from the list, and free the memory.
+    // Remove all the entries from the list, and free the memory.
     virtual void clear() = 0;
 
-    // Return if the list contains a given element.
-    virtual bool contains(const T &element) const = 0;
+    // Return if the list contains a given entry.
+    virtual bool contains(const T &entry) const = 0;
 };
 
 #endif

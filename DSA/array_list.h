@@ -30,7 +30,7 @@ private:
             / LOG2)) * BASE_CAPACITY;
     }
 
-    // Helper function to shift a range of elements starting at a
+    // Helper function to shift a range of entries starting at a
     // given index with a given displacement.
     void shift(const size_t &index, const ptrdiff_t &displacement)
     {
@@ -92,16 +92,16 @@ public:
         list_size = 0;
     }
 
-    // Build a list based on a given array of elements.
-    array_list(const T elements[], const size_t &size)
-        : adt_list(elements, size)
+    // Build a list based on a given array of entries.
+    array_list(const T entries[], const size_t &size)
+        : adt_list(entries, size)
     {
         list_capacity = capacity_of(size);
         list_data = new T[list_capacity];
         list_size = size;
         for (size_t i = 0; i < size; i++)
         {
-            list_data[i] = elements[i];
+            list_data[i] = entries[i];
         }
     }
 
@@ -112,7 +112,7 @@ public:
         list_data = new T[list_capacity];
         list_size = list.size();
         // TO-DO: Change the following code using iterator
-        // Create a shallow copy of each element in the given list.
+        // Create a shallow copy of each entry in the given list.
         /*
         for (size_t i = 0; i < list_size; i++)
         {
@@ -145,25 +145,25 @@ public:
         return list_capacity;
     }
 
-    // Add a given element to the container.
-    virtual void add(const T &element)
+    // Add a given entry to the container.
+    virtual void add(const T &entry)
     {
         shift(list_size, 1);
-        list_data[list_size - 1] = element;
+        list_data[list_size - 1] = entry;
     }
 
-    // Add a given element to a given index of the list.
-    virtual void add(const size_t &index, const T &element)
+    // Add a given entry to a given index of the list.
+    virtual void add(const size_t &index, const T &entry)
     {
         if (index > list_size)
         {
             throw out_of_range("Index out of range.");
         }
         shift(index, 1);
-        list_data[index] = element;
+        list_data[index] = entry;
     }
 
-    // Remove the element at a given index from the list.
+    // Remove the entry at a given index from the list.
     virtual void remove(const size_t &index)
     {
         if (index >= list_size)
@@ -173,14 +173,14 @@ public:
         shift(index + 1, -1);
     }
 
-    // Remove a given element from the list.
-    virtual void remove(const T &element)
+    // Remove a given entry from the list.
+    virtual void remove(const T &entry)
     {
-        size_t index = index_of(element);
+        size_t index = index_of(entry);
         remove(index);
     }
 
-    // Get the element at a given index.
+    // Get the entry at a given index.
     virtual T get(const size_t &index) const
     {
         if (index >= list_size)
@@ -190,33 +190,33 @@ public:
         return list_data[index];
     }
 
-    // Set the value of the element at a given index to a given element.
+    // Set the value of the entry at a given index to a given entry.
     // Throw out_of_range exception.
-    virtual void set(const size_t &index, const T &element)
+    virtual void set(const size_t &index, const T &entry)
     {
         if (index >= list_size)
         {
             throw out_of_range("Index out of range.");
         }
-        list_data[index] = element;
+        list_data[index] = entry;
     }
 
-    // Get the index of a given element.
-    // Throw no_such_element exception when the given element is not found.
-    virtual size_t index_of(const T &element) const
+    // Get the index of a given entry.
+    // Throw no_such_element exception when the given entry is not found.
+    virtual size_t index_of(const T &entry) const
     {
         for (size_t i = 0; i < list_size; i++)
         {
-            if (list_data[i] == element)
+            if (list_data[i] == entry)
             {
                 return i;
             }
         }
-        throw no_such_element("Cannot get the index of an element that \
+        throw no_such_element("Cannot get the index of an entry that \
 is not in the list.");
     }
 
-    // Remove all the elements from the list, and free the memory.
+    // Remove all the entries from the list, and free the memory.
     virtual void clear()
     {
         delete[] list_data;
@@ -225,13 +225,13 @@ is not in the list.");
         list_size = 0;
     }
 
-    // Return if the list contains a given element.
-    virtual bool contains(const T &element) const
+    // Return if the list contains a given entry.
+    virtual bool contains(const T &entry) const
     {
         size_t index = 0;
         try
         {
-            index = index_of(element);
+            index = index_of(entry);
         }
         catch (no_such_element exception)
         {

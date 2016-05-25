@@ -22,8 +22,10 @@
     <ClInclude Include="adt_container.h" />
     <ClInclude Include="adt_list.h" />
     <ClInclude Include="array_list.h" />
-    <ClInclude Include="linked_list.h" />
+    <ClInclude Include="d_node.h" />
+    <ClInclude Include="s_linked_list.h" />
     <ClInclude Include="node.h" />
+    <ClInclude Include="s_node.h" />
     <ClInclude Include="no_such_element.h" />
     <ClInclude Include="sort.h" />
   </ItemGroup>
