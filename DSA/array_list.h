@@ -18,21 +18,21 @@ private:
     // Natural log 2, used in function capacity_of(const size_t &)
     const double LOG2 = 0.6931471805599453;
 
-    T * list_data;
+    T *list_data;
     size_t list_size;
     size_t list_capacity;
 
     // Helper function to determine the capacity needed to hold a
     // given size of list.
-    size_t capacity_of(const size_t & size)
+    size_t capacity_of(const size_t &size)
     {
-        return (size_t) pow(2, ceil(log((double) size / BASE_CAPACITY) \
+        return (size_t)pow(2, ceil(log((double) size / BASE_CAPACITY) \
             / LOG2)) * BASE_CAPACITY;
     }
 
     // Helper function to shift a range of elements starting at a
     // given index with a given displacement.
-    void shift(const size_t & index, const ptrdiff_t & displacement)
+    void shift(const size_t &index, const ptrdiff_t &displacement)
     {
         if (displacement == 0)
         {
@@ -51,7 +51,7 @@ than 0 after shifting.");
         if (new_capacity > list_capacity)
         {
             list_capacity = new_capacity;
-            T * new_data = new T[list_capacity];
+            T *new_data = new T[list_capacity];
             for (size_t i = 0; i < list_size; i++)
             {
                 if (i < index)
@@ -66,7 +66,7 @@ than 0 after shifting.");
             delete[] list_data;
             list_data = new_data;
         }
-        else if ((displacement > 0) && (list_size >= 1))  // shifting right
+        else if ((displacement > 0) &&(list_size >= 1))  // shifting right
         {
             for (size_t i = list_size - 1; i >= index; i--)
             {
@@ -93,7 +93,7 @@ public:
     }
 
     // Build a list based on a given array of elements.
-    array_list(const T elements[], const size_t & size)
+    array_list(const T elements[], const size_t &size)
         : adt_list(elements, size)
     {
         list_capacity = capacity_of(size);
@@ -106,7 +106,7 @@ public:
     }
 
     // Build a list based on a given list.
-    array_list(const array_list<T, BASE_CAPACITY> & list) : adt_list(list)
+    array_list(const array_list<T, BASE_CAPACITY> &list) : adt_list(list)
     {
         list_capacity = list.capacity();
         list_data = new T[list_capacity];
@@ -146,14 +146,14 @@ public:
     }
 
     // Add a given element to the container.
-    virtual void add(const T & element)
+    virtual void add(const T &element)
     {
         shift(list_size, 1);
         list_data[list_size - 1] = element;
     }
 
     // Add a given element to a given index of the list.
-    virtual void add(const size_t & index, const T & element)
+    virtual void add(const size_t &index, const T &element)
     {
         if (index > list_size)
         {
@@ -164,7 +164,7 @@ public:
     }
 
     // Remove the element at a given index from the list.
-    virtual void remove(const size_t & index)
+    virtual void remove(const size_t &index)
     {
         if (index >= list_size)
         {
@@ -174,14 +174,14 @@ public:
     }
 
     // Remove a given element from the list.
-    virtual void remove(const T & element)
+    virtual void remove(const T &element)
     {
         size_t index = index_of(element);
         remove(index);
     }
 
     // Get the element at a given index.
-    virtual T get(const size_t & index) const
+    virtual T get(const size_t &index) const
     {
         if (index >= list_size)
         {
@@ -192,7 +192,7 @@ public:
 
     // Set the value of the element at a given index to a given element.
     // Throw out_of_range exception.
-    virtual void set(const size_t & index, const T & element)
+    virtual void set(const size_t &index, const T &element)
     {
         if (index >= list_size)
         {
@@ -203,7 +203,7 @@ public:
 
     // Get the index of a given element.
     // Throw no_such_element exception when the given element is not found.
-    virtual size_t index_of(const T & element) const
+    virtual size_t index_of(const T &element) const
     {
         for (size_t i = 0; i < list_size; i++)
         {
@@ -226,7 +226,7 @@ is not in the list.");
     }
 
     // Return if the list contains a given element.
-    virtual bool contains(const T & element) const
+    virtual bool contains(const T &element) const
     {
         size_t index = 0;
         try

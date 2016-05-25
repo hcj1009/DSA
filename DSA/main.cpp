@@ -4,10 +4,10 @@
 
 using namespace std;
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
     string test_array[100];
-    for (int i = 0; i < 100; i++)
+    for (size_t i = 0; i < 100; i++)
     {
         test_array[i] = to_string(i);
     }

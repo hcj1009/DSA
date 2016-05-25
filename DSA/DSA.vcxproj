@@ -19,10 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="adt_bag.h" />
     <ClInclude Include="adt_container.h" />
     <ClInclude Include="adt_list.h" />
-    <ClInclude Include="array_bag.h" />
     <ClInclude Include="array_list.h" />
     <ClInclude Include="linked_list.h" />
     <ClInclude Include="node.h" />

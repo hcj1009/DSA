@@ -7,16 +7,16 @@ class node
 {
 private:
     T node_data;
-    node<T> * node_next;
+    node<T> *node_next;
 
 public:
-    node(const T & data)
+    node(const T &data)
     {
         node_data = data;
         node_next = nullptr;
     }
 
-    node(const T & data, const node<T> & next)
+    node(const T &data, const node<T> &next)
     {
         node_data = data;
         node_next = next;
@@ -27,7 +27,7 @@ public:
         return node_data;
     }
 
-    virtual void set_data(const T & data)
+    virtual void set_data(const T &data)
     {
         node_data = data;
     }
@@ -37,7 +37,7 @@ public:
         return node_next;
     }
 
-    virtual void set_next(const node<T> & next)
+    virtual void set_next(const node<T> &next)
     {
         node_next = next;
     }

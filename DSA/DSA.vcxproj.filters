@@ -18,12 +18,6 @@
     <ClInclude Include="sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="adt_bag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="array_bag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="no_such_element.h">
       <Filter>Header Files</Filter>
     </ClInclude>
