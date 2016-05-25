@@ -32,7 +32,7 @@ public:
         node_data = data;
     }
 
-    virtual s_node<T> *next() const
+    virtual s_node<T> *&next()
     {
         return node_next;
     }

@@ -6,15 +6,10 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+    s_linked_list<string> test_list;
+    test_list.clear();
 
-    string test_array[100];
-    for (size_t i = 0; i < 100; i++)
-    {
-        test_array[i] = to_string(i);
-    }
-
-    s_linked_list<string> list;
-    s_linked_list<string> list2(test_array, 100);
+    test_list.add(0, "");
 
     system("pause");
     return 0;

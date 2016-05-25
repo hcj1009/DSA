@@ -34,7 +34,7 @@ private:
     // given index with a given displacement.
     void shift(const size_t &index, const ptrdiff_t &displacement)
     {
-        if (displacement == 0)
+        if (0 == displacement)
         {
             return;
         }
@@ -125,12 +125,13 @@ public:
     virtual ~array_list()
     {
         delete[] list_data;
+        list_data = nullptr;
     }
 
     // Return if the container is empty.
     virtual bool empty() const
     {
-        return (list_size == 0);
+        return (0 == list_size);
     }
 
     // Get the size of the list.
@@ -207,7 +208,7 @@ public:
     {
         for (size_t i = 0; i < list_size; i++)
         {
-            if (list_data[i] == entry)
+            if (entry == list_data[i])
             {
                 return i;
             }
@@ -228,10 +229,9 @@ is not in the list.");
     // Return if the list contains a given entry.
     virtual bool contains(const T &entry) const
     {
-        size_t index = 0;
         try
         {
-            index = index_of(entry);
+            index_of(entry);
         }
         catch (no_such_element exception)
         {
