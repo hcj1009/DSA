@@ -16,7 +16,7 @@ public:
     {
         // STUB
     }
-
+    
     // Build a list based on a given array of elements.
     linked_list(const T elements[], const size_t & size)
         : adt_list(element, size)
