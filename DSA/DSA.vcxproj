@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="adt_container.h" />
     <ClInclude Include="adt_list.h" />
+    <ClInclude Include="adt_queue.h" />
     <ClInclude Include="adt_stack.h" />
     <ClInclude Include="array_list.h" />
     <ClInclude Include="array_stack.h" />
