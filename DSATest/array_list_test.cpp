@@ -63,7 +63,7 @@ namespace DSATest
             array_list<string> test_list;
 
             Assert::IsTrue(test_list.empty());
-            test_list.add("List");
+            test_list.add("String");
             Assert::IsFalse(test_list.empty());
         }
 
@@ -221,31 +221,69 @@ namespace DSATest
         {
             array_list<string> test_list;
 
-            // Testing remove(const size_t & index)
+            // Test exceptions.
+            Assert::ExpectException<out_of_range>([&test_list]
+            {
+                (&test_list)->remove(0);
+            });
+            Assert::ExpectException<out_of_range>([&test_list]
+            {
+                (&test_list)->remove(10);
+            });
+            Assert::ExpectException<out_of_range>([&test_list]
+            {
+                (&test_list)->remove(-1);
+            });
+
+            Assert::IsTrue(test_list.empty());
+            Assert::AreEqual((size_t)0, test_list.size());
+
             for (size_t i = 0; i < 10; i++)
             {
                 test_list.add("String " + to_string(i));
             }
             Assert::AreEqual((size_t)10, test_list.size());
 
-            test_list.remove(0);
+            // Case when removing the first entry from the list.
+            Assert::AreEqual((string)"String 0", test_list.remove(0));
             Assert::AreEqual((size_t)9, test_list.size());
             Assert::IsFalse(test_list.contains("String 0"));
             Assert::AreEqual((string)"String 1", test_list.get(0));
             Assert::AreEqual((string)"String 2", test_list.get(1));
-            test_list.remove(8);
+
+            // Case when removing the last entry from the list.
+            Assert::AreEqual((string)"String 9", test_list.remove(8));
             Assert::AreEqual((size_t)8, test_list.size());
             Assert::IsFalse(test_list.contains("String 9"));
             Assert::AreEqual((string)"String 7", test_list.get(6));
             Assert::AreEqual((string)"String 8", test_list.get(7));
-            test_list.remove(4);
+
+            // Other cases.
+            Assert::AreEqual((string)"String 4", test_list.remove(3));
             Assert::AreEqual((size_t)7, test_list.size());
-            Assert::IsFalse(test_list.contains("String 5"));
-            Assert::AreEqual((string)"String 4", test_list.get(3));
-            Assert::AreEqual((string)"String 6", test_list.get(4));
-            Assert::AreEqual((string)"String 7", test_list.get(5));
+            Assert::IsFalse(test_list.contains("String 4"));
+            Assert::AreEqual((string)"String 3", test_list.get(2));
+            Assert::AreEqual((string)"String 5", test_list.get(3));
+
+            Assert::ExpectException<out_of_range>([&test_list]
+            {
+                (&test_list)->remove(7);
+            });
+            Assert::ExpectException<out_of_range>([&test_list]
+            {
+                (&test_list)->remove(-1);
+            });
+
+            // Case when removing the last entry in the list.
+            test_list.clear();
+            test_list.add("String");
+            Assert::AreEqual((size_t)1, test_list.size());
+            Assert::AreEqual((string)"String", test_list.remove(0));
+            Assert::AreEqual((size_t)0, test_list.size());
+            Assert::IsFalse(test_list.contains("String"));
 
             test_list.clear();
+
             // Testing remove(const T & entry)
             for (size_t i = 0; i < 10; i++)
             {

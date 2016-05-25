@@ -66,7 +66,7 @@ than 0 after shifting.");
             delete[] list_data;
             list_data = new_data;
         }
-        else if ((displacement > 0) &&(list_size >= 1))  // shifting right
+        else if ((displacement > 0) && (list_size >= 1))  // shifting right
         {
             for (size_t i = list_size - 1; i >= index; i--)
             {
@@ -165,13 +165,15 @@ public:
     }
 
     // Remove the entry at a given index from the list.
-    virtual void remove(const size_t &index)
+    virtual T remove(const size_t &index)
     {
         if (index >= list_size)
         {
             throw out_of_range("Index out of range.");
         }
+        T rm = list_data[index];
         shift(index + 1, -1);
+        return rm;
     }
 
     // Remove a given entry from the list.

@@ -128,24 +128,43 @@ public:
     }
 
     // Remove the entry at a given index from the list.
-    virtual void remove(const size_t &index)
+    virtual T remove(const size_t &index)
     {
-        s_node<T> *prev_node = nullptr;
-
-        // Case when removing the first entry from the list.
-        if (index == 0)
+        if (index >= list_size)
         {
-            prev_node = node_at(index);
+            throw out_of_range("Index out of range.");
+        }
 
+        T rm;
+        s_node<T> *cur_node;    // Node to be removed.
+        // Case when removing the first entry from the list.
+        if (0 == index)
+        {
+            cur_node = node_at(index);
+            rm = cur_node->data();
+            list_head = cur_node->next();
+            // Case when removing the last entry in the list.
+            if (!list_head)
+            {
+                list_tail = nullptr;
+            }
         }
         // Other cases.
         else
         {
-            prev_node = node_at(index - 1);
-            prev_node->set_next(prev_node->next()->next());
+            s_node<T> *prev_node = node_at(index - 1);
+            cur_node = prev_node->next();
+            rm = cur_node->data();
+            prev_node->set_next(cur_node->next());
+            // Case when removing the last entry from the list.
+            if (!cur_node->next())
+            {
+                list_tail = prev_node;
+            }
         }
-        
+        delete cur_node;
         list_size--;
+        return rm;
     }
 
     // Remove a given entry from the list.
@@ -171,7 +190,21 @@ public:
     // Throw no_such_element exception when the given entry is not found.
     virtual size_t index_of(const T &entry) const
     {
-        return 0;
+        size_t index = 0;
+        s_node<T> *cur_node = list_head;
+
+        while (cur_node)
+        {
+            if (entry == cur_node->data())
+            {
+                return index;
+            }
+            index++;
+            cur_node = cur_node->next();
+        }
+
+        throw no_such_element("Cannot get the index of an entry that \
+is not in the list.");
     }
 
     // Remove all the entries from the list, and free the memory.

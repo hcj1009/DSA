@@ -23,7 +23,7 @@ public:
     // TO-DO Add an array/list to the current list.
 
     // Remove the entry at a given index from the list.
-    virtual void remove(const size_t &index) = 0;
+    virtual T remove(const size_t &index) = 0;
 
     // Remove a given entry from the list.
     // Throw no_such_element exception if not found.
