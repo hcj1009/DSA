@@ -10,6 +10,11 @@ private:
     node<T> * list_head;
     node<T> * list_tail;    // Optimization for adding to the back.
 
+    node<T> * node_at(const size_t & index)
+    {
+        return nullptr;
+    }
+
 public:
     // Default constructor of the lsit.
     linked_list() : adt_list()
