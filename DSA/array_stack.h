@@ -105,7 +105,7 @@ public:
         stack_size = 0;
     }
 
-    // Return if the list stack a given entry.
+    // Return if the stack contains a given entry.
     virtual bool contains(const T &entry) const
     {
         for (size_t i = 0; i < stack_size; i++)

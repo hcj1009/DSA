@@ -51,6 +51,9 @@
     <ClInclude Include="empty_stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="linked_stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

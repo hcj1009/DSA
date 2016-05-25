@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="array_list_test.cpp" />
     <ClCompile Include="array_stack_test.cpp" />
+    <ClCompile Include="linked_stack_test.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
