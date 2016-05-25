@@ -44,7 +44,7 @@ public:
     }
 
     // Get the size of the container.
-    virtual (size_t)size() const
+    virtual size_t size() const
     {
         return size;
     }
@@ -99,7 +99,7 @@ public:
 
     // Get the index of a given element.
     // Throw no_such_element exception when the given element is not found.
-    virtual (size_t)index_of(const T &element) const
+    virtual size_t index_of(const T &element) const
     {
         return 0;
     }

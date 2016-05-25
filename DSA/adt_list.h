@@ -36,7 +36,7 @@ public:
     virtual void set(const size_t &index, const T &element) = 0;
 
     // Get the index of a given element.
-    virtual (size_t)index_of(const T &element) const = 0;
+    virtual size_t index_of(const T &element) const = 0;
 
     // TO-DO Override operators
 };

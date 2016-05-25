@@ -15,7 +15,7 @@ public:
     virtual bool empty() const = 0;
 
     // Get the size of the container.
-    virtual (size_t)size() const = 0;
+    virtual size_t size() const = 0;
 
     // Add a given element to the container.
     virtual void add(const T &element) = 0;

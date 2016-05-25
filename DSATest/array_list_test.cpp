@@ -76,10 +76,10 @@ namespace DSATest
                 test_list.add("String " + to_string(i));
                 Assert::AreEqual(i + 1, test_list.size());
             }
-            for (size_t i = 99; i >= 0; i--)
+            for (size_t i = 0; i < 100; i++)
             {
-                test_list.remove(i);
-                Assert::AreEqual(i, test_list.size());
+                test_list.remove(99 - i);
+                Assert::AreEqual(99 - i, test_list.size());
             }
         }
 
