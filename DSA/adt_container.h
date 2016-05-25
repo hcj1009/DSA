@@ -20,7 +20,7 @@ public:
     // Add a given entry to the container.
     virtual void add(const T &entry) = 0;
 
-    // Remove all the entries from the list, and free the memory.
+    // Remove all the entries from the container, and free the memory.
     virtual void clear() = 0;
 
     // Return if the list contains a given entry.

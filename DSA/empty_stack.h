@@ -1,15 +1,15 @@
-#ifndef NO_SUCH_ELEMENT_H
-#define NO_SUCH_ELEMENT_H
+#ifndef EMPTY_STACK_H
+#define EMPTY_STACK_H
 
 #include <exception>
 
-class no_such_element : std::exception
+class empty_stack : std::exception
 {
 private:
     const char *errmsg;
 
 public:
-    no_such_element(const char *msg)
+    empty_stack(const char *msg)
     {
         errmsg = msg;
     }
