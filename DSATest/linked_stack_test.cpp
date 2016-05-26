@@ -101,7 +101,7 @@ namespace DSATest
             linked_stack<string> test_stack;
             Assert::IsTrue(test_stack.empty());
 
-            Assert::ExpectException<empty_stack>([&test_stack]
+            Assert::ExpectException<empty_container>([&test_stack]
             {
                 (&test_stack)->pop();
             });
@@ -124,7 +124,7 @@ namespace DSATest
             linked_stack<string> test_stack;
             Assert::IsTrue(test_stack.empty());
 
-            Assert::ExpectException<empty_stack>([&test_stack]
+            Assert::ExpectException<empty_container>([&test_stack]
             {
                 (&test_stack)->peek();
             });

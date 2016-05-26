@@ -1,7 +1,7 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
-#include "no_such_element.h"
+#include "dsaexcept.h"
 #include "adt_list.h"
 #include "s_node.h"
 
@@ -10,18 +10,18 @@ template <class T>
 class s_linked_list : adt_list<T>
 {
 private:
-    size_t list_size;
-    s_node<T> *list_head;
-    s_node<T> *list_tail;    // Optimization for adding to the back.
+    size_t m_size;
+    s_node<T> *m_head;
+    s_node<T> *m_tail;    // Optimization for adding to the back.
 
     // Helper function to get the node at a given index.
     s_node<T> *node_at(const size_t &index) const
     {
-        if (index >= list_size)
+        if (index >= m_size)
         {
-            throw out_of_range("Index out of range.");
+            throw index_error("Index out of bounds.");
         }
-        s_node<T> *current = list_head;
+        s_node<T> *current = m_head;
         for (int i = 0; i < index; i++)
         {
             current = current->next();
@@ -33,9 +33,9 @@ public:
     // Default constructor of the lsit.
     s_linked_list() : adt_list()
     {
-        list_head = nullptr;
-        list_tail = nullptr;
-        list_size = 0;
+        m_head = nullptr;
+        m_tail = nullptr;
+        m_size = 0;
     }
     
     // Build a list based on a given array of entries.
@@ -48,8 +48,8 @@ public:
         }
         else
         {
-            list_head = new s_node<T>(entries[0]);
-            s_node<T> *current = list_head;
+            m_head = new s_node<T>(entries[0]);
+            s_node<T> *current = m_head;
             s_node<T> *new_node = nullptr;
             for (size_t i = 1; i < size; i++)
             {
@@ -57,28 +57,28 @@ public:
                 current->set_next(new_node);
                 current = current->next();
             }
-            list_tail = new_node;
-            list_size = size;
+            m_tail = new_node;
+            m_size = size;
         }
     }
 
     // Default destructor of the list.
     virtual ~s_linked_list()
     {
-        // delete list_head;
-        // delete list_tail;
+        // delete m_head;
+        // delete m_tail;
     }
 
     // Return if the container is empty.
     virtual bool empty() const
     {
-        return (0 == list_size);
+        return (0 == m_size);
     }
 
     // Get the size of the container.
     virtual size_t size() const
     {
-        return list_size;
+        return m_size;
     }
 
     // Add a given entry to the container.
@@ -86,18 +86,18 @@ public:
     {
         s_node<T> *new_node = new s_node<T>(entry);
         // Empty list case.
-        if (0 == list_size)
+        if (0 == m_size)
         {
-            list_head = new_node;
-            list_tail = new_node;
+            m_head = new_node;
+            m_tail = new_node;
         }
         // Normal cases.
         else
         {
-            list_tail->set_next(new_node);
-            list_tail = new_node;
+            m_tail->set_next(new_node);
+            m_tail = new_node;
         }
-        list_size++;
+        m_size++;
     }
 
     // Add a given entry to a given index of the list.
@@ -108,8 +108,8 @@ public:
         // Case when adding to the frong of the list
         if (0 == index)
         {
-            new_node->set_next(list_head);
-            list_head = new_node;
+            new_node->set_next(m_head);
+            m_head = new_node;
         }
         // Other cases.
         else
@@ -120,19 +120,19 @@ public:
         }
 
         // Case when the list is empty.
-        if ((!list_tail) || (prev_node == list_tail))
+        if ((!m_tail) || (prev_node == m_tail))
         {
-            list_tail = new_node;
+            m_tail = new_node;
         }
-        list_size++;
+        m_size++;
     }
 
     // Remove the entry at a given index from the list.
     virtual T remove(const size_t &index)
     {
-        if (index >= list_size)
+        if (index >= m_size)
         {
-            throw out_of_range("Index out of range.");
+            throw index_error("Index out of bounds.");
         }
 
         T rm;
@@ -142,11 +142,11 @@ public:
         {
             cur_node = node_at(index);
             rm = cur_node->data();
-            list_head = cur_node->next();
+            m_head = cur_node->next();
             // Case when removing the last entry in the list.
-            if (!list_head)
+            if (!m_head)
             {
-                list_tail = nullptr;
+                m_tail = nullptr;
             }
         }
         // Other cases.
@@ -159,11 +159,11 @@ public:
             // Case when removing the last entry from the list.
             if (!cur_node->next())
             {
-                list_tail = prev_node;
+                m_tail = prev_node;
             }
         }
         delete cur_node;
-        list_size--;
+        m_size--;
         return rm;
     }
 
@@ -191,7 +191,7 @@ public:
     virtual size_t index_of(const T &entry) const
     {
         size_t index = 0;
-        s_node<T> *cur_node = list_head;
+        s_node<T> *cur_node = m_head;
 
         while (cur_node)
         {
@@ -210,11 +210,11 @@ is not in the list.");
     // Remove all the entries from the list, and free the memory.
     virtual void clear()
     {
-        // delete list_head;
-        // delete list_tail;
-        list_head = nullptr;
-        list_tail = nullptr;
-        list_size = 0;
+        // delete m_head;
+        // delete m_tail;
+        m_head = nullptr;
+        m_tail = nullptr;
+        m_size = 0;
     }
 
     // Return if the list contains a given entry.

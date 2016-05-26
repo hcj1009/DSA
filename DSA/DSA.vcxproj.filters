@@ -18,9 +18,6 @@
     <ClInclude Include="sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="no_such_element.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="adt_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -28,9 +25,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="array_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="s_linked_list.h">
@@ -48,13 +42,16 @@
     <ClInclude Include="array_stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="empty_stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="linked_stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="adt_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="array_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dsaexcept.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

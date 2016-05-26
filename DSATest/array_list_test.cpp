@@ -222,15 +222,15 @@ namespace DSATest
             array_list<string> test_list;
 
             // Test exceptions.
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(0);
             });
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(10);
             });
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(-1);
             });
@@ -265,11 +265,11 @@ namespace DSATest
             Assert::AreEqual((string)"String 3", test_list.get(2));
             Assert::AreEqual((string)"String 5", test_list.get(3));
 
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(7);
             });
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(-1);
             });

@@ -1,8 +1,8 @@
 #ifndef LINKED_STACK_H
 #define LINKED_STACK_H
 
+#include "dsaexcept.h"
 #include "adt_stack.h"
-#include "empty_stack.h"
 #include "s_node.h"
 
 // Singly linked node implementation of LIFO Stack data structure.
@@ -43,7 +43,7 @@ public:
     {
         if (0 == stack_size)
         {
-            throw empty_stack("Cannot pop from an empty stack.");
+            throw empty_container("Cannot pop from an empty stack.");
         }
         return stack_top->data();
     }
@@ -68,7 +68,7 @@ public:
     {
         if (0 == stack_size)
         {
-            throw empty_stack("Cannot pop from an empty stack.");
+            throw empty_container("Cannot pop from an empty stack.");
         }
         s_node<T> *top_node = stack_top;
         stack_top = stack_top->next();

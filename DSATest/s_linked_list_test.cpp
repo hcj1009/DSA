@@ -161,11 +161,11 @@ namespace DSATest
             // Test add(const size_t &index, const T &entry)
 
             // Test exceptions in empty list.
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->add(1, "String");
             });
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->add(-1, "String");
             });
@@ -205,11 +205,11 @@ namespace DSATest
             Assert::AreEqual((string)"String 4", test_list.get(6));
 
             // Test exceptions.
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->add(50, "String");
             });
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->add(-1, "String");
             });
@@ -219,15 +219,15 @@ namespace DSATest
         {
             s_linked_list<string> test_list;
             // Test exceptions.
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(0);
             });
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(10);
             });
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(-1);
             });
@@ -262,11 +262,11 @@ namespace DSATest
             Assert::AreEqual((string)"String 3", test_list.get(2));
             Assert::AreEqual((string)"String 5", test_list.get(3));
 
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(7);
             });
-            Assert::ExpectException<out_of_range>([&test_list]
+            Assert::ExpectException<index_error>([&test_list]
             {
                 (&test_list)->remove(-1);
             });

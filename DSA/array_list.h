@@ -2,12 +2,8 @@
 #define ARRAY_LIST_H
 
 #include <cmath>
-#include <stdexcept>
-#include "no_such_element.h"
+#include "dsaexcept.h"
 #include "adt_list.h"
-
-using std::out_of_range;
-using std::range_error;
 
 // Array-based List implementation.
 template <class T,
@@ -18,9 +14,9 @@ private:
     // Natural log 2, used in function capacity_of(const size_t &)
     const double LOG2 = 0.6931471805599453;
 
-    T *list_data;
-    size_t list_size;
-    size_t list_capacity;
+    T *m_data;
+    size_t m_size;
+    size_t m_capacity;
 
     // Helper function to determine the capacity needed to hold a
     // given size of list.
@@ -41,82 +37,82 @@ private:
 
         if (index + displacement < 0)
         {
-            throw range_error("Invalid displacement: index/indeces smaller \
+            throw index_error("Invalid displacement: index/indeces smaller \
 than 0 after shifting.");
         }
 
-        size_t new_size = list_size + displacement;
+        size_t new_size = m_size + displacement;
         size_t new_capacity = capacity_of(new_size);
 
-        if (new_capacity > list_capacity)
+        if (new_capacity > m_capacity)
         {
-            list_capacity = new_capacity;
-            T *new_data = new T[list_capacity];
-            for (size_t i = 0; i < list_size; i++)
+            m_capacity = new_capacity;
+            T *new_data = new T[m_capacity];
+            for (size_t i = 0; i < m_size; i++)
             {
                 if (i < index)
                 {
-                    new_data[i] = list_data[i];
+                    new_data[i] = m_data[i];
                 }
                 else
                 {
-                    new_data[i + displacement] = list_data[i];
+                    new_data[i + displacement] = m_data[i];
                 }
             }
-            delete[] list_data;
-            list_data = new_data;
+            delete[] m_data;
+            m_data = new_data;
         }
-        else if ((displacement > 0) && (list_size >= 1))  // shifting right
+        else if ((displacement > 0) && (m_size >= 1))  // shifting right
         {
-            for (size_t i = list_size - 1; i >= index; i--)
+            for (size_t i = m_size - 1; i >= index; i--)
             {
-                list_data[i + displacement] = list_data[i];
+                m_data[i + displacement] = m_data[i];
             }
         }
         else    // case when displacement < 0, shifting left
         {
-            for (size_t i = index; i < list_size; i++)
+            for (size_t i = index; i < m_size; i++)
             {
-                list_data[i + displacement] = list_data[i];
+                m_data[i + displacement] = m_data[i];
             }
         }
-        list_size = new_size;
+        m_size = new_size;
     }
 
 public:
     // Default constructor of the list.
     array_list() : adt_list()
     {
-        list_capacity = BASE_CAPACITY;
-        list_data = new T[list_capacity];
-        list_size = 0;
+        m_capacity = BASE_CAPACITY;
+        m_data = new T[m_capacity];
+        m_size = 0;
     }
 
     // Build a list based on a given array of entries.
     array_list(const T entries[], const size_t &size)
         : adt_list(entries, size)
     {
-        list_capacity = capacity_of(size);
-        list_data = new T[list_capacity];
-        list_size = size;
+        m_capacity = capacity_of(size);
+        m_data = new T[m_capacity];
+        m_size = size;
         for (size_t i = 0; i < size; i++)
         {
-            list_data[i] = entries[i];
+            m_data[i] = entries[i];
         }
     }
 
     // Build a list based on a given list.
     array_list(const array_list<T, BASE_CAPACITY> &list) : adt_list(list)
     {
-        list_capacity = list.capacity();
-        list_data = new T[list_capacity];
-        list_size = list.size();
+        m_capacity = list.capacity();
+        m_data = new T[m_capacity];
+        m_size = list.size();
         // TO-DO: Change the following code using iterator
         // Create a shallow copy of each entry in the given list.
         /*
-        for (size_t i = 0; i < list_size; i++)
+        for (size_t i = 0; i < m_size; i++)
         {
-            list_data[i] = list.get(i);
+            m_data[i] = list.get(i);
         }
         */
     }
@@ -124,54 +120,54 @@ public:
     // Default destructor fo the list.
     virtual ~array_list()
     {
-        delete[] list_data;
-        list_data = nullptr;
+        delete[] m_data;
+        m_data = nullptr;
     }
 
     // Return if the container is empty.
     virtual bool empty() const
     {
-        return (0 == list_size);
+        return (0 == m_size);
     }
 
     // Get the size of the list.
     virtual size_t size() const
     {
-        return list_size;
+        return m_size;
     }
     
     // Get the capacity of the list;
     virtual size_t capacity() const
     {
-        return list_capacity;
+        return m_capacity;
     }
 
     // Add a given entry to the container.
     virtual void add(const T &entry)
     {
-        shift(list_size, 1);
-        list_data[list_size - 1] = entry;
+        shift(m_size, 1);
+        m_data[m_size - 1] = entry;
     }
 
     // Add a given entry to a given index of the list.
     virtual void add(const size_t &index, const T &entry)
     {
-        if (index > list_size)
+        if (index > m_size)
         {
-            throw out_of_range("Index out of range.");
+            throw index_error("Index out of bounds.");
         }
         shift(index, 1);
-        list_data[index] = entry;
+        m_data[index] = entry;
     }
 
     // Remove the entry at a given index from the list.
     virtual T remove(const size_t &index)
     {
-        if (index >= list_size)
+        if (index >= m_size)
         {
-            throw out_of_range("Index out of range.");
+            throw index_error("Index out of bounds.");
         }
-        T rm = list_data[index];
+        T rm = m_data[index];
         shift(index + 1, -1);
         return rm;
     }
@@ -186,31 +182,31 @@ public:
     // Get the entry at a given index.
     virtual T get(const size_t &index) const
     {
-        if (index >= list_size)
+        if (index >= m_size)
         {
-            throw out_of_range("Index out of range.");
+            throw index_error("Index out of bounds.");
         }
-        return list_data[index];
+        return m_data[index];
     }
 
     // Set the value of the entry at a given index to a given entry.
-    // Throw out_of_range exception.
+    // Throw index_error exception.
     virtual void set(const size_t &index, const T &entry)
     {
-        if (index >= list_size)
+        if (index >= m_size)
         {
-            throw out_of_range("Index out of range.");
+            throw index_error("Index out of bounds.");
         }
-        list_data[index] = entry;
+        m_data[index] = entry;
     }
 
     // Get the index of a given entry.
     // Throw no_such_element exception when the given entry is not found.
     virtual size_t index_of(const T &entry) const
     {
-        for (size_t i = 0; i < list_size; i++)
+        for (size_t i = 0; i < m_size; i++)
         {
-            if (entry == list_data[i])
+            if (entry == m_data[i])
             {
                 return i;
             }
@@ -222,10 +218,10 @@ is not in the list.");
     // Remove all the entries from the list, and free the memory.
     virtual void clear()
     {
-        delete[] list_data;
-        list_capacity = BASE_CAPACITY;
-        list_data = new T[list_capacity];
-        list_size = 0;
+        delete[] m_data;
+        m_capacity = BASE_CAPACITY;
+        m_data = new T[m_capacity];
+        m_size = 0;
     }
 
     // Return if the list contains a given entry.

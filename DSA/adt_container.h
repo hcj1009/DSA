@@ -23,7 +23,7 @@ public:
     // Remove all the entries from the container, and free the memory.
     virtual void clear() = 0;
 
-    // Return if the list contains a given entry.
+    // Return if the container contains a given entry.
     virtual bool contains(const T &entry) const = 0;
 };
 

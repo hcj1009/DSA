@@ -115,6 +115,12 @@ namespace DSATest
             }
             Assert::IsFalse(test_stack.contains(""));
             Assert::IsFalse(test_stack.contains("String"));
+            for (size_t i = 0; i < 100; i++)
+            {
+                test_stack.pop();
+                Assert::IsFalse(test_stack.contains("String "
+                    + to_string(99 - i)));
+            }
         }
 
         TEST_METHOD(test_push)
@@ -134,7 +140,7 @@ namespace DSATest
             array_stack<string> test_stack;
             Assert::IsTrue(test_stack.empty());
 
-            Assert::ExpectException<empty_stack>([&test_stack]
+            Assert::ExpectException<empty_container>([&test_stack]
             {
                 (&test_stack)->pop();
             });
@@ -158,7 +164,7 @@ namespace DSATest
             array_stack<string> test_stack;
             Assert::IsTrue(test_stack.empty());
 
-            Assert::ExpectException<empty_stack>([&test_stack]
+            Assert::ExpectException<empty_container>([&test_stack]
             {
                 (&test_stack)->peek();
             });

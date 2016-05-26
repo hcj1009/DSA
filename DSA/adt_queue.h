@@ -15,6 +15,7 @@ public:
     virtual ~adt_queue() {}
 
     // Add a given entry to the back of the queue.
+    // Alias for add(const T &entry)
     virtual void enqueue(const T &entry) = 0;
 
     // Remove and return the first (oldest) entry in the queue.

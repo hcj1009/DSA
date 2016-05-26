@@ -6,40 +6,40 @@ template <class T>
 class s_node
 {
 private:
-    T node_data;
-    s_node<T> *node_next;
+    T m_data;
+    s_node<T> *m_next;
 
 public:
     s_node(const T &data)
     {
-        node_data = data;
-        node_next = nullptr;
+        m_data = data;
+        m_next = nullptr;
     }
 
     s_node(const T &data, s_node<T> *&next)
     {
-        node_data = data;
-        node_next = next;
+        m_data = data;
+        m_next = next;
     }
 
     virtual T data() const
     {
-        return node_data;
+        return m_data;
     }
 
     virtual void set_data(const T &data)
     {
-        node_data = data;
+        m_data = data;
     }
 
     virtual s_node<T> *&next()
     {
-        return node_next;
+        return m_next;
     }
 
     virtual void set_next(s_node<T> *&next)
     {
-        node_next = next;
+        m_next = next;
     }
 };
 
