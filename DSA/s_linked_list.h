@@ -22,7 +22,7 @@ private:
             throw index_error("Index out of bounds.");
         }
         s_node<T> *current = m_head;
-        for (int i = 0; i < index; i++)
+        for (size_t i = 0; i < index; i++)
         {
             current = current->next();
         }
@@ -38,6 +38,16 @@ public:
         m_size = 0;
     }
     
+    s_linked_list(const adt_list &list) : adt_list(list)
+    {
+
+    }
+
+    s_linked_list(adt_list &&list)
+    {
+
+    }
+
     // Build a list based on a given array of entries.
     s_linked_list(const T entries[], const size_t &size)
         : adt_list(entries, size)
@@ -229,6 +239,20 @@ is not in the list.");
             return false;
         }
         return true;
+    }
+
+    virtual T *to_array() const
+    {
+        return nullptr;
+    }
+
+    virtual s_linked_list& operator=(const s_linked_list &rhs)
+    {
+        return *this;
+    }
+    virtual s_linked_list& operator=(s_linked_list &&rhs)
+    {
+        return *this;
     }
 };
 

@@ -1,15 +1,30 @@
-#include "s_linked_list.h"
+#include "array_list.h"
 #include <string>
+#include <algorithm>
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 int main(int argc, char *argv[])
 {
-    s_linked_list<string> test_list;
-    test_list.clear();
-
-    test_list.add(0, "");
+    string test_array[100];
+    for (size_t i = 0; i < 100; i++)
+    {
+        test_array[i] = "String";
+    }
+    array_list<string> test_list(test_array, 100);
+    for (size_t i = 0; i < 100; i++)
+    {
+        try
+        {
+            test_list.remove(0);
+        }
+        catch (runtime_error e)
+        {
+            cout << i << ": " << e.what() << endl;
+        }
+    }
 
     system("pause");
     return 0;

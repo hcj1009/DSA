@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
+#include <algorithm>
 #include <string>
 #include "../DSA/array_list.h"
 
@@ -39,6 +40,8 @@ namespace DSATest
             // (specified BASE_CAPACITY).
             array_list<string, 50> test_list6(test_list4);
 
+            array_list<string> test_list7(test_list5);
+
             Assert::AreEqual((size_t)0, test_list1.size());
             Assert::AreEqual((size_t)10, test_list1.capacity());
 
@@ -56,6 +59,24 @@ namespace DSATest
 
             Assert::AreEqual((size_t)100, test_list6.size());
             Assert::AreEqual((size_t)100, test_list6.capacity());
+
+            Assert::AreEqual((size_t)100, test_list7.size());
+            Assert::AreEqual((size_t)160, test_list7.capacity());
+
+            for (size_t i = 0; i < 100; i++)
+            {
+                Assert::AreEqual(to_string(i), test_list2.get(i));
+                Assert::AreEqual(to_string(i), test_list4.get(i));
+                Assert::AreEqual(to_string(i), test_list5.get(i));
+                Assert::AreEqual(to_string(i), test_list6.get(i));
+                Assert::AreEqual(to_string(i), test_list7.get(i));
+            }
+
+            array_list<string> test_list8(move(test_list5));
+            Assert::AreEqual((size_t)100, test_list8.size());
+            Assert::AreEqual((size_t)160, test_list8.capacity());
+            Assert::AreEqual((size_t)0, test_list5.size());
+            Assert::AreEqual((size_t)10, test_list5.capacity());
         }
 
         TEST_METHOD(test_empty)
@@ -307,6 +328,67 @@ namespace DSATest
             Assert::AreEqual((string)"String 4", test_list.get(3));
             Assert::AreEqual((string)"String 6", test_list.get(4));
             Assert::AreEqual((string)"String 7", test_list.get(5));
+        }
+
+        TEST_METHOD(test_to_array)
+        {
+            array_list<string> test_list;
+            for (size_t i = 0; i < 100; i++)
+            {
+                test_list.add(to_string(i));
+            }
+            Assert::AreEqual((size_t)100, test_list.size());
+
+            string *test_array = test_list.to_array();
+            for (size_t i = 0; i < 100; i++)
+            {
+                Assert::AreEqual(to_string(i), test_array[i]);
+            }
+        }
+
+        TEST_METHOD(test_operator_equal)
+        {
+            array_list<string> test_list1;
+            for (size_t i = 0; i < 100; i++)
+            {
+                test_list1.add(to_string(i));
+            }
+            Assert::AreEqual((size_t)100, test_list1.size());
+
+            // Normal cases.
+            array_list<string> test_list2;
+            Assert::IsTrue(test_list2.empty());
+            Assert::AreEqual((size_t)0, test_list2.size());
+            Assert::AreEqual((size_t)10, test_list2.capacity());
+
+            test_list2 = test_list1;
+            Assert::IsFalse(test_list1.empty());
+            Assert::AreEqual((size_t)100, test_list1.size());
+            Assert::AreEqual((size_t)160, test_list1.capacity());
+            Assert::IsFalse(test_list2.empty());
+            Assert::AreEqual((size_t)100, test_list2.size());
+            Assert::AreEqual((size_t)160, test_list2.capacity());
+
+            for (size_t i = 0; i < 100; i++)
+            {
+                Assert::AreEqual(to_string(i), test_list2.get(i));
+            }
+
+            // Test rvalue cases.
+            // array_list<string> rvalue_list();
+            // test_list2 = rvalue_list();
+            test_list2.clear();
+            Assert::IsTrue(test_list2.empty());
+            Assert::AreEqual((size_t)0, test_list2.size());
+            Assert::AreEqual((size_t)10, test_list2.capacity());
+
+            test_list2 = move(test_list1);
+            Assert::IsTrue(test_list1.empty());
+            Assert::AreEqual((size_t)0, test_list1.size());
+            Assert::AreEqual((size_t)10, test_list1.capacity());
+            Assert::IsFalse(test_list2.empty());
+            Assert::AreEqual((size_t)100, test_list2.size());
+            Assert::AreEqual((size_t)160, test_list2.capacity());
         }
     };
 }
