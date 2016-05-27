@@ -56,40 +56,33 @@ than 0 after shifting.");
             m_capacity = new_capacity;
             T *new_data = new T[m_capacity];
             memset(new_data, 0, m_capacity);
-            /* Memory copy version.
-               TODO Something is wrong. Fix later. *
-            // Copy unchanged entries.
-            memcpy(&(new_data[0]), &(m_data[0]), index * sizeof(T));
-            // Copy shifted entries.
-            memcpy(&(new_data[new_index]), &(m_data[index]),
-                (m_size - index) * sizeof(T));
-            /**/
-            /* Move semantics version. */
             for (size_t i = 0; i < m_size; i++)
             {
-                size_t in = i < min(index, (size_t)new_index) ? i : i + disp;
+                size_t in = i < index ? i : i + disp;
                 new_data[in] = move(m_data[i]);
             }
-            /**/
+
             delete[] m_data;
             m_data = new_data;
         }
-        else if ((0 < disp) && (1 <= m_size))  // shifting right
+        else
         {
-            for (size_t i = m_size - 1; i >= index; i--)
+            size_t src = 0;
+            size_t cls = new_size;
+            ptrdiff_t sign = 1;
+            if (0 < disp)
             {
-                m_data[i + disp] = move(m_data[i]);
+                src = m_size + index - 1;
+                sign *= -1;
+                cls = index;
             }
-            memset(&(m_data[index]), 0, disp * sizeof(T));
-        }
-        else    // case when displacement < 0, shifting left
-        {
+            size_t dest = src + disp;
             for (size_t i = index; i < m_size; i++)
             {
-                m_data[i + disp] = move(m_data[i]);
+                m_data[dest + i * sign] =
+                    move(m_data[src + i * sign]);
             }
-            // TODO Something wrong with this, fix later:
-            // memset(&(m_data[new_size]), 0, (-disp) * sizeof(T));
+            memset(&(m_data[cls]), 0, -sign * disp * sizeof(T));
         }
         m_size = new_size;
     }
