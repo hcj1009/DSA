@@ -27,9 +27,10 @@ public:
     virtual ~adt_list() {};
 
     // Add a given entry to a given index of the list.
-    virtual void add(const size_t &index, const T &entry) = 0;
+    virtual void add(const T &entry) = 0;
 
-    /* TODO Implement these overloads.
+    virtual void add(const size_t &index, const T &entry) = 0;
+    
     virtual void add(const T entries[], const size_t &size) = 0;
 
     virtual void add(const size_t &index,
@@ -40,7 +41,8 @@ public:
     virtual void add(const size_t &index, const adt_list &list) {}
     virtual void add(adt_list &&list) {}
     virtual void add(const size_t &index, adt_list &&list) {}
-    */
+
+    /**/
 
     // Remove and return the entry at a given index from the list.
     virtual T remove(const size_t &index) = 0;
@@ -72,6 +74,7 @@ public:
     virtual adt_list& operator=(adt_list &&rhs)
     { return *this; }
     
+    friend adt_list& operator+(const adt_list &lhs, const T &rhs) { return *this; };
     // TODO Override operators.
 };
 

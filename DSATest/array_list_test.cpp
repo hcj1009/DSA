@@ -385,10 +385,38 @@ namespace DSATest
             test_list2 = move(test_list1);
             Assert::IsTrue(test_list1.empty());
             Assert::AreEqual((size_t)0, test_list1.size());
-            Assert::AreEqual((size_t)10, test_list1.capacity());
+            Assert::AreEqual((size_t)160, test_list1.capacity());
             Assert::IsFalse(test_list2.empty());
             Assert::AreEqual((size_t)100, test_list2.size());
             Assert::AreEqual((size_t)160, test_list2.capacity());
+        }
+
+        TEST_METHOD(test_operator_plus)
+        {
+            array_list<string> test_list1;
+            Assert::AreEqual((size_t)0, test_list1.size());
+            for (size_t i = 0; i < 10; i++)
+            {
+                test_list1.add("String " + to_string(i));
+                Assert::AreEqual(i + 1, test_list1.size());
+                Assert::AreEqual((string)("String " + to_string(i)),
+                    test_list1.get(i));
+            }
+
+            array_list<string> test_list2;
+            Assert::AreEqual((size_t)0, test_list2.size());
+            test_list2 = test_list1 + "String";
+            Assert::AreEqual((size_t)11, test_list2.size());
+            Assert::AreEqual((string)"String", test_list2.get(10));
+            Assert::AreEqual((size_t)10, test_list1.size());
+
+            test_list1 = test_list1 + "String";
+            Assert::AreEqual((size_t)11, test_list1.size());
+            Assert::AreEqual((string)"String", test_list1.get(10));
+
+            test_list1 += "Another String";
+            Assert::AreEqual((size_t)12, test_list1.size());
+            Assert::AreEqual((string)"Another String", test_list1.get(11));
         }
     };
 }

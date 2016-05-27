@@ -6,7 +6,6 @@
 #include "dsaexcept.h"
 #include "adt_list.h"
 
-using std::min;
 using std::move;
 
 // Array-based List implementation.
@@ -40,9 +39,7 @@ protected:
             return;
         }
 
-        ptrdiff_t new_index = index + disp;
-
-        if (0 > new_index)
+        if (0 > index + disp)
         {
             throw index_error("Invalid displacement: index/indeces smaller \
 than 0 after shifting.");
@@ -124,7 +121,7 @@ public:
         m_data = move(list.m_data);
         list.m_capacity = BASE_CAPACITY;
         list.m_size = 0;
-        memset(list.m_data, 0, list.m_capacity);
+        memset(list.m_data, 0, list.m_capacity * sizeof(T));
     }
 
     // Build a list based on a given array of entries.
@@ -179,6 +176,71 @@ public:
         shift(index, 1);
         m_data[index] = entry;
     }
+
+    /**/
+    virtual void add(const T entries[], const size_t &size)
+    {
+        shift(m_size, size);
+        memcpy(&(m_data[m_size]), entries, size);
+    }
+    
+    virtual void add(const size_t &index,
+        const T entries[],
+        const size_t &size)
+    {
+        if (index > m_size)
+        {
+            throw index_error("Index out of bounds.");
+        }
+        shift(index, size);
+        memcpy(&(m_data[index]), entries, size);
+    }
+
+    virtual void add(const array_list<T, BASE_CAPACITY> &list)
+    {
+        shift(m_size, list.m_size);
+        memcpy(&(m_data[m_size]), list.m_data, list.m_size);
+    }
+
+    virtual void add(const size_t &index, 
+        const array_list<T, BASE_CAPACITY> &list)
+    {
+        if (index > m_size)
+        {
+            throw index_error("Index out of bounds.");
+        }
+        shift(index, list.m_size);
+        memcpy(&(m_data[index]), list.m_data, list.m_size);
+    }
+
+    virtual void add(array_list<T, BASE_CAPACITY> &&list)
+    {
+        shift(m_size, list.m_size);
+        for (size_t i = 0; i < list.m_size; i++)
+        {
+            m_data[m_size + i] = move(list.m_data[i]);
+        }
+        list.m_size = 0;
+        memset(list.m_data, 0, list.m_capacity * sizeof(T));
+    }
+
+    virtual void add(const size_t &index,
+        array_list<T, BASE_CAPACITY> &&list)
+    {
+        if (index > m_size)
+        {
+            throw index_error("Index out of bounds.");
+        }
+        shift(index, list.m_size);
+        for (size_t i = 0; i < list.m_size; i++)
+        {
+            m_data[index + i] = move(list.m_data[i]);
+        }
+        list.m_size = 0;
+        memset(list.m_data, 0, list.m_capacity * sizeof(T));
+    }
+
+    /**/
 
     // Remove the entry at a given index from the list.
     virtual T remove(const size_t &index)
@@ -283,8 +345,8 @@ is not in the list.");
     }
 
     // Cases when the right-hand expression is rvalue.
-    virtual array_list 
-        &operator=(array_list<T, BASE_CAPACITY> &&rhs)
+    virtual array_list<T, BASE_CAPACITY> &operator=
+        (array_list<T, BASE_CAPACITY> &&rhs)
     {
         if (!rhs.m_data)
         {
@@ -296,11 +358,25 @@ is not in the list.");
             m_capacity = move(rhs.m_capacity);
             m_size = move(rhs.m_size);
             m_data = move(rhs.m_data);
-            rhs.m_capacity = BASE_CAPACITY;
             rhs.m_size = 0;
-            memset(rhs.m_data, 0, m_size);
+            memset(rhs.m_data, 0, rhs.m_capacity);
         }
         return *this;
+    }
+
+    array_list<T, BASE_CAPACITY> &operator+=
+        (const T &rhs)
+    {
+        add(rhs);
+        return *this;
+    }
+
+    friend array_list<T, BASE_CAPACITY> operator+
+        (const array_list<T, BASE_CAPACITY> &lhs, const T &rhs)
+    {
+        array_list<T, BASE_CAPACITY> new_list(lhs);
+        new_list.add(rhs);
+        return new_list;
     }
 };
 
