@@ -5,24 +5,25 @@
 #include <algorithm>
 #include "base_container.h"
 
-template <class T,
-    size_t BASE_CAPACITY = 10>
+template <class T>
 class dynamic_array_container : public base_container<T>
 {
 protected:
     // Natural log 2, used in function capacity_of(const size_t &)
     const double LOG2 = 0.6931471805599453;
+    static const size_t DEFAULT_BASE_CAPACITY = 10;
 
     T *m_data;
     size_t m_capacity;
+    size_t m_base_capacity;
 
     // Helper function to determine the capacity needed to hold a
     // given size of list.
     inline size_t capacity_of(const size_t &size) const
     {
         // TODO Optimize this:
-        return (size_t)pow(2, ceil(log((double)size / BASE_CAPACITY) \
-            / LOG2)) * BASE_CAPACITY;
+        return (size_t)pow(2, ceil(log((double)size / m_base_capacity) \
+            / LOG2)) * m_base_capacity;
     }
 
     // Helper function to enlarge the capacity when the container is full.
@@ -98,11 +99,14 @@ than 0 after shifting.");
     }
 
 public:
-    dynamic_array_container() : base_container()
+    dynamic_array_container
+    (const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
+        : base_container()
     {
-        m_capacity = BASE_CAPACITY;
+        m_base_capacity = base_capacity;
+        m_capacity = m_base_capacity;
         m_data = new T[m_capacity];
-        memset(m_data, 0, m_capacity);
+        memset(m_data, 0, m_capacity * sizeof(T));
     }
 
     virtual ~dynamic_array_container()
@@ -118,9 +122,9 @@ public:
     virtual void clear()
     {
         base_container<T>::clear();
-        m_capacity = BASE_CAPACITY;
+        m_capacity = m_base_capacity;
         m_data = new T[m_capacity];
-        memset(m_data, 0, m_capacity);
+        memset(m_data, 0, m_capacity * sizeof(T));
     }
 
     // Get the index of a given entry.

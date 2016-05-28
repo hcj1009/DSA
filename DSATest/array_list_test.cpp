@@ -28,18 +28,16 @@ namespace DSATest
             array_list<string> test_list2(test_array, 100);
 
             // Default constructor (specified BASE_CAPACITY).
-            array_list<string, 50> test_list3;
+            array_list<string> test_list3(50);
 
             // Constructor based on C array (specified BASE_CAPACITY).
-            array_list<string, 50> test_list4(test_array, 100);
+            array_list<string> test_list4(test_array, 100, 50);
 
             // Constructor based on List data structure.
             array_list<string> test_list5(test_list2);
 
             // Constructor based on List data structure
-            // (specified BASE_CAPACITY).
-            array_list<string, 50> test_list6(test_list4);
-
+            array_list<string> test_list6(test_list4);
             array_list<string> test_list7(test_list5);
 
             Assert::AreEqual((size_t)0, test_list1.size());
@@ -107,7 +105,7 @@ namespace DSATest
         TEST_METHOD(test_capacity)
         {
             array_list<string> test_list1;
-            array_list<string, 50> test_list2;
+            array_list<string> test_list2(50);
             Assert::AreEqual((size_t)10, test_list1.capacity());
             Assert::AreEqual((size_t)50, test_list2.capacity());
             for (size_t i = 0; i < 250; i++)

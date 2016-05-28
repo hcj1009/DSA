@@ -1,18 +1,16 @@
 #ifndef ARRAY_QUEUE_H
 #define ARRAY_QUEUE_H
 
-#include "dsaexcept.h"
 #include "adt_queue.h"
+#include "dynamic_array_container.h"
 
 // Circular array based implementation of FIFO Queue.
-template <class T,
-    size_t BASE_CAPACITY = 10>
-class array_queue : public adt_queue<T>
+template <class T>
+class array_queue 
+    : public adt_queue<T>
+    , public dynamic_array_container<T>
 {
 protected:
-    T *m_data;
-    size_t m_size;
-    size_t m_capacity;
     size_t m_front;
     size_t m_back;
 
@@ -23,7 +21,7 @@ protected:
     }
 
     // Helper function to double the capacity of the queue when it is full.
-    void ensure_capacity()
+    inline void ensure_capacity()
     {
         // When the circular array is full
         if (increase_index(m_back, 2) == m_front)
@@ -44,37 +42,63 @@ protected:
 
 public:
     // Default constructor.
-    array_queue() : adt_queue()
+    array_queue
+    (const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
     {
-        m_capacity = BASE_CAPACITY;
-        m_data = new T[m_capacity + 1];
-        m_size = 0;
+        m_base_capacity = base_capacity;
+        m_capacity = m_base_capacity;
         m_front = 0;
         m_back = m_capacity;
+        m_data = new T[m_capacity + 1];
+        memset(m_data, 0, (m_capacity + 1) * sizeof(T));
     }
+
+    /**/
+    array_queue(const array_queue<T> &queue)
+    {
+        m_base_capacity = queue.m_base_capacity;
+        m_capacity = queue.m_capacity;
+        m_size = queue.m_size;
+        m_front = queue.m_front;
+        m_back = queue.m_back;
+        m_data = queue.m_data;
+    }
+    /**/
+
+    array_queue(array_queue<T> &&queue)
+    {
+        delete[] m_data;
+        m_base_capacity = std::move(queue.m_base_capacity);
+        m_capacity = std::move(queue.m_base_capacity);
+        m_size = std::move(queue.m_size);
+        m_front = std::move(queue.m_front);
+        m_back = std::move(queue.m_back);
+        m_data = queue.m_data;
+    }
+    /**/
 
     // Default destructor.
     virtual ~array_queue()
     {
-        delete[] m_data;
+        // delete[] m_data;
     }
 
     // Return if the queue is empty.
     virtual bool empty() const
     {
-        return (0 == m_size);
+        return dynamic_array_container<T>::empty();
     }
 
     // Get the size of the queue.
     virtual size_t size() const
     {
-        return m_size;
+        return dynamic_array_container<T>::size();
     }
 
     // Get the capacity of the queue.
     virtual size_t capacity() const
     {
-        return m_capacity;
+        return dynamic_array_container<T>::capacity();
     }
 
     // Get the first entry in the queue.
@@ -97,14 +121,7 @@ public:
         return m_data[m_back];
     }
 
-    // Add a given entry to the queue.
-    virtual void add(const T &entry)
-    {
-        enqueue(entry);
-    }
-
     // Add a given entry to the back of the queue.
-    // Alias for add(const T &entry)
     virtual void enqueue(const T &entry)
     {
         ensure_capacity();
@@ -129,10 +146,11 @@ public:
     // Remove all the entries from the queue, and free the memory.
     virtual void clear()
     {
+        base_container<T>::clear();
         delete[] m_data;
-        m_capacity = BASE_CAPACITY;
+        m_capacity = m_base_capacity;
         m_data = new T[m_capacity + 1];
-        m_size = 0;
+        memset(m_data, 0, (m_capacity + 1) * sizeof(T));
         m_front = 0;
         m_back = m_capacity;
     }

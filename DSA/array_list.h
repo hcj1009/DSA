@@ -5,52 +5,46 @@
 #include "adt_list.h"
 
 // Array-based List implementation.
-template <class T,
-    size_t BASE_CAPACITY = 10>
+template <class T>
 class array_list
     : public adt_list<T>
-    , public dynamic_array_container<T, BASE_CAPACITY>
+    , public dynamic_array_container<T>
 {
-    typedef dynamic_array_container<T, BASE_CAPACITY> super;
 public:
     // Default constructor of the list.
-    array_list() : dynamic_array_container(), adt_list() {}
+    array_list(const size_t &base_capacity = DEFAULT_BASE_CAPACITY) 
+        : dynamic_array_container(base_capacity), adt_list() {}
 
     // Builda list based on a given list.
-    array_list(const array_list<T, BASE_CAPACITY> &list)
+    array_list(const array_list<T> &list)
     {
-        m_size = list.m_size;
+        m_base_capacity = list.m_base_capacity;
         m_capacity = list.m_capacity;
+        m_size = list.m_size;
         m_data = new T[m_capacity];
         memset(m_data, 0, m_capacity);
-        memcpy(m_data, list.m_data,
-            m_size * sizeof(T));
-    }
-
-    array_list(array_list<T, BASE_CAPACITY> *list)
-    {
-        m_capacity = list->m_capacity;
-        m_size = list->m_size;
-        m_data = new T[m_capacity];
-        memset(m_data, 0, m_capacity);
-        memcpy(m_data, list->m_data, m_size * sizeof(T));
+        memcpy(m_data, list.m_data, m_size * sizeof(T));
     }
 
     // Move constructor: build a list based on a given list (rvalue).
-    array_list(array_list<T, BASE_CAPACITY> &&list) noexcept
+    array_list(array_list<T> &&list) noexcept
     {
+        m_base_capacity = std::move(list.m_base_capacity);
         m_capacity = std::move(list.m_capacity);
         m_size = std::move(list.m_size);
         m_data = std::move(list.m_data);
-        list.m_capacity = BASE_CAPACITY;
+        list.m_capacity = m_base_capacity;
         list.m_size = 0;
         memset(list.m_data, 0, list.m_capacity * sizeof(T));
     }
 
     // Build a list based on a given array of entries.
-    array_list(const T entries[], const size_t &size)
+    array_list(const T entries[], 
+        const size_t &size, 
+        const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
         : adt_list(entries, size)
     {
+        m_base_capacity = base_capacity;
         m_capacity = capacity_of(size);
         m_size = size;
         m_data = new T[m_capacity];
@@ -67,19 +61,19 @@ public:
     // Return if the container is empty.
     virtual bool empty() const
     {
-        return dynamic_array_container<T, BASE_CAPACITY>::empty();
+        return dynamic_array_container<T>::empty();
     }
 
     // Get the size of the list.
     virtual size_t size() const
     {
-        return dynamic_array_container<T, BASE_CAPACITY>::size();
+        return dynamic_array_container<T>::size();
     }
 
     // Get the capacity of the list;
     virtual size_t capacity() const
     {
-        return dynamic_array_container<T, BASE_CAPACITY>::capacity();
+        return dynamic_array_container<T>::capacity();
     }
 
     // Add a given entry to the container.
@@ -119,14 +113,14 @@ public:
         memcpy(&(m_data[index]), entries, size * sizeof(T));
     }
 
-    virtual void add(const array_list<T, BASE_CAPACITY> &list)
+    virtual void add(const array_list<T> &list)
     {
         shift(m_size, list.m_size);
         memcpy(&(m_data[m_size]), list.m_data, list.m_size * sizeof(T));
     }
 
     virtual void add(const size_t &index, 
-        const array_list<T, BASE_CAPACITY> &list)
+        const array_list<T> &list)
     {
         if (index > m_size)
         {
@@ -136,7 +130,7 @@ public:
         memcpy(&(m_data[index]), list.m_data, list.m_size * sizeof(T));
     }
 
-    virtual void add(array_list<T, BASE_CAPACITY> &&list)
+    virtual void add(array_list<T> &&list)
     {
         shift(m_size, list.m_size);
         for (size_t i = 0; i < list.m_size; i++)
@@ -148,7 +142,7 @@ public:
     }
 
     virtual void add(const size_t &index,
-        array_list<T, BASE_CAPACITY> &&list)
+        array_list<T> &&list)
     {
         if (index > m_size)
         {
@@ -208,18 +202,18 @@ public:
     // Remove all the entries from the list, and free the memory.
     virtual void clear()
     {
-        dynamic_array_container<T, BASE_CAPACITY>::clear();
+        dynamic_array_container<T>::clear();
     }
 
     virtual size_t index_of(const T &entry) const
     {
-        return dynamic_array_container<T, BASE_CAPACITY>::index_of(entry);
+        return dynamic_array_container<T>::index_of(entry);
     }
 
     // Return if the list contains a given entry.
     virtual bool contains(const T &entry) const
     {
-        return dynamic_array_container<T, BASE_CAPACITY>::contains(entry);
+        return dynamic_array_container<T>::contains(entry);
     }
 
     // Get the pointer pointing to an array that represents the list.
@@ -232,7 +226,7 @@ public:
 
     // Override assignment expression.
     virtual array_list 
-        &operator=(const array_list<T, BASE_CAPACITY> &rhs)
+        &operator=(const array_list<T> &rhs)
     {
         if (rhs.m_capacity != m_capacity)
         {
@@ -246,8 +240,8 @@ public:
     }
 
     // Cases when the right-hand expression is rvalue.
-    virtual array_list<T, BASE_CAPACITY> &operator=
-        (array_list<T, BASE_CAPACITY> &&rhs)
+    virtual array_list<T> &operator=
+        (array_list<T> &&rhs)
     {
         if (!rhs.m_data)
         {
@@ -265,17 +259,17 @@ public:
         return *this;
     }
 
-    array_list<T, BASE_CAPACITY> &operator+=
+    array_list<T> &operator+=
         (const T &rhs)
     {
         add(rhs);
         return *this;
     }
 
-    friend array_list<T, BASE_CAPACITY> operator+
-        (const array_list<T, BASE_CAPACITY> &lhs, const T &rhs)
+    friend array_list<T> operator+
+        (const array_list<T> &lhs, const T &rhs)
     {
-        array_list<T, BASE_CAPACITY> new_list(lhs);
+        array_list<T> new_list(lhs);
         new_list.add(rhs);
         return new_list;
     }

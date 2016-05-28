@@ -26,12 +26,6 @@ public:
 
     }
 
-    linked_stack(linked_stack<T> &&stack)
-        : adt_stack()
-    {
-
-    }
-
     virtual ~linked_stack()
     {
         stack_top = nullptr;

@@ -11,12 +11,6 @@ public:
     // Default constructor of the stack.
     adt_stack() : adt_container() {}
 
-    adt_stack(adt_stack *stack) : adt_container() {}
-
-    adt_stack(const adt_stack &stack) : adt_container() {}
-
-    adt_stack(adt_stack && stack) : adt_container() {}
-
     // Default destructor of the stack.
     virtual ~adt_stack() {}
 
@@ -29,12 +23,6 @@ public:
 
     // Pop the top entry from the stack.
     virtual T pop() = 0;
-
-    adt_stack& operator=(const adt_stack<T> &stack)
-    { return *this; }
-
-    adt_stack& operator=(adt_stack<T> &&stack)
-    { return *this; }
 };
 
 #endif

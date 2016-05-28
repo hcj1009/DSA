@@ -18,7 +18,7 @@ namespace DSATest
             array_stack<string> test_stack1;
 
             // Default constructor (specified BASE_CAPACITY).
-            array_stack<string, 50> test_stack2;
+            array_stack<string> test_stack2(50);
 
             Assert::AreEqual((size_t)0, test_stack1.size());
             Assert::AreEqual((size_t)10, test_stack1.capacity());
@@ -63,7 +63,7 @@ namespace DSATest
             Assert::AreEqual((size_t)0, test_stack1.size());
             Assert::AreEqual((size_t)10, test_stack1.capacity());
 
-            array_stack<string, 50> test_stack2;
+            array_stack<string> test_stack2(50);
             Assert::AreEqual((size_t)0, test_stack2.size());
             Assert::AreEqual((size_t)50, test_stack2.capacity());
 

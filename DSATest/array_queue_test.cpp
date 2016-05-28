@@ -17,7 +17,8 @@ namespace DSATest
             array_queue<string> test_queue1;
 
             // Default constructor (specified BASE_CAPACITY).
-            array_queue<string, 50> test_queue2;
+            array_queue<string> test_queue2(50);
+
 
             Assert::IsTrue(test_queue1.empty());
             Assert::AreEqual((size_t)0, test_queue1.size());
@@ -26,6 +27,33 @@ namespace DSATest
             Assert::IsTrue(test_queue1.empty());
             Assert::AreEqual((size_t)0, test_queue2.size());
             Assert::AreEqual((size_t)50, test_queue2.capacity());
+
+
+            // TODO Enqueue to test_queue1 & 2
+            /**
+            array_queue<string> test_queue3(test_queue1);
+            array_queue<string> test_queue4(test_queue1);
+
+
+            Assert::IsTrue(test_queue3.empty());
+            Assert::AreEqual((size_t)0, test_queue3.size());
+            Assert::AreEqual((size_t)10, test_queue3.capacity());
+
+            Assert::IsTrue(test_queue4.empty());
+            Assert::AreEqual((size_t)0, test_queue4.size());
+            Assert::AreEqual((size_t)50, test_queue4.capacity());
+
+            array_queue<string> test_queue5(move(test_queue1));
+            array_queue<string> test_queue6(move(test_queue2));
+
+            Assert::IsTrue(test_queue5.empty());
+            Assert::AreEqual((size_t)0, test_queue5.size());
+            Assert::AreEqual((size_t)10, test_queue5.capacity());
+
+            Assert::IsTrue(test_queue6.empty());
+            Assert::AreEqual((size_t)0, test_queue6.size());
+            Assert::AreEqual((size_t)50, test_queue6.capacity());
+            /**/
         }
 
         TEST_METHOD(test_empty)
@@ -65,7 +93,7 @@ namespace DSATest
             Assert::AreEqual((size_t)0, test_queue1.size());
             Assert::AreEqual((size_t)10, test_queue1.capacity());
 
-            array_queue<string, 50> test_queue2;
+            array_queue<string> test_queue2(50);
             Assert::AreEqual((size_t)0, test_queue2.size());
             Assert::AreEqual((size_t)50, test_queue2.capacity());
 

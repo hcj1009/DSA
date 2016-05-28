@@ -1,0 +1,41 @@
+// dynamic_array_container.h
+Make BASE_CAPACITY a member.
+Change array_*.h accordingly.
+
+// s_linked_container.h
+Fix insert_entry function.
+Modify s_linked_list.h accordingly.
+
+// array_list.h
+Fix destructor.
+Test add overloads.
+Implement remove overloads.
+Implement operator overrides.
+
+// s_linked_list.h
+Fix destructor.
+Implement add overloads.
+Implement remove overloads.
+Implement to_array.
+Implement operator overrides.
+
+// linked_deque.h
+Implement operator overrides.
+
+// s_node.h, d_node.h
+Add copy & move constructors.
+
+// General
+Restructure array_queue.h, array_stack.h (inherit from dynamic_array_container class).
+Restructure linked_stack.h (inherit from s_linked_container class).
+
+Implement iterators.
+Add d_linked_list class.
+Add fixed_array_container.h.
+Add full_container exception to dsaexcept.h.
+Add adt_set & adt_multiset.
+Implement array_set, linked_set, array_multiset, linked_multiset.
+Implement fixed_* class.
+
+// Extras
+Add comments.
