@@ -18,7 +18,7 @@ public:
         m_next = nullptr;
     }
 
-    s_node(d_node<T> *&prev, const T &data, s_node<T> *&prev)
+    d_node(d_node<T> *&prev, const T &data, d_node<T> *&next)
     {
         m_data = data;
         m_prev = prev;
