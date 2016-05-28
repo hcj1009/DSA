@@ -176,5 +176,56 @@ namespace DSATest
                 Assert::AreEqual(i + 1, test_stack.size());
             }
         }
+
+        TEST_METHOD(test_assignment_operator)
+        {
+            array_stack<string> test_stack1;
+            for (size_t i = 0; i < 100; i++)
+            {
+                test_stack1.push(to_string(i));
+                Assert::AreEqual(to_string(i), test_stack1.peek());
+            }
+            Assert::AreEqual((size_t)100, test_stack1.size());
+
+            array_stack<string> test_stack2;
+            Assert::IsTrue(test_stack2.empty());
+            Assert::AreEqual((size_t)0, test_stack2.size());
+            Assert::AreEqual((size_t)10, test_stack2.capacity());
+
+            test_stack2 = test_stack1;
+            Assert::IsFalse(test_stack1.empty());
+            Assert::AreEqual((size_t)100, test_stack1.size());
+            Assert::AreEqual((size_t)160, test_stack1.capacity());
+            Assert::IsFalse(test_stack2.empty());
+            Assert::AreEqual((size_t)100, test_stack2.size());
+            Assert::AreEqual((size_t)160, test_stack2.capacity());
+
+            for (size_t i = 0; i < 100; i++)
+            {
+                Assert::AreEqual(to_string(99 - i), test_stack1.pop());
+                Assert::AreEqual(to_string(99 - i), test_stack2.pop());
+            }
+
+            // Test rvalue cases.
+            test_stack2.clear();
+            Assert::IsTrue(test_stack2.empty());
+            Assert::AreEqual((size_t)0, test_stack2.size());
+            Assert::AreEqual((size_t)10, test_stack2.capacity());
+
+            for (size_t i = 0; i < 100; i++)
+            {
+                test_stack1.push(to_string(i));
+                Assert::AreEqual(to_string(i), test_stack1.peek());
+            }
+            Assert::AreEqual((size_t)100, test_stack1.size());
+
+            test_stack2 = move(test_stack1);
+            Assert::IsTrue(test_stack1.empty());
+            Assert::AreEqual((size_t)0, test_stack1.size());
+            Assert::AreEqual((size_t)160, test_stack1.capacity());
+            Assert::IsFalse(test_stack2.empty());
+            Assert::AreEqual((size_t)100, test_stack2.size());
+            Assert::AreEqual((size_t)160, test_stack2.capacity());
+        }
     };
 }

@@ -7,9 +7,9 @@
 
 // Singly linked node implementation of LIFO Stack data structure.
 template<class T>
-class linked_stack : adt_stack<T>
+class linked_stack : public adt_stack<T>
 {
-private:
+protected:
     s_node<T> *stack_top;
     size_t stack_size;
 
@@ -18,6 +18,18 @@ public:
     {
         stack_top = nullptr;
         stack_size = 0;
+    }
+
+    linked_stack(const linked_stack<T> &stack)
+        : adt_stack()
+    {
+
+    }
+
+    linked_stack(linked_stack<T> &&stack)
+        : adt_stack()
+    {
+
     }
 
     virtual ~linked_stack()
@@ -96,6 +108,16 @@ public:
             cur_node = cur_node->next();
         }
         return false;
+    }
+
+    linked_stack& operator=(const linked_stack<T> &stack)
+    {
+        return *this;
+    }
+
+    linked_stack& operator=(linked_stack<T> &&stack)
+    {
+        return *this;
     }
 };
 

@@ -54,6 +54,24 @@
     <ClInclude Include="dsaexcept.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="adt_deque.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linked_deque.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="s_linked_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="d_linked_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic_array_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="base_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

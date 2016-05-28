@@ -26,9 +26,6 @@ public:
     // Default destructor of the list.
     virtual ~adt_list() {};
 
-    // Add a given entry to a given index of the list.
-    virtual void add(const T &entry) = 0;
-
     virtual void add(const size_t &index, const T &entry) = 0;
     
     virtual void add(const T entries[], const size_t &size) = 0;

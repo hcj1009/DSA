@@ -7,9 +7,9 @@
 // Circular array based implementation of FIFO Queue.
 template <class T,
     size_t BASE_CAPACITY = 10>
-class array_queue : adt_queue<T>
+class array_queue : public adt_queue<T>
 {
-private:
+protected:
     T *m_data;
     size_t m_size;
     size_t m_capacity;

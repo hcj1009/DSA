@@ -5,7 +5,7 @@
 template <class T>
 class s_node
 {
-private:
+protected:
     T m_data;
     s_node<T> *m_next;
 

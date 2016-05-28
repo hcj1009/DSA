@@ -346,7 +346,7 @@ namespace DSATest
             }
         }
 
-        TEST_METHOD(test_operator_equal)
+        TEST_METHOD(test_assignment_operator)
         {
             array_list<string> test_list1;
             for (size_t i = 0; i < 100; i++)
@@ -371,6 +371,7 @@ namespace DSATest
 
             for (size_t i = 0; i < 100; i++)
             {
+                Assert::AreEqual(to_string(i), test_list1.get(i));
                 Assert::AreEqual(to_string(i), test_list2.get(i));
             }
 
@@ -391,7 +392,7 @@ namespace DSATest
             Assert::AreEqual((size_t)160, test_list2.capacity());
         }
 
-        TEST_METHOD(test_operator_plus)
+        TEST_METHOD(test_addition_operator)
         {
             array_list<string> test_list1;
             Assert::AreEqual((size_t)0, test_list1.size());
