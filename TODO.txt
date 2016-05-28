@@ -1,7 +1,3 @@
-// dynamic_array_container.h
-Make BASE_CAPACITY a member.
-Change array_*.h accordingly.
-
 // s_linked_container.h
 Fix insert_entry function.
 Modify s_linked_list.h accordingly.
@@ -26,7 +22,6 @@ Implement operator overrides.
 Add copy & move constructors.
 
 // General
-Restructure array_queue.h, array_stack.h (inherit from dynamic_array_container class).
 Restructure linked_stack.h (inherit from s_linked_container class).
 
 Implement iterators.

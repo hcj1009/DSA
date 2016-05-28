@@ -8,7 +8,7 @@ class adt_container
 {
 public:
     // Default constructor of the container.
-    adt_container() {}
+    adt_container() = default;
 
     // Default destructor of the container.
     virtual ~adt_container() {}

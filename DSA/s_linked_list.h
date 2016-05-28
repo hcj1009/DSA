@@ -15,7 +15,7 @@ protected:
 
 public:
     // Default constructor of the lsit.
-    s_linked_list() : s_linked_container(), adt_list()
+    s_linked_list() : s_linked_container()
     {
         m_tail = nullptr;
     }

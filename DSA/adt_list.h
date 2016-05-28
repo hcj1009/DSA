@@ -9,22 +9,13 @@ class adt_list : public adt_container<T>
 {
 public:
     // Default constructor of the list.
-    adt_list() : adt_container() {};
-
-    // Build a list based on a given list.
-    adt_list(const adt_list &list) {};
-
-    // Build a list based on a given list (pointer).
-    adt_list(adt_list *list) {};
-
-    // Build a list based on a given list (rvalue).
-    adt_list(adt_list &&list) noexcept {};
+    adt_list() : adt_container() {}
 
     // Build a list based on a given array of entries.
-    adt_list(const T entries[], const size_t &size) : adt_container() {};
+    adt_list(const T entries[], const size_t &size) : adt_container() {}
 
     // Default destructor of the list.
-    virtual ~adt_list() {};
+    virtual ~adt_list() {}
 
     virtual void add(const size_t &index, const T &entry) = 0;
     
@@ -33,13 +24,6 @@ public:
     virtual void add(const size_t &index,
         const T entries[],
         const size_t &size) = 0;
-
-    virtual void add(const adt_list &list) {}
-    virtual void add(const size_t &index, const adt_list &list) {}
-    virtual void add(adt_list &&list) {}
-    virtual void add(const size_t &index, adt_list &&list) {}
-
-    /**/
 
     // Remove and return the entry at a given index from the list.
     virtual T remove(const size_t &index) = 0;
@@ -62,17 +46,6 @@ public:
 
     // Get the pointer pointing to an array that represents the list.
     virtual T *to_array() const = 0;
-
-    // Override assignment expression.
-    virtual adt_list& operator=(const adt_list &rhs)
-    { return *this; }
-
-    // Cases when the right-hand expression is rvalue.
-    virtual adt_list& operator=(adt_list &&rhs)
-    { return *this; }
-    
-    friend adt_list& operator+(const adt_list &lhs, const T &rhs) { return *this; };
-    // TODO Override operators.
 };
 
 #endif

@@ -12,7 +12,7 @@ class array_list
 {
 public:
     // Default constructor of the list.
-    array_list(const size_t &base_capacity = DEFAULT_BASE_CAPACITY) 
+    array_list(const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
         : dynamic_array_container(base_capacity), adt_list() {}
 
     // Builda list based on a given list.

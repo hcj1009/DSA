@@ -9,7 +9,7 @@ class adt_queue : public adt_container<T>
 {
 public:
     // Default constructor.
-    adt_queue() : adt_container() {};
+    adt_queue() : adt_container() {}
 
     // Default destructor.
     virtual ~adt_queue() {}
