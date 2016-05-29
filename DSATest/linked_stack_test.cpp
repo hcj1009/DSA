@@ -5,6 +5,7 @@
 #include "../DSA/linked_stack.h"
 
 using namespace std;
+using namespace DSA;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace DSATest

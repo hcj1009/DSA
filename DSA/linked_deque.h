@@ -4,92 +4,95 @@
 #include "adt_deque.h"
 #include "d_linked_container.h"
 
-template <class T>
-class linked_deque : public d_linked_container<T>
+namespace DSA
 {
-public:
-    linked_deque() : d_linked_container() {}
-
-    linked_deque(const linked_deque<T> &deque)
+    template <class T>
+    class linked_deque : public d_linked_container<T>
     {
-        m_head = deque.m_head;
-        m_tail = deque.m_tail;
-        m_size = deque.m_size;
-    }
+    public:
+        linked_deque() : d_linked_container() {}
 
-    virtual ~linked_deque() {}
-
-    virtual bool empty() const
-    {
-        return d_linked_container<T>::empty();
-    }
-
-    virtual size_t size() const
-    {
-        return d_linked_container<T>::size();
-    }
-
-    virtual void clear()
-    {
-        d_linked_container<T>::clear();
-    }
-
-    virtual void push_front(const T &entry)
-    {
-        d_node<T> *new_node(entry);
-        insert_front(new_node);
-    }
-
-    virtual T pop_front()
-    {
-        if (0 == m_size)
+        linked_deque(const linked_deque<T> &deque)
         {
-            throw empty_container("Cannot pop entry from an empty deque.");
+            m_head = deque.m_head;
+            m_tail = deque.m_tail;
+            m_size = deque.m_size;
         }
-        d_node<T> *cur_node = remove(0);
-        m_size--;
-        return cur_node->data();
-    }
 
-    virtual T front() const
-    {
-        if (0 == m_size)
+        virtual ~linked_deque() {}
+
+        virtual bool empty() const
         {
-            throw empty_container("Cannot get entry from an empty deque.");
+            return d_linked_container<T>::empty();
         }
-        return m_head->data();
-    }
 
-    virtual void push_back(const T &entry)
-    {
-        d_node<T> *new_node(entry);
-        insert_back(new_node);
-    }
-
-    virtual T pop_back()
-    {
-        if (0 == m_size)
+        virtual size_t size() const
         {
-            throw empty_container("Cannot pop entry from an empty deque.");
+            return d_linked_container<T>::size();
         }
-        return T();
-        // return remove(--m_size)->data();
-    }
 
-    virtual T back() const
-    {
-        if (0 == m_size)
+        virtual void clear()
         {
-            throw empty_container("Cannot get entry from an empty deque.");
+            d_linked_container<T>::clear();
         }
-        return T();
-        // return m_tail->data();
-    }
 
-    virtual bool contains(const T &entry) const
-    {
-        return d_linked_container<T>::contains(entry);
-    }
-};
+        virtual void push_front(const T &entry)
+        {
+            d_node<T> *new_node(entry);
+            insert_front(new_node);
+        }
+
+        virtual T pop_front()
+        {
+            if (0 == m_size)
+            {
+                throw empty_container("Cannot pop entry from an empty deque.");
+            }
+            d_node<T> *cur_node = remove(0);
+            m_size--;
+            return cur_node->data();
+        }
+
+        virtual T front() const
+        {
+            if (0 == m_size)
+            {
+                throw empty_container("Cannot get entry from an empty deque.");
+            }
+            return m_head->data();
+        }
+
+        virtual void push_back(const T &entry)
+        {
+            d_node<T> *new_node(entry);
+            insert_back(new_node);
+        }
+
+        virtual T pop_back()
+        {
+            if (0 == m_size)
+            {
+                throw empty_container("Cannot pop entry from an empty deque.");
+            }
+            return T();
+            // return remove(--m_size)->data();
+        }
+
+        virtual T back() const
+        {
+            if (0 == m_size)
+            {
+                throw empty_container("Cannot get entry from an empty deque.");
+            }
+            return T();
+            // return m_tail->data();
+        }
+
+        virtual bool contains(const T &entry) const
+        {
+            return d_linked_container<T>::contains(entry);
+        }
+    };
+}
 
 #endif

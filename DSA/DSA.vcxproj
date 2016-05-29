@@ -29,18 +29,25 @@
     <ClInclude Include="array_queue.h" />
     <ClInclude Include="array_stack.h" />
     <ClInclude Include="base_container.h" />
+    <ClInclude Include="dsa.h" />
+    <ClInclude Include="dsa_deque.h" />
+    <ClInclude Include="dsa_queue.h" />
+    <ClInclude Include="dsa_set.h" />
+    <ClInclude Include="dsa_stack.h" />
     <ClInclude Include="dynamic_array_container.h" />
     <ClInclude Include="d_linked_container.h" />
     <ClInclude Include="d_node.h" />
-    <ClInclude Include="dsaexcept.h" />
+    <ClInclude Include="dsa_except.h" />
     <ClInclude Include="fixed_array_container.h" />
     <ClInclude Include="fixed_set.h" />
     <ClInclude Include="linked_deque.h" />
     <ClInclude Include="linked_stack.h" />
+    <ClInclude Include="dsa_list.h" />
     <ClInclude Include="s_linked_container.h" />
     <ClInclude Include="s_linked_list.h" />
     <ClInclude Include="s_node.h" />
-    <ClInclude Include="sort.h" />
+    <ClInclude Include="dsa_sort.h" />
+    <ClInclude Include="timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

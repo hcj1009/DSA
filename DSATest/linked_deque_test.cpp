@@ -4,7 +4,8 @@
 #include <string>
 #include "../DSA/linked_deque.h"
 
-using std::string;
+using namespace std;
+using namespace DSA;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace DSATest

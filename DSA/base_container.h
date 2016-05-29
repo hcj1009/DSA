@@ -3,39 +3,42 @@
 
 #include "adt_container.h"
 
-template <class T>
-class base_container : virtual public adt_container<T>
+namespace DSA
 {
-protected:
-    size_t m_size;
-
-public:
-    base_container() : adt_container<T>()
+    template <class T>
+    class base_container : virtual public adt_container<T>
     {
-        m_size = 0;
-    }
+    protected:
+        size_t m_size;
 
-    virtual ~base_container() {}
+    public:
+        base_container() : adt_container<T>()
+        {
+            m_size = 0;
+        }
 
-    virtual bool empty() const
-    {
-        return (0 == m_size);
-    }
+        virtual ~base_container() {}
 
-    virtual size_t size() const
-    {
-        return m_size;
-    }
+        virtual bool empty() const
+        {
+            return (0 == m_size);
+        }
 
-    virtual void clear()
-    {
-        m_size = 0;
-    }
+        virtual size_t size() const
+        {
+            return m_size;
+        }
 
-    virtual bool contains(const T &entry) const
-    {
-        return false;
-    }
-};
+        virtual void clear()
+        {
+            m_size = 0;
+        }
+
+        virtual bool contains(const T &entry) const
+        {
+            return false;
+        }
+    };
+}
 
 #endif

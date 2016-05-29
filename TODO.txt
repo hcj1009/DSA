@@ -20,9 +20,8 @@ Add copy & move constructors.
 // General
 Implement iterators.
 Add d_linked_list class.
-Add full_container exception to dsaexcept.h.
 Add adt_set & adt_multiset.
-Implement array_set, linked_set, array_multiset, linked_multiset.
+Implement linked_set, array_multiset, linked_multiset.
 Implement fixed_* class.
 
 // Extras

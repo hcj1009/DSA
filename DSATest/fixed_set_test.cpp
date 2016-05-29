@@ -4,7 +4,8 @@
 #include <string>
 #include "../DSA/fixed_set.h"
 
-using std::to_string;
+using namespace std;
+using namespace DSA;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace DSATest
