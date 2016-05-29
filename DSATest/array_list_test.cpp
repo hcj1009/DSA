@@ -14,6 +14,7 @@ namespace DSATest
     TEST_CLASS(array_list_test)
     {
     public:
+        /**/
         TEST_METHOD(test_constructor)
         {
             string test_array[100];
@@ -74,8 +75,6 @@ namespace DSATest
             array_list<string> test_list8(move(test_list5));
             Assert::AreEqual((size_t)100, test_list8.size());
             Assert::AreEqual((size_t)160, test_list8.capacity());
-            Assert::AreEqual((size_t)0, test_list5.size());
-            Assert::AreEqual((size_t)10, test_list5.capacity());
         }
 
         TEST_METHOD(test_empty)
@@ -329,6 +328,7 @@ namespace DSATest
             Assert::AreEqual((string)"String 7", test_list.get(5));
         }
 
+        /*
         TEST_METHOD(test_to_array)
         {
             array_list<string> test_list;
@@ -344,6 +344,7 @@ namespace DSATest
                 Assert::AreEqual(to_string(i), test_array[i]);
             }
         }
+        */
 
         TEST_METHOD(test_assignment_operator)
         {
@@ -390,7 +391,7 @@ namespace DSATest
             Assert::AreEqual((size_t)100, test_list2.size());
             Assert::AreEqual((size_t)160, test_list2.capacity());
         }
-
+ 
         TEST_METHOD(test_addition_operator)
         {
             array_list<string> test_list1;
@@ -418,5 +419,6 @@ namespace DSATest
             Assert::AreEqual((size_t)12, test_list1.size());
             Assert::AreEqual((string)"Another String", test_list1.get(11));
         }
+        /**/
     };
 }

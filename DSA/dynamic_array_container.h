@@ -5,7 +5,6 @@
 #include <memory>
 #include <algorithm>
 #include "dsa_except.h"
-#include "dsa_object.h"
 #include "base_container.h"
 
 namespace DSA

@@ -6,7 +6,6 @@
 
 namespace DSA
 {
-
     // Circular array based implementation of FIFO Queue.
     template <class T>
     class array_queue

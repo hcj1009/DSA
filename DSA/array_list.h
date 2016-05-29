@@ -24,6 +24,10 @@ namespace DSA
             m_capacity = list.m_capacity;
             m_size = list.m_size;
             m_data = data_t(new std::shared_ptr<T>[m_capacity]);
+            for (size_t i = 0; i < m_size; i++)
+            {
+                m_data[i] = std::shared_ptr<T>(list.m_data[i]);
+            }
         }
 
         // Move constructor: build a list based on a given list (rvalue).
@@ -33,15 +37,12 @@ namespace DSA
             m_capacity = std::move(list.m_capacity);
             m_size = std::move(list.m_size);
             m_data = std::move(list.m_data);
-            list.m_capacity = m_base_capacity;
-            list.m_size = 0;
         }
 
         // Build a list based on a given array of entries.
         array_list(const T entries[],
             const size_t &size,
             const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
-            : adt_list(entries, size)
         {
             m_base_capacity = base_capacity;
             m_capacity = capacity_of(size);
@@ -49,7 +50,7 @@ namespace DSA
             m_data = data_t(new shared_ptr<T>[m_capacity]);
             for (size_t i = 0; i < m_size; i++)
             {
-                m_data[i] = std::shared_ptr<T>(&entries[i]);
+                m_data[i].reset(new T(entries[i]));
             }
         }
 
@@ -85,16 +86,17 @@ namespace DSA
         virtual void add(const T &entry)
         {
             shift(m_size, 1);
-            m_data[m_size - 1] = std::shared_ptr<T>(new T(entry));
+            m_data[m_size - 1].reset(new T(entry));
         }
 
-        /*
+        /*/
+        /**
         virtual void add(T &&entry)
         {
             shift(m_size, 1);
-            m_data[m_size - 1] = std::shared_ptr<T>(&entry);
+            m_data[m_size - 1].reset(&std::move(entry));
         }
-        */
+        /**/
 
         // Add a given entry to a given index of the list.
         virtual void add(const size_t &index, const T &entry)
@@ -104,7 +106,7 @@ namespace DSA
                 throw index_error("Index out of bounds.");
             }
             shift(index, 1);
-            m_data[index] = std::shared_ptr<T>(new T(entry));
+            m_data[index].reset(new T(entry));
         }
 
         /**/
@@ -113,7 +115,7 @@ namespace DSA
             shift(m_size, size);
             for (size_t i = 0; i < m_size; i++)
             {
-                m_data[m_size + i] = std::shared_ptr<T>(new T(entries[i]));
+                m_data[m_size + i].reset(new T(entries[i]));
             }
         }
 
@@ -128,7 +130,7 @@ namespace DSA
             shift(index, size);
             for (size_t i = 0; i < m_size; i++)
             {
-                m_data[index + i] = std::shared_ptr<T>(new T(entries[i]));
+                m_data[index + i].reset(new T(entries[i]));
             }
         }
 
@@ -189,7 +191,7 @@ namespace DSA
             {
                 throw index_error("Index out of bounds.");
             }
-            T &cur_entry = *m_data[index];
+            T cur_entry = std::move(*m_data[index]);
             shift(index + 1, -1);
             return cur_entry;
         }
@@ -208,7 +210,8 @@ namespace DSA
             {
                 throw index_error("Index out of bounds.");
             }
-            return *m_data[index];
+            T cur_entry = *(m_data[index]);
+            return cur_entry;
         }
 
         // Set the value of the entry at a given index to a given entry.
@@ -219,7 +222,7 @@ namespace DSA
             {
                 throw index_error("Index out of bounds.");
             }
-            m_data[index] = std::shared_ptr<T>(new T(entry));
+            m_data[index].reset(new T(entry));
         }
 
         virtual size_t index_of(const T &entry) const
@@ -245,13 +248,13 @@ namespace DSA
         {
             if (rhs.m_capacity != m_capacity)
             {
-                m_data = data_t
-                    (new std::shared_ptr<T>[m_capacity = rhs.m_capacity]);
+                m_data.reset(new std::shared_ptr<T>[m_capacity = rhs.m_capacity]);
             }
+            m_base_capacity = rhs.m_base_capacity;
             m_size = rhs.m_size;
             for (size_t i = 0; i < m_size; i++)
             {
-                m_data[i] = rhs.m_data[i];
+                m_data[i] = std::shared_ptr<T>(rhs.m_data[i]);
             }
             return *this;
         }
@@ -260,19 +263,12 @@ namespace DSA
         virtual array_list<T> &operator=
             (array_list<T> &&rhs)
         {
-            if (!rhs.m_data)
+            m_base_capacity = std::move(rhs.m_base_capacity);
+            m_capacity = std::move(rhs.m_capacity);
+            m_size = std::move(rhs.m_size);
+            for (size_t i = 0; i < m_size; i++)
             {
-                clear();
-            }
-            else
-            {
-                m_capacity = std::move(rhs.m_capacity);
-                m_size = std::move(rhs.m_size);
-                for (size_t i = 0; i < m_size; i++)
-                {
-                    m_data[i] = rhs.m_data[i];
-                }
-                rhs.m_size = 0;
+                m_data[i] = std::move(rhs.m_data[i]);
             }
             return *this;
         }

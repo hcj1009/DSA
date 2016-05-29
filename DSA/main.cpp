@@ -4,8 +4,6 @@
 #include "timer.h"
 #include "dsa.h"
 
-#include "dsa_object.h"
-
 using namespace DSA;
 using DSA::utility::timer;
 
@@ -22,27 +20,35 @@ int main(int argc, char *argv[])
     for (size_t i = 0; i < COUNT; i++)
     {
         t.reset();
-        for (size_t i = 0; i < 10000; i++)
+        for (size_t i = 0; i < 1000; i++)
         {
             test_list1.insert(test_list1.end(),
                 std::to_string(i));
+        }
+        for (size_t i = 0; i < 1000; i++)
+        {
+            test_list1.erase(test_list1.begin());
         }
         total_time1 += t.elapsed();
         test_list1.clear();
     }
     std::cout << total_time1 / COUNT << "s" << std::endl;
     /**/
-
     /**/
     std::cout << "Testing DSA::array_list<string>..." << std::endl;
-    array_list<string> test_list2(5000);
+    array_list<string> test_list2(100);
+    string a = "12";
     double total_time2 = 0;
     for (size_t i = 0; i < COUNT; i++)
     {
         t.reset();
-        for (size_t i = 0; i < 10000; i++)
+        for (size_t i = 0; i < 1000; i++)
         {
-            test_list2.add(std::to_string(i));
+            test_list2.add(a);
+        }
+        for (size_t i = 0; i < 1000; i++)
+        {
+            test_list2.remove(0);
         }
         total_time2 += t.elapsed();
         test_list2.clear();
