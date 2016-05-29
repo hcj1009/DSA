@@ -23,7 +23,7 @@ public:
         memcpy(m_data, stack.m_data, m_size * sizeof(T));
     }
 
-    array_stack(array_stack<T> &&stack)
+    array_stack(array_stack<T> &&stack) noexcept
     {
         m_base_capacity = std::move(stack.m_base_capacity);
         m_capacity = std::move(stack.m_capacity);

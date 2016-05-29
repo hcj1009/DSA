@@ -4,13 +4,13 @@
 #include "adt_container.h"
 
 template <class T>
-class base_container : public adt_container<T>
+class base_container : virtual public adt_container<T>
 {
 protected:
     size_t m_size;
 
 public:
-    base_container() : adt_container()
+    base_container() : adt_container<T>()
     {
         m_size = 0;
     }

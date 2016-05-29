@@ -5,7 +5,8 @@
 #include "d_node.h"
 
 template <class T>
-class d_linked_container : public base_container<T>
+class d_linked_container 
+    : virtual public base_container<T>
 {
 protected:
     d_node<T> *m_head;
@@ -97,7 +98,7 @@ protected:
         else
         {
             d_node<T> *new_node = new d_node<T>(entry);
-            d_node<T> &old_node = node_at(index);
+            d_node<T> &old_node = *node_at(index);
             new_node->set_prev(old_node.prev());
             new_node->set_next(old_node);
             if (!new_node->prev())

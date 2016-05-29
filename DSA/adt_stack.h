@@ -5,7 +5,7 @@
 
 // Abstract data structure LIFO Stack.
 template <class T>
-class adt_stack : public adt_container<T>
+class adt_stack : virtual public adt_container<T>
 {
 public:
     // Default constructor of the stack.

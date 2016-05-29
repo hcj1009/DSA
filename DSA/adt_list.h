@@ -5,7 +5,7 @@
 
 // Abstract data structure List.
 template <class T>
-class adt_list : public adt_container<T>
+class adt_list : virtual public adt_container<T>
 {
 public:
     // Default constructor of the list.

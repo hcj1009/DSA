@@ -6,7 +6,8 @@
 #include "base_container.h"
 
 template <class T>
-class dynamic_array_container : public base_container<T>
+class dynamic_array_container 
+    : virtual public base_container<T>
 {
 protected:
     // Natural log 2, used in function capacity_of(const size_t &)
@@ -44,9 +45,23 @@ protected:
         }
     }
 
+    // Get the index of a given entry.
+    // Throw no_such_element exception when the given entry is not found.
+    inline size_t index_of(const T &entry) const
+    {
+        for (size_t i = 0; i < m_size; i++)
+        {
+            if (entry == m_data[i])
+            {
+                return i;
+            }
+        }
+        throw no_such_element("Cannot find such entry in the container.");
+    }
+
     // Helper function to shift a range of entries starting at a
     // given index with a given displacement.
-    void shift(const size_t &index,
+    inline void shift(const size_t &index,
         const ptrdiff_t &disp)
     {
         if (0 == disp)
@@ -125,20 +140,6 @@ public:
         m_capacity = m_base_capacity;
         m_data = new T[m_capacity];
         memset(m_data, 0, m_capacity * sizeof(T));
-    }
-
-    // Get the index of a given entry.
-    // Throw no_such_element exception when the given entry is not found.
-    virtual size_t index_of(const T &entry) const
-    {
-        for (size_t i = 0; i < m_size; i++)
-        {
-            if (entry == m_data[i])
-            {
-                return i;
-            }
-        }
-        throw no_such_element("Cannot find such entry in the container.");
     }
 
     // Return if the container contains a given entry.

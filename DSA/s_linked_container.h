@@ -5,7 +5,8 @@
 #include "s_node.h"
 
 template <class T>
-class s_linked_container : public base_container<T>
+class s_linked_container 
+    : virtual public base_container<T>
 {
 protected:
     s_node<T> *m_head;
@@ -40,33 +41,30 @@ protected:
         throw no_such_element("Cannot find such entry in the container.");
     }
 
-    void insert_entry(const size_t &index, const T &entry)
+    void insert_front(const T &entry)
     {
         s_node<T> *new_node = new s_node<T>(entry);
-        s_node<T> *prev_node = nullptr;
+        new_node->set_next(m_head);
+        m_head = new_node;
+        m_size++;
+    }
+
+    void insert_entry(const size_t &index, const T &entry)
+    {
         // Case when adding to the frong of the list
         if (0 == index)
         {
-            new_node->set_next(m_head);
-            m_head = new_node;
+            insert_front(entry);
         }
         // Other cases.
         else
         {
-            prev_node = node_at(index - 1);
-            new_node->set_next(prev_node->next());
-            prev_node->set_next(new_node);
+            s_node<T> *new_node = new s_node<T>(entry);
+            s_node<T> &prev_node = *node_at(index - 1);
+            new_node->set_next(prev_node.next());
+            prev_node.set_next(new_node);
+            m_size++;
         }
-
-        /** TODO move this to s_linked_list::add()
-        // Case when the list is empty.
-        if ((!m_tail) || (prev_node == m_tail))
-        {
-            m_tail = new_node;
-        }
-        /**/
-
-        m_size++;
     }
 
 public:

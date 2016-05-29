@@ -23,6 +23,7 @@
     <ClInclude Include="adt_deque.h" />
     <ClInclude Include="adt_list.h" />
     <ClInclude Include="adt_queue.h" />
+    <ClInclude Include="adt_set.h" />
     <ClInclude Include="adt_stack.h" />
     <ClInclude Include="array_list.h" />
     <ClInclude Include="array_queue.h" />
@@ -32,6 +33,8 @@
     <ClInclude Include="d_linked_container.h" />
     <ClInclude Include="d_node.h" />
     <ClInclude Include="dsaexcept.h" />
+    <ClInclude Include="fixed_array_container.h" />
+    <ClInclude Include="fixed_set.h" />
     <ClInclude Include="linked_deque.h" />
     <ClInclude Include="linked_stack.h" />
     <ClInclude Include="s_linked_container.h" />

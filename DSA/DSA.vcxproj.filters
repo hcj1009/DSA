@@ -72,6 +72,15 @@
     <ClInclude Include="base_container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="fixed_array_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adt_set.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fixed_set.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

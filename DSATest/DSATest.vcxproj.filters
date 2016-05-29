@@ -44,5 +44,8 @@
     <ClCompile Include="linked_deque_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fixed_set_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

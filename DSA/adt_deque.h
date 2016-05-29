@@ -5,7 +5,7 @@
 
 // Abstract data structure Double-ended Queue (Deque)
 template <class T>
-class adt_deque : public adt_container<T>
+class adt_deque : virtual public adt_container<T>
 {
 public:
     // Default constructor.

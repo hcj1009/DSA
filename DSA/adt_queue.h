@@ -5,7 +5,7 @@
 
 // Abstract data structure FIFO Queue.
 template <class T>
-class adt_queue : public adt_container<T>
+class adt_queue : virtual public adt_container<T>
 {
 public:
     // Default constructor.

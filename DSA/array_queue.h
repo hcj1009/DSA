@@ -65,7 +65,7 @@ public:
     }
     /**/
 
-    array_queue(array_queue<T> &&queue)
+    array_queue(array_queue<T> &&queue) noexcept
     {
         delete[] m_data;
         m_base_capacity = std::move(queue.m_base_capacity);
