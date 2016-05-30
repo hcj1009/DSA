@@ -129,6 +129,9 @@
     <ClInclude Include="array_stack_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="linked_deque_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

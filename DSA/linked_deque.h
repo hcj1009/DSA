@@ -12,89 +12,34 @@ namespace DSA
         typedef d_linked_container<T> base_impl;
         typedef std::shared_ptr<d_node<T>> node_ptr;
     public:
-        linked_deque() : d_linked_container<T>() {}
+        linked_deque();
 
-        linked_deque(const linked_deque<T> &deque)
-        {
-            base_impl::m_head = deque.base_impl::m_head;
-            base_impl::m_tail = deque.base_impl::m_tail;
-            base_impl::m_size = deque.base_impl::m_size;
-        }
+        linked_deque(const linked_deque<T> &deque);
 
-        virtual ~linked_deque() {}
+        virtual ~linked_deque();
 
-        virtual bool empty() const
-        {
-            return d_linked_container<T>::empty();
-        }
+        inline virtual bool empty() const;
 
-        virtual size_t size() const
-        {
-            return d_linked_container<T>::size();
-        }
+        inline virtual size_t size() const;
 
-        virtual void clear()
-        {
-            d_linked_container<T>::clear();
-        }
+        inline virtual void clear();
 
-        virtual void push_front(const T &entry)
-        {
-            node_ptr new_node = node_ptr(new T(entry));
-            insert_front(new_node);
-        }
+        inline virtual void push_front(const T &entry);
 
-        virtual T pop_front()
-        {
-            if (0 == base_impl::m_size)
-            {
-                throw empty_container("Cannot pop entry from an empty deque.");
-            }
-            node_ptr cur_node = remove(0);
-            base_impl::m_size--;
-            return cur_node->data();
-        }
+        inline virtual T pop_front();
 
-        virtual T front() const
-        {
-            if (0 == base_impl::m_size)
-            {
-                throw empty_container("Cannot get entry from an empty deque.");
-            }
-            return base_impl::m_head->data();
-        }
+        inline virtual T front() const;
 
-        virtual void push_back(const T &entry)
-        {
-            node_ptr new_node = node_ptr(new T(entry));
-            insert_back(new_node);
-        }
+        inline virtual void push_back(const T &entry);
 
-        virtual T pop_back()
-        {
-            if (0 == base_impl::m_size)
-            {
-                throw empty_container("Cannot pop entry from an empty deque.");
-            }
-            return T();
-            // return remove(--base_impl::m_size)->data();
-        }
+        inline virtual T pop_back();
 
-        virtual T back() const
-        {
-            if (0 == base_impl::m_size)
-            {
-                throw empty_container("Cannot get entry from an empty deque.");
-            }
-            return T();
-            // return base_impl::m_tail->data();
-        }
+        inline virtual T back() const;
 
-        virtual bool contains(const T &entry) const
-        {
-            return d_linked_container<T>::contains(entry);
-        }
+        inline virtual bool contains(const T &entry) const;
     };
 }
+
+#include "linked_deque_impl.h"
 
 #endif
