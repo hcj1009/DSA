@@ -3,10 +3,10 @@
 
 namespace DSA
 {
-    /**/
     // Get the node at a given position (index) in the linked chain.
     template <class T>
-    node_ptr s_linked_container<T>::node_at(const size_t &index) const
+    std::shared_ptr<s_node<T>> 
+        s_linked_container<T>::node_at(const size_t &index) const
     {
         if (index >= base_impl::m_size)
         {
@@ -23,7 +23,8 @@ namespace DSA
 
     // Get the node that contains a given entry in the linked chain.
     template <class T>
-    node_ptr s_linked_container<T>::node_of(const T &entry) const
+    std::shared_ptr<s_node<T>> 
+        s_linked_container<T>::node_of(const T &entry) const
     {
         node_ptr cur_node = m_head;
         while (&cur_node)
@@ -67,7 +68,6 @@ namespace DSA
             base_impl::m_size++;
         }
     }
-    /**/
 
     template <class T>
     s_linked_container<T>::s_linked_container() : base_container<T>()

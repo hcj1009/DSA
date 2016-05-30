@@ -104,7 +104,7 @@ than 0 after shifting.");
 
     template <class T>
     dynamic_array_container<T>::dynamic_array_container
-    (const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
+    (const size_t &base_capacity)
         : base_container<T>()
     {
         m_base_capacity = base_capacity;

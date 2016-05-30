@@ -7,10 +7,11 @@ namespace DSA
     template <class T>
     class d_node
     {
+        typedef std::shared_ptr<d_node<T>> node_ptr;
     protected:
         T m_data;
-        d_node<T> *m_prev;
-        d_node<T> *m_next;
+        node_ptr m_prev;
+        node_ptr m_next;
 
     public:
         d_node(const T &data)
@@ -20,7 +21,7 @@ namespace DSA
             m_next = nullptr;
         }
 
-        d_node(d_node<T> *&prev, const T &data, d_node<T> *&next)
+        d_node(const node_ptr &prev, const T &data, const node_ptr &next)
         {
             m_data = data;
             m_prev = prev;
@@ -37,12 +38,12 @@ namespace DSA
             m_data = data;
         }
 
-        virtual d_node<T> *&next()
+        virtual node_ptr next()
         {
             return m_next;
         }
 
-        virtual void set_next(d_node<T> *&next)
+        virtual void set_next(const node_ptr &next)
         {
             m_next = next;
         }
@@ -52,7 +53,7 @@ namespace DSA
             return m_prev;
         }
 
-        virtual void set_prev(d_node<T> *&prev)
+        virtual void set_prev(const node_ptr &prev)
         {
             m_prev = prev;
         }

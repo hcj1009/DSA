@@ -10,6 +10,7 @@ namespace DSA
     class linked_deque : public d_linked_container<T>
     {
         typedef d_linked_container<T> base_impl;
+        typedef std::shared_ptr<d_node<T>> node_ptr;
     public:
         linked_deque() : d_linked_container<T>() {}
 
@@ -39,7 +40,7 @@ namespace DSA
 
         virtual void push_front(const T &entry)
         {
-            d_node<T> *new_node(entry);
+            node_ptr new_node = node_ptr(new T(entry));
             insert_front(new_node);
         }
 
@@ -49,7 +50,7 @@ namespace DSA
             {
                 throw empty_container("Cannot pop entry from an empty deque.");
             }
-            d_node<T> *cur_node = remove(0);
+            node_ptr cur_node = remove(0);
             base_impl::m_size--;
             return cur_node->data();
         }
@@ -65,7 +66,7 @@ namespace DSA
 
         virtual void push_back(const T &entry)
         {
-            d_node<T> *new_node(entry);
+            node_ptr new_node = node_ptr(new T(entry));
             insert_back(new_node);
         }
 

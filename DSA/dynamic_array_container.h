@@ -38,8 +38,7 @@ namespace DSA
 
         // Helper function to shift a range of entries starting at a
         // given index with a given displacement.
-        inline void shift(const size_t &index,
-            const ptrdiff_t &disp);
+        inline void shift(const size_t &index, const ptrdiff_t &disp);
 
     public:
         dynamic_array_container
