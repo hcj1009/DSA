@@ -15,7 +15,7 @@ namespace DSA
     {
         typedef std::ptrdiff_t ptrdiff_t;
         typedef std::shared_ptr<T> entry_ptr;
-        typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
+        typedef std::unique_ptr<entry_ptr[]> data_ptr;
     protected:
         // Natural log 2, used in function capacity_of(const size_t &)
         const double LOG2 = 0.6931471805599453;
