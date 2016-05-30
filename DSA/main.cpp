@@ -1,13 +1,9 @@
 #include <iostream>
 #include <string>
-#include <vector>
-#include <queue>
-#include <deque>
-#include <list>
-#include <stack>
+
 #include "timer.h"
-//#include "dsa.h"
-#include "array_list.h"
+#include "dsa.h"
+#include "std_container.h"
 
 using namespace DSA;
 using DSA::utility::timer;
