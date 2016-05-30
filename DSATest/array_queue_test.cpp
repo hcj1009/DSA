@@ -109,6 +109,7 @@ namespace DSATest
             Assert::AreEqual((size_t)50, test_queue2.size());
             Assert::AreEqual((size_t)50, test_queue2.capacity());
 
+            // TODO Fix circular array.
             for (size_t i = 0; i < 20; i++)
             {
                 test_queue1.dequeue();

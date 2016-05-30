@@ -21,10 +21,10 @@ namespace DSA
             m_base_capacity = stack.m_base_capacity;
             m_capacity = stack.m_capacity;
             m_size = stack.m_size;
-            m_data = data_t(stack);
+            m_data = data_t(new std::shared_ptr<T>[m_capacity]);
             for (size_t i = 0; i < m_size; i++)
             {
-                m_data[i] = stack.m_data[i];
+                m_data[i] = std::shared_ptr<T>(stack.m_data[i]);
             }
         }
 
@@ -69,21 +69,21 @@ namespace DSA
             {
                 throw empty_container("Cannot peek from an empty stack.");
             }
-            return *m_data[m_size - 1];
+            return *(m_data[m_size - 1]);
         }
 
         // Push an entry to the top of the stack.
         virtual void push(const T &entry)
         {
             ensure_capacity();
-            m_data[m_size] = std::shared_ptr<T>(&entry);
+            m_data[m_size].reset(new T(entry));
             m_size++;
         }
 
         virtual void push(T &&entry)
         {
             ensure_capacity();
-            m_data[m_size] = std::shared_ptr<T>(&entry);
+            m_data[m_size].reset(new T(std::move(entry)));
             m_size++;
         }
 
@@ -94,7 +94,9 @@ namespace DSA
             {
                 throw empty_container("Cannot pop from an empty stack.");
             }
-            return *m_data[--m_size];
+            T cur_entry = std::move(*m_data[m_size - 1]);
+            shift(m_size, -1);
+            return cur_entry;
         }
 
         // Return if the stack contains a given entry.
@@ -107,16 +109,19 @@ namespace DSA
         {
             if (stack.m_capacity > m_capacity)
             {
-                
                 m_capacity = stack.m_capacity;
-                m_data = data_t(new shared_ptr<T>[m_capacity]);
+                m_data = data_t(new std::shared_ptr<T>[m_capacity]);
             }
             m_base_capacity = stack.m_base_capacity;
             m_size = stack.m_size;
+            // Fix this:
+                /*
             for (size_t i = 0; i < m_size; i++)
             {
+                // 
                 m_data[i] = stack.m_data[i];
             }
+            */
             return *this;
         }
 

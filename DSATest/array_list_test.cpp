@@ -328,7 +328,6 @@ namespace DSATest
             Assert::AreEqual((string)"String 7", test_list.get(5));
         }
 
-        /*
         TEST_METHOD(test_to_array)
         {
             array_list<string> test_list;
@@ -344,8 +343,8 @@ namespace DSATest
                 Assert::AreEqual(to_string(i), test_array[i]);
             }
         }
-        */
 
+        /*
         TEST_METHOD(test_assignment_operator)
         {
             array_list<string> test_list1;

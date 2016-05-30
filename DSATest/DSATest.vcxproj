@@ -159,12 +159,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="array_list_test.cpp" />
+    <ClCompile Include="array_queue_test.cpp" />
+    <ClCompile Include="array_stack_test.cpp" />
+    <ClCompile Include="fixed_set_test.cpp" />
+    <ClCompile Include="linked_deque_test.cpp" />
+    <ClCompile Include="linked_stack_test.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="s_linked_list_test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

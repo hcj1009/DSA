@@ -11,29 +11,31 @@ namespace DSA
     class s_linked_container
         : virtual public base_container<T>
     {
+        typedef std::shared_ptr<s_node<T>> node_ptr;
     protected:
-        s_node<T> *m_head;
+        node_ptr m_head;
 
         // Get the node at a given position (index) in the linked chain.
-        s_node<T> *node_at(const size_t &index) const
+        node_ptr node_at(const size_t &index) const
         {
             if (index >= m_size)
             {
                 throw index_error("Index out of bounds.");
             }
-            s_node<T> *cur_node = m_head;
+            node_ptr cur_node
+                = node_ptr(m_head);
             for (size_t i = 0; i < index; i++)
             {
-                cur_node = cur_node->next();
+                cur_node = std::move(cur_node->next());
             }
             return cur_node;
         }
 
         // Get the node that contains a given entry in the linked chain.
-        s_node<T> *node_of(const T &entry) const
+        node_ptr node_of(const T &entry) const
         {
-            s_node<T> *cur_node = m_head;
-            while (cur_node)
+            node_ptr cur_node = m_head;
+            while (&cur_node)
             {
                 if (entry == cur_node->data())
                 {
@@ -44,22 +46,12 @@ namespace DSA
             throw no_such_element("Cannot find such entry in the container.");
         }
 
-        inline void delete_node(s_node<T> *node)
-        {
-            if (!node)
-            {
-                return;
-            }
-            delete_node(node->next());
-            node->set_next(nullptr);
-            delete node;
-        }
-
         void insert_front(const T &entry)
         {
-            s_node<T> *new_node = new s_node<T>(entry);
+            node_ptr new_node 
+                = node_ptr(new s_node<T>(entry));
             new_node->set_next(m_head);
-            m_head = new_node;
+            m_head = std::move(new_node);
             m_size++;
         }
 
@@ -73,10 +65,12 @@ namespace DSA
             // Other cases.
             else
             {
-                s_node<T> *new_node = new s_node<T>(entry);
-                s_node<T> &prev_node = *node_at(index - 1);
-                new_node->set_next(prev_node.next());
-                prev_node.set_next(new_node);
+                node_ptr new_node 
+                    = node_ptr(new s_node<T>(entry));
+                node_ptr prev_node 
+                    = std::move(node_at(index - 1));
+                new_node->set_next(prev_node->next());
+                prev_node->set_next(new_node);
                 m_size++;
             }
         }
@@ -84,19 +78,14 @@ namespace DSA
     public:
         s_linked_container() : base_container()
         {
-            m_head = nullptr;
+            m_head = node_ptr();
         }
 
-        virtual ~s_linked_container()
-        {
-            delete_node(m_head);
-        }
+        virtual ~s_linked_container() {}
 
         virtual void clear()
         {
             base_container<T>::clear();
-            delete_node(m_head);
-            m_head = nullptr;
         }
 
         // Get the index of a given entry.
@@ -104,16 +93,17 @@ namespace DSA
         virtual size_t index_of(const T &entry) const
         {
             size_t index = 0;
-            s_node<T> *cur_node = m_head;
+            node_ptr cur_node = std::move(m_head);
 
-            while (cur_node)
+            while (cur_node)   // cur_node != nullptr;
             {
+                // Fix this:
                 if (entry == cur_node->data())
                 {
                     return index;
                 }
                 index++;
-                cur_node = cur_node->next();
+                cur_node = std::move(cur_node->next());
             }
 
             throw no_such_element("Cannot get the index of an entry that \

@@ -68,6 +68,7 @@ namespace DSATest
             Assert::AreEqual((size_t)0, test_stack2.size());
             Assert::AreEqual((size_t)50, test_stack2.capacity());
 
+            /**/
             for (size_t i = 0; i < 100; i++)
             {
                 test_stack1.push("String " + to_string(i));
@@ -78,6 +79,7 @@ namespace DSATest
             Assert::AreEqual((size_t)160, test_stack1.capacity());
             Assert::AreEqual((size_t)100, test_stack2.size());
             Assert::AreEqual((size_t)100, test_stack2.capacity());
+            /**/
         }
 
         TEST_METHOD(test_clear)

@@ -1,11 +1,12 @@
+// array_queue.h
+Fix circular array.
+
 // array_list.h
-Fix destructor.
 Test add overloads.
 Implement remove overloads.
 Implement operator overrides.
 
 // s_linked_list.h
-Fix destructor.
 Implement add overloads.
 Implement remove overloads.
 Implement to_array.

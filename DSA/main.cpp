@@ -35,16 +35,15 @@ int main(int argc, char *argv[])
     std::cout << total_time1 / COUNT << "s" << std::endl;
     /**/
     /**/
-    std::cout << "Testing DSA::array_list<string>..." << std::endl;
-    array_list<string> test_list2(100);
-    string a = "12";
+    std::cout << "Testing DSA::s_linked_list<string>..." << std::endl;
+    s_linked_list<string> test_list2;
     double total_time2 = 0;
     for (size_t i = 0; i < COUNT; i++)
     {
         t.reset();
         for (size_t i = 0; i < 1000; i++)
         {
-            test_list2.add(a);
+            test_list2.add(std::to_string(i));
         }
         for (size_t i = 0; i < 1000; i++)
         {
@@ -55,6 +54,25 @@ int main(int argc, char *argv[])
     }
     std::cout << total_time2 / COUNT << "s" << std::endl;
     /**/
+
+    std::cout << "Testing DSA::array_list<string>..." << std::endl;
+    array_list<string> test_list3(1000);
+    double total_time3 = 0;
+    for (size_t i = 0; i < COUNT; i++)
+    {
+        t.reset();
+        for (size_t i = 0; i < 1000; i++)
+        {
+            test_list3.add(std::to_string(i));
+        }
+        for (size_t i = 0; i < 1000; i++)
+        {
+            test_list3.remove(0);
+        }
+        total_time3 += t.elapsed();
+        test_list3.clear();
+    }
+    std::cout << total_time3 / COUNT << "s" << std::endl;
 
 
     system("pause");

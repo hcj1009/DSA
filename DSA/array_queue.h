@@ -33,7 +33,8 @@ namespace DSA
                     data_t(new std::shared_ptr<T>[new_capacity]);
                 for (size_t i = 0; i < m_size; i++)
                 {
-                    new_data[i] = m_data[increase_index(m_front, i)];
+                    new_data[i] = std::move
+                    (m_data[increase_index(m_front, i)]);
                 }
                 m_data = std::move(new_data);
                 m_front = 0;
@@ -54,7 +55,6 @@ namespace DSA
             m_data = data_t(new std::shared_ptr<T>[m_capacity + 1]);
         }
 
-        /**/
         array_queue(const array_queue<T> &queue)
         {
             m_base_capacity = queue.m_base_capacity;
@@ -62,7 +62,11 @@ namespace DSA
             m_size = queue.m_size;
             m_front = queue.m_front;
             m_back = queue.m_back;
-            m_data = queue.m_data;
+            m_data = data_t(new std::shared_ptr<T>[m_capacity]);
+            for (size_t i = 0; i < m_size; i++)
+            {
+                m_data[i] = std::shared_ptr<T>(queue.m_data[i]);
+            }
         }
 
         array_queue(array_queue<T> &&queue) noexcept
@@ -73,13 +77,11 @@ namespace DSA
             m_size = std::move(queue.m_size);
             m_front = std::move(queue.m_front);
             m_back = std::move(queue.m_back);
-            m_data = queue.m_data;
+            m_data = std::move(queue.m_data);
         }
 
         // Default destructor.
-        virtual ~array_queue()
-        {
-        }
+        virtual ~array_queue() { }
 
         // Return if the queue is empty.
         virtual bool empty() const
@@ -106,7 +108,7 @@ namespace DSA
             {
                 throw empty_container("Cannot get front entry: queue is empty.");
             }
-            return *m_data[m_front];
+            return *(m_data[m_front]);
         }
 
         // Get the last entry in the queue.
@@ -116,7 +118,7 @@ namespace DSA
             {
                 throw empty_container("Cannot get back entry: queue is empty.");
             }
-            return *m_data[m_back];
+            return *(m_data[m_back]);
         }
 
         // Add a given entry to the back of the queue.
@@ -124,7 +126,7 @@ namespace DSA
         {
             ensure_capacity();
             m_back = increase_index(m_back, 1);
-            m_data[m_back] = std::shared_ptr<T>(&entry);
+            m_data[m_back].reset(new T(entry));
             m_size++;
         }
 
@@ -133,9 +135,10 @@ namespace DSA
         {
             if (0 == m_size)
             {
-                throw empty_container("Cannot get back entry: queue is empty.");
+                throw empty_container("Cannot get back entry: \
+queue is empty.");
             }
-            T &front_entry = *m_data[m_front];
+            T front_entry = std::move(*m_data[m_front]);
             m_front = increase_index(m_front, 1);
             m_size--;
             return front_entry;

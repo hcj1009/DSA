@@ -126,9 +126,7 @@ than 0 after shifting.");
             m_data = data_t(new std::shared_ptr<T>[m_capacity]);
         }
 
-        virtual ~dynamic_array_container()
-        {
-        }
+        virtual ~dynamic_array_container() { }
 
         virtual size_t capacity() const
         {

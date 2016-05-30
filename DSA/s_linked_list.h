@@ -12,21 +12,28 @@ namespace DSA
         : public adt_list<T>
         , public s_linked_container<T>
     {
+        typedef std::shared_ptr<s_node<T>> node_ptr;
     protected:
-        s_node<T> *m_tail;    // Optimization for adding to the back.
+        node_ptr m_tail;    // Optimization for adding to the back.
 
     public:
         // Default constructor of the lsit.
-        s_linked_list() : s_linked_container()
-        {
-            m_tail = nullptr;
-        }
+        s_linked_list()
+            : s_linked_container()
+            , m_tail() {}
 
         s_linked_list(const s_linked_list<T> &list)
         {
-            m_head = list.m_head;
-            m_tail = list.m_tail;
+            m_head = node_ptr(list.m_head);
+            m_tail = node_ptr(list.m_tail);
             m_size = list.m_size;
+        }
+
+        s_linked_list(s_linked_list<T> &&list) noexcept
+        {
+            m_head = std::move(list.m_head);
+            m_tail = std::move(list.m_tail);
+            m_size = std::move(list.m_size);
         }
 
         // Build a list based on a given array of entries.
@@ -38,12 +45,12 @@ namespace DSA
             }
             else
             {
-                m_head = new s_node<T>(entries[0]);
-                s_node<T> *cur_node = m_head;
-                s_node<T> *new_node = nullptr;
+                m_head.reset(new s_node<T>(entries[0]));
+                node_ptr cur_node = m_head;
+                node_ptr new_node;
                 for (size_t i = 1; i < size; i++)
                 {
-                    new_node = new s_node<T>(entries[i]);
+                    new_node.reset(new s_node<T>(entries[i]));
                     cur_node->set_next(new_node);
                     cur_node = cur_node->next();
                 }
@@ -53,8 +60,7 @@ namespace DSA
         }
 
         // Default destructor of the list.
-        virtual ~s_linked_list()
-        {}
+        virtual ~s_linked_list() { }
 
         // Return if the container is empty.
         virtual bool empty() const
@@ -71,7 +77,8 @@ namespace DSA
         // Add a given entry to the container.
         virtual void add(const T &entry)
         {
-            s_node<T> *new_node = new s_node<T>(entry);
+            node_ptr new_node
+                = node_ptr(new s_node<T>(entry));
             // Empty list case.
             if (0 == m_size)
             {
@@ -114,7 +121,7 @@ namespace DSA
             }
 
             T cur_entry;
-            s_node<T> *cur_node;    // Node to be removed.
+            node_ptr cur_node;    // Node to be removed.
             // Case when removing the first entry from the list.
             if (0 == index)
             {
@@ -124,13 +131,13 @@ namespace DSA
                 // Case when removing the last entry in the list.
                 if (!m_head)
                 {
-                    m_tail = nullptr;
+                    m_tail = node_ptr();
                 }
             }
             // Other cases.
             else
             {
-                s_node<T> *prev_node = node_at(index - 1);
+                node_ptr prev_node = node_at(index - 1);
                 cur_node = prev_node->next();
                 cur_entry = cur_node->data();
                 prev_node->set_next(cur_node->next());
@@ -140,7 +147,6 @@ namespace DSA
                     m_tail = prev_node;
                 }
             }
-            delete cur_node;
             m_size--;
             return cur_entry;
         }
@@ -160,7 +166,7 @@ namespace DSA
         // Set the value of the entry at a given index to a given entry.
         virtual void set(const size_t &index, const T &entry)
         {
-            s_node<T> *cur_node = node_at(index);
+            node_ptr cur_node = node_at(index);
             cur_node->set_data(entry);
         }
 

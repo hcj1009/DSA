@@ -12,6 +12,7 @@ namespace DSA
         : public adt_stack<T>
         , public s_linked_container<T>
     {
+        typedef std::shared_ptr<s_node<T>> node_ptr;
     public:
         linked_stack() : adt_stack<T>() {}
 
@@ -57,8 +58,8 @@ namespace DSA
             {
                 throw empty_container("Cannot pop from an empty stack.");
             }
-            s_node<T> *top_node = m_head;
-            m_head = m_head->next();
+            node_ptr top_node = m_head;
+            m_head = std::move(m_head->next());
             m_size--;
             return top_node->data();
         }
