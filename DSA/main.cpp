@@ -6,7 +6,8 @@
 #include <list>
 #include <stack>
 #include "timer.h"
-#include "dsa.h"
+//#include "dsa.h"
+#include "array_list.h"
 
 using namespace DSA;
 using DSA::utility::timer;
@@ -14,7 +15,7 @@ using DSA::utility::timer;
 const size_t ITEM_COUNT = 1000;
 const size_t LOOP_COUNT = 10;
 
-void disp_msg(const string &msg)
+void disp_msg(const std::string &msg)
 {
     std::cout << "Testing " << msg << std::endl;
 }
@@ -22,15 +23,16 @@ void disp_msg(const string &msg)
 void disp_time(double time)
 {
     std::cout << "Total time: " << time << "s" << std::endl;
-    std::cout << "Average time: " << time / LOOP_COUNT << "s" << std::endl << std::endl;
+    std::cout << "Average time: " << time / LOOP_COUNT
+        << "s" << std::endl << std::endl;
 }
 
 int main(int argc, char *argv[])
 {
     timer t;
 
-    /* STL std::vector *
-    disp_msg("std::vector<string>");
+    /* STL std::vector */
+    disp_msg("std::vector<std::string>");
     std::vector<std::string> test_std_vector;
     double total_std_vector = 0;
     for (size_t i = 0; i < LOOP_COUNT; i++)
@@ -51,7 +53,7 @@ int main(int argc, char *argv[])
     /**/
 
     /* STL std::list *
-    disp_msg("std::list<string>");
+    disp_msg("std::list<std::string>");
     std::list<std::string> test_std_list;
     double total_std_list = 0;
     for (size_t i = 0; i < LOOP_COUNT; i++)
@@ -70,9 +72,9 @@ int main(int argc, char *argv[])
     disp_time(total_std_list);
     /**/
 
-    /** DSA array_list *
-    disp_msg("DSA::array_list<string>");
-    array_list<string> test_array_list;
+    /** DSA array_list */
+    disp_msg("DSA::array_list<std::string>");
+    array_list<std::string> test_array_list;
     double total_array_list = 0;
     for (size_t i = 0; i < LOOP_COUNT; i++)
     {
@@ -189,7 +191,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_queue);
     /**/
 
-    /* DSA array_queue */
+    /* DSA array_queue *
     disp_msg("DSA::array_queue<string>");
     array_queue<string> test_array_queue;
     double total_array_queue = 0;
@@ -230,6 +232,11 @@ int main(int argc, char *argv[])
 
     /**/
 
+#ifdef __linux__
+    std::cout << "Press enter to continue...";
+    std::cin.get();
+#elif _WIN32
     system("pause");
+#endif
     return 0;
 }

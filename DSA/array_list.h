@@ -12,47 +12,54 @@ namespace DSA
         : public adt_list<T>
         , public dynamic_array_container<T>
     {
+        typedef dynamic_array_container<T> base_impl;
         typedef std::shared_ptr<T> entry_ptr;
         typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     public:
         // Default constructor of the list.
-        array_list(const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
-            : dynamic_array_container(base_capacity) {}
+        array_list(const size_t &base_capacity 
+                = base_impl::DEFAULT_BASE_CAPACITY)
+            : dynamic_array_container<T>(base_capacity) {}
 
         // Builda list based on a given list.
         array_list(const array_list<T> &list)
         {
-            m_base_capacity = list.m_base_capacity;
-            m_capacity = list.m_capacity;
-            m_size = list.m_size;
-            m_data = data_ptr(new entry_ptr[m_capacity]);
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::m_base_capacity = list.base_impl::m_base_capacity;
+            base_impl::m_capacity = list.base_impl::m_capacity;
+            base_impl::m_size = list.base_impl::m_size;
+            base_impl::m_data = 
+                data_ptr(new entry_ptr[base_impl::m_capacity]);
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[i] = std::shared_ptr<T>(list.m_data[i]);
+                base_impl::m_data[i] = 
+                    std::shared_ptr<T>(list.base_impl::m_data[i]);
             }
         }
 
         // Move constructor: build a list based on a given list (rvalue).
         array_list(array_list<T> &&list) noexcept
         {
-            m_base_capacity = std::move(list.m_base_capacity);
-            m_capacity = std::move(list.m_capacity);
-            m_size = std::move(list.m_size);
-            m_data = std::move(list.m_data);
+            base_impl::m_base_capacity =
+                std::move(list.base_impl::m_base_capacity);
+            base_impl::m_capacity = std::move(list.base_impl::m_capacity);
+            base_impl::m_size = std::move(list.base_impl::m_size);
+            base_impl::m_data = std::move(list.base_impl::m_data);
         }
 
         // Build a list based on a given array of entries.
         array_list(const T entries[],
             const size_t &size,
-            const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
+            const size_t &base_capacity
+            = base_impl::DEFAULT_BASE_CAPACITY)
         {
-            m_base_capacity = base_capacity;
-            m_capacity = capacity_of(size);
-            m_size = size;
-            m_data = data_ptr(new shared_ptr<T>[m_capacity]);
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::m_base_capacity = base_capacity;
+            base_impl::m_capacity = base_impl::capacity_of(size);
+            base_impl::m_size = size;
+            base_impl::m_data = 
+                data_ptr(new entry_ptr[base_impl::m_capacity]);
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[i].reset(new T(entries[i]));
+                base_impl::m_data[i].reset(new T(entries[i]));
             }
         }
 
@@ -87,37 +94,39 @@ namespace DSA
         // Add a given entry to the container.
         virtual void add(const T &entry)
         {
-            shift(m_size, 1);
-            m_data[m_size - 1].reset(new T(entry));
+            base_impl::shift(base_impl::m_size, 1);
+            base_impl::m_data[base_impl::m_size - 1] = 
+                entry_ptr(new T(entry));
         }
 
         /*/
         /**
         virtual void add(T &&entry)
         {
-            shift(m_size, 1);
-            m_data[m_size - 1].reset(&std::move(entry));
+            base_impl::shift(m_size, 1);
+            base_impl::m_data[m_size - 1].reset(&std::move(entry));
         }
         /**/
 
         // Add a given entry to a given index of the list.
         virtual void add(const size_t &index, const T &entry)
         {
-            if (index > m_size)
+            if (index > base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
-            shift(index, 1);
-            m_data[index].reset(new T(entry));
+            base_impl::shift(index, 1);
+            base_impl::m_data[index] = entry_ptr(new T(entry));
         }
 
         /**/
         virtual void add(const T entries[], const size_t &size)
         {
-            shift(m_size, size);
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::shift(base_impl::m_size, size);
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[m_size + i].reset(new T(entries[i]));
+                base_impl::m_data[base_impl::m_size + i] = 
+                    entry_ptr(new T(entries[i]));
             }
         }
 
@@ -125,63 +134,64 @@ namespace DSA
             const T entries[],
             const size_t &size)
         {
-            if (index > m_size)
+            if (index > base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
-            shift(index, size);
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::shift(index, size);
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[index + i].reset(new T(entries[i]));
+                base_impl::m_data[index + i] = entry_ptr(new T(entries[i]));
             }
         }
 
         virtual void add(const array_list<T> &list)
         {
-            shift(m_size, list.m_size);
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::shift(base_impl::m_size, list.base_impl::m_size);
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[m_size + i] = list.m_data[i];
+                base_impl::m_data[base_impl::m_size + i] =
+                    list.base_impl::m_data[i];
             }
         }
 
         virtual void add(const size_t &index,
             const array_list<T> &list)
         {
-            if (index > m_size)
+            if (index > base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
-            shift(index, list.m_size);
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::shift(index, list.base_impl::m_size);
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[index + i] = list.m_data[i];
+                base_impl::m_data[index + i] = list.base_impl::m_data[i];
             }
         }
 
         virtual void add(array_list<T> &&list)
         {
-            shift(m_size, list.m_size);
+            base_impl::shift(base_impl::m_size, list.base_impl::m_size);
             for (size_t i = 0; i < list.m_size; i++)
             {
-                m_data[m_size + i] = std::move(list.m_data[i]);
+                base_impl::m_data[base_impl::m_size + i] =
+                    std::move(list.base_impl::m_data[i]);
             }
-            list.m_size = 0;
         }
 
         virtual void add(const size_t &index,
             array_list<T> &&list)
         {
-            if (index > m_size)
+            if (index > base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
-            shift(index, list.m_size);
-            for (size_t i = 0; i < list.m_size; i++)
+            base_impl::shift(index, list.base_impl::m_size);
+            for (size_t i = 0; i < list.base_impl::m_size; i++)
             {
-                m_data[index + i] = std::move(list.m_data[i]);
+                base_impl::m_data[index + i] =
+                    std::move(list.base_impl::m_data[i]);
             }
-            list.m_size = 0;
         }
 
         /**/
@@ -189,12 +199,12 @@ namespace DSA
         // Remove the entry at a given index from the list.
         virtual T remove(const size_t &index)
         {
-            if (index >= m_size)
+            if (index >= base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
-            T cur_entry = std::move(*m_data[index]);
-            shift(index + 1, -1);
+            T cur_entry = std::move(*base_impl::m_data[index]);
+            base_impl::shift(index + 1, -1);
             return cur_entry;
         }
 
@@ -208,11 +218,11 @@ namespace DSA
         // Get the entry at a given index.
         virtual T get(const size_t &index) const
         {
-            if (index >= m_size)
+            if (index >= base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
-            T cur_entry = *(m_data[index]);
+            T cur_entry = *(base_impl::m_data[index]);
             return cur_entry;
         }
 
@@ -220,11 +230,11 @@ namespace DSA
         // Throw index_error exception.
         virtual void set(const size_t &index, const T &entry)
         {
-            if (index >= m_size)
+            if (index >= base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
-            m_data[index].reset(new T(entry));
+            base_impl::m_data[index].reset(new T(entry));
         }
 
         virtual size_t index_of(const T &entry) const
@@ -241,22 +251,24 @@ namespace DSA
         // Get the pointer pointing to an array that represents the list.
         virtual T *to_array() const
         {
-            return new T[m_size];
+            return new T[base_impl::m_size];
         }
 
         // Override assignment expression.
         virtual array_list
             &operator=(const array_list<T> &rhs)
         {
-            if (rhs.m_capacity != m_capacity)
+            if (rhs.base_impl::m_capacity != base_impl::m_capacity)
             {
-                m_data.reset(new entry_ptr[m_capacity = rhs.m_capacity]);
+                base_impl::m_data.reset(new entry_ptr[base_impl::m_capacity 
+                        = rhs.base_impl::m_capacity]);
             }
-            m_base_capacity = rhs.m_base_capacity;
-            m_size = rhs.m_size;
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::m_base_capacity = rhs.base_impl::m_base_capacity;
+            base_impl::m_size = rhs.base_impl::m_size;
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[i] = std::shared_ptr<T>(rhs.m_data[i]);
+                base_impl::m_data[i] =
+                    std::shared_ptr<T>(rhs.base_impl::m_data[i]);
             }
             return *this;
         }
@@ -265,10 +277,11 @@ namespace DSA
         virtual array_list<T> &operator=
             (array_list<T> &&rhs)
         {
-            m_base_capacity = std::move(rhs.m_base_capacity);
-            m_capacity = std::move(rhs.m_capacity);
-            m_size = std::move(rhs.m_size);
-            m_data = std::move(rhs.m_data);
+            base_impl::m_base_capacity =
+                std::move(rhs.base_impl::m_base_capacity);
+            base_impl::m_capacity = std::move(rhs.base_impl::m_capacity);
+            base_impl::m_size = std::move(rhs.base_impl::m_size);
+            base_impl::m_data = std::move(rhs.base_impl::m_data);
             return *this;
         }
 

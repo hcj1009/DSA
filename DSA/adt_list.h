@@ -11,10 +11,11 @@ namespace DSA
     {
     public:
         // Default constructor of the list.
-        adt_list() : adt_container() {}
+        adt_list() : adt_container<T>() {}
 
         // Build a list based on a given array of entries.
-        adt_list(const T entries[], const size_t &size) : adt_container() {}
+        adt_list(const T entries[], const size_t &size)
+            : adt_container<T>() {}
 
         // Default destructor of the list.
         virtual ~adt_list() {}

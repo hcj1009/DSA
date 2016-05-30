@@ -13,6 +13,7 @@ namespace DSA
     class dynamic_array_container
         : virtual public base_container<T>
     {
+        typedef std::ptrdiff_t ptrdiff_t;
         typedef std::shared_ptr<T> entry_ptr;
         typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     protected:
@@ -28,7 +29,6 @@ namespace DSA
         // given size of list.
         inline size_t capacity_of(const size_t &size) const
         {
-            // TODO Optimize this:
             return (size_t)pow(2, ceil(log((double)size / m_base_capacity) \
                 / LOG2)) * m_base_capacity;
         }
@@ -36,12 +36,12 @@ namespace DSA
         // Helper function to enlarge the capacity when the container is full.
         inline void ensure_capacity()
         {
-            if (m_size >= m_capacity)
+            if (base_container<T>::m_size >= m_capacity)
             {
-                m_capacity = m_size < 2 * m_capacity
-                    ? 2 * m_capacity : capacity_of(m_size);
+                m_capacity = base_container<T>::m_size < 2 * m_capacity
+                    ? 2 * m_capacity : capacity_of(base_container<T>::m_size);
                 data_ptr new_data = data_ptr(new entry_ptr[m_capacity]);
-                for (size_t i = 0; i < m_size; i++)
+                for (size_t i = 0; i < base_container<T>::m_size; i++)
                 {
                     new_data[i] = std::move(m_data[i]);
                 }
@@ -53,7 +53,7 @@ namespace DSA
         // Throw no_such_element exception when the given entry is not found.
         inline size_t index_of(const T &entry) const
         {
-            for (size_t i = 0; i < m_size; i++)
+            for (size_t i = 0; i < base_container<T>::m_size; i++)
             {
                 if (entry == *m_data[i])
                 {
@@ -79,17 +79,17 @@ namespace DSA
 than 0 after shifting.");
             }
 
-            size_t new_size = m_size + disp;
+            size_t new_size = base_container<T>::m_size + disp;
             size_t new_capacity = new_size < m_capacity
                 ? m_capacity : new_size < 2 * m_capacity
-                ? 2 * m_capacity : capacity_of(m_size);
+                ? 2 * m_capacity : capacity_of(base_container<T>::m_size);
 
             if (new_capacity > m_capacity)
             {
                 m_capacity = new_capacity;
                 data_ptr new_data = 
                     data_ptr (new entry_ptr[m_capacity]);
-                for (size_t i = 0; i < m_size; i++)
+                for (size_t i = 0; i < base_container<T>::m_size; i++)
                 {
                     size_t in = i < index ? i : i + disp;
                     new_data[in] = m_data[i];
@@ -103,24 +103,24 @@ than 0 after shifting.");
                 ptrdiff_t sign = 1;
                 if (0 < disp)
                 {
-                    src = m_size + index - 1;
+                    src = base_container<T>::m_size + index - 1;
                     sign *= -1;
                     cls = index;
                 }
                 size_t dest = src + disp;
-                for (size_t i = index; i < m_size; i++)
+                for (size_t i = index; i < base_container<T>::m_size; i++)
                 {
                     m_data[dest + i * sign] = 
                         std::move(m_data[src + i * sign]);
                 }
             }
-            m_size = new_size;
+            base_container<T>::m_size = new_size;
         }
 
     public:
         dynamic_array_container
         (const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
-            : base_container()
+            : base_container<T>()
         {
             m_base_capacity = base_capacity;
             m_capacity = m_base_capacity;
@@ -155,6 +155,9 @@ than 0 after shifting.");
             return true;
         }
     };
+
+    template <class T>
+    const size_t dynamic_array_container<T>::DEFAULT_BASE_CAPACITY;
 }
 
 #endif
