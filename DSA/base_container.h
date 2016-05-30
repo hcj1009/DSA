@@ -10,35 +10,16 @@ namespace DSA
     {
     protected:
         size_t m_size;
-
     public:
-        base_container() : adt_container<T>()
-        {
-            m_size = 0;
-        }
-
-        virtual ~base_container() {}
-
-        virtual bool empty() const
-        {
-            return (0 == m_size);
-        }
-
-        virtual size_t size() const
-        {
-            return m_size;
-        }
-
-        virtual void clear()
-        {
-            m_size = 0;
-        }
-
-        virtual bool contains(const T &entry) const
-        {
-            return false;
-        }
+        base_container();
+        virtual ~base_container();
+        inline virtual bool empty() const;
+        inline virtual size_t size() const;
+        inline virtual void clear();
+        inline virtual bool contains(const T &entry) const;
     };
 }
+
+#include "base_container_impl.h"
 
 #endif

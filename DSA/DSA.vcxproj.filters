@@ -111,6 +111,15 @@
     <ClInclude Include="std_container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="base_container_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic_array_container_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="s_linked_container_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

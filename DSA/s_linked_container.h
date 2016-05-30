@@ -16,6 +16,7 @@ namespace DSA
     protected:
         node_ptr m_head;
 
+        /**
         // Get the node at a given position (index) in the linked chain.
         node_ptr node_at(const size_t &index) const
         {
@@ -49,7 +50,7 @@ namespace DSA
 
         void insert_front(const T &entry)
         {
-            node_ptr new_node 
+            node_ptr new_node
                 = node_ptr(new s_node<T>(entry));
             new_node->set_next(m_head);
             m_head = std::move(new_node);
@@ -66,64 +67,37 @@ namespace DSA
             // Other cases.
             else
             {
-                node_ptr new_node 
+                node_ptr new_node
                     = node_ptr(new s_node<T>(entry));
-                node_ptr prev_node 
+                node_ptr prev_node
                     = std::move(node_at(index - 1));
                 new_node->set_next(prev_node->next());
                 prev_node->set_next(new_node);
                 base_impl::m_size++;
             }
         }
+        /**/
+
+        /**/
+        // Get the node at a given position (index) in the linked chain.
+        inline node_ptr node_at(const size_t &index) const;
+        // Get the node that contains a given entry in the linked chain.
+        inline node_ptr node_of(const T &entry) const;
+        inline void insert_front(const T &entry);
+        inline void insert_entry(const size_t &index, const T &entry);
+        /**/
 
     public:
-        s_linked_container() : base_container<T>()
-        {
-            m_head = node_ptr();
-        }
-
-        virtual ~s_linked_container() {}
-
-        virtual void clear()
-        {
-            base_container<T>::clear();
-        }
-
+        s_linked_container();
+        virtual ~s_linked_container();
+        inline virtual void clear();
         // Get the index of a given entry.
         // Throw no_such_element exception when the given entry is not found.
-        virtual size_t index_of(const T &entry) const
-        {
-            size_t index = 0;
-            node_ptr cur_node = std::move(m_head);
-
-            while (cur_node)   // cur_node != nullptr;
-            {
-                // Fix this:
-                if (entry == cur_node->data())
-                {
-                    return index;
-                }
-                index++;
-                cur_node = std::move(cur_node->next());
-            }
-
-            throw no_such_element("Cannot get the index of an entry that \
-is not in the list.");
-        }
-
-        virtual bool contains(const T &entry) const
-        {
-            try
-            {
-                index_of(entry);
-            }
-            catch (no_such_element exception)
-            {
-                return false;
-            }
-            return true;
-        }
+        inline virtual size_t index_of(const T &entry) const;
+        inline virtual bool contains(const T &entry) const;
     };
 }
+
+#include "s_linked_container_impl.h"
 
 #endif

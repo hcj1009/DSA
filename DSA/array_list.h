@@ -30,10 +30,10 @@ namespace DSA
             = base_impl::DEFAULT_BASE_CAPACITY);
         // Default destructor fo the list.
         virtual ~array_list();
-        virtual bool empty() const;
-        virtual size_t size() const;
-        virtual size_t capacity() const;
-        virtual void clear();
+        inline virtual bool empty() const;
+        inline virtual size_t size() const;
+        inline virtual size_t capacity() const;
+        inline virtual void clear();
         virtual void add(const T &entry);
         virtual void add(const size_t &index, const T &entry);
         virtual void add(const T entries[], const size_t &size);
