@@ -11,6 +11,7 @@ namespace DSA
     class s_linked_container
         : virtual public base_container<T>
     {
+        typedef base_container<T> base_impl;
         typedef std::shared_ptr<s_node<T>> node_ptr;
     protected:
         node_ptr m_head;
@@ -18,7 +19,7 @@ namespace DSA
         // Get the node at a given position (index) in the linked chain.
         node_ptr node_at(const size_t &index) const
         {
-            if (index >= m_size)
+            if (index >= base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
@@ -52,7 +53,7 @@ namespace DSA
                 = node_ptr(new s_node<T>(entry));
             new_node->set_next(m_head);
             m_head = std::move(new_node);
-            m_size++;
+            base_impl::m_size++;
         }
 
         void insert_entry(const size_t &index, const T &entry)
@@ -71,12 +72,12 @@ namespace DSA
                     = std::move(node_at(index - 1));
                 new_node->set_next(prev_node->next());
                 prev_node->set_next(new_node);
-                m_size++;
+                base_impl::m_size++;
             }
         }
 
     public:
-        s_linked_container() : base_container()
+        s_linked_container() : base_container<T>()
         {
             m_head = node_ptr();
         }

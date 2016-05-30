@@ -16,27 +16,30 @@ namespace DSA
         typedef std::shared_ptr<T> entry_ptr;
         typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     public:
-        array_stack(const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
-            : dynamic_array_container(base_capacity) {}
+        array_stack(const size_t &base_capacity 
+                = base_impl::DEFAULT_BASE_CAPACITY)
+            : dynamic_array_container<T>(base_capacity) {}
 
         array_stack(const array_stack<T> &stack)
         {
-            m_base_capacity = stack.m_base_capacity;
-            m_capacity = stack.m_capacity;
-            m_size = stack.m_size;
-            m_data = data_ptr(new entry_ptr[m_capacity]);
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::m_base_capacity = stack.base_impl::m_base_capacity;
+            base_impl::m_capacity = stack.base_impl::m_capacity;
+            base_impl::m_size = stack.base_impl::m_size;
+            base_impl::m_data = data_ptr(new entry_ptr[base_impl::m_capacity]);
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[i] = std::shared_ptr<T>(stack.m_data[i]);
+                base_impl::m_data[i]
+                    = std::shared_ptr<T>(stack.base_impl::m_data[i]);
             }
         }
 
         array_stack(array_stack<T> &&stack) noexcept
         {
-            m_base_capacity = std::move(stack.m_base_capacity);
-            m_capacity = std::move(stack.m_capacity);
-            m_size = std::move(stack.m_size);
-            m_data = std::move(stack.m_data);
+            base_impl::m_base_capacity = 
+                std::move(stack.base_impl::m_base_capacity);
+            base_impl::m_capacity = std::move(stack.base_impl::m_capacity);
+            base_impl::m_size = std::move(stack.base_impl::m_size);
+            base_impl::m_data = std::move(stack.base_impl::m_data);
         }
 
         virtual ~array_stack() {}
@@ -68,37 +71,37 @@ namespace DSA
         // Get the entry on the top of the stack.
         virtual T peek() const
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot peek from an empty stack.");
             }
-            return *(m_data[m_size - 1]);
+            return *(base_impl::m_data[base_impl::m_size - 1]);
         }
 
         // Push an entry to the top of the stack.
         virtual void push(const T &entry)
         {
-            ensure_capacity();
-            m_data[m_size].reset(new T(entry));
-            m_size++;
+            base_impl::ensure_capacity();
+            base_impl::m_data[base_impl::m_size].reset(new T(entry));
+            base_impl::m_size++;
         }
 
         virtual void push(T &&entry)
         {
-            ensure_capacity();
-            m_data[m_size].reset(new T(std::move(entry)));
-            m_size++;
+            base_impl::ensure_capacity();
+            base_impl::m_data[base_impl::m_size].reset(new T(std::move(entry)));
+            base_impl::m_size++;
         }
 
         // Pop the top entry from the stack.
         virtual T pop()
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot pop from an empty stack.");
             }
-            T cur_entry = std::move(*m_data[m_size - 1]);
-            shift(m_size, -1);
+            T cur_entry = std::move(*base_impl::m_data[base_impl::m_size - 1]);
+            base_impl::shift(base_impl::m_size, -1);
             return cur_entry;
         }
 
@@ -110,26 +113,27 @@ namespace DSA
 
         array_stack& operator=(const array_stack<T> &stack)
         {
-            if (stack.m_capacity > m_capacity)
+            if (stack.base_impl::m_capacity > base_impl::m_capacity)
             {
-                m_capacity = stack.m_capacity;
-                m_data = data_ptr(new entry_ptr[m_capacity]);
+                base_impl::m_capacity = stack.base_impl::m_capacity;
+                base_impl::m_data = data_ptr(new entry_ptr[base_impl::m_capacity]);
             }
-            m_base_capacity = stack.m_base_capacity;
-            m_size = stack.m_size;
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::m_base_capacity = stack.base_impl::m_base_capacity;
+            base_impl::m_size = stack.base_impl::m_size;
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[i] = stack.m_data[i];
+                base_impl::m_data[i] = stack.base_impl::m_data[i];
             }
             return *this;
         }
 
         array_stack& operator=(array_stack<T> &&stack)
         {
-            m_base_capacity = std::move(stack.m_base_capacity);
-            m_capacity = std::move(stack.m_capacity);
-            m_size = std::move(stack.m_size);
-            m_data = std::move(stack.m_data);
+            base_impl::m_base_capacity
+                = std::move(stack.base_impl::m_base_capacity);
+            base_impl::m_capacity = std::move(stack.base_impl::m_capacity);
+            base_impl::m_size = std::move(stack.base_impl::m_size);
+            base_impl::m_data = std::move(stack.base_impl::m_data);
             return *this;
         }
     };

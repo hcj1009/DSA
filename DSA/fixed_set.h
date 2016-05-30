@@ -11,22 +11,26 @@ namespace DSA
         : public adt_set<T>
         , public fixed_array_container<T, CAPACITY>
     {
+        typedef std::ptrdiff_t ptrdiff_t;
+        typedef fixed_array_container<T, CAPACITY> base_impl;
     public:
         fixed_set() : fixed_array_container<T, CAPACITY>() {}
 
         fixed_set(const fixed_set<T, CAPACITY> &set)
         {
-            m_size = set.m_size;
-            memcpy(m_data, set.m_data, m_size * sizeof(T));
-            memset(&(m_data[m_size]), 0, (CAPACITY - m_size) * sizeof(T));
+            base_impl::m_size = set.base_impl::m_size;
+            memcpy(base_impl::m_data, set.base_impl::m_data, 
+                    base_impl::m_size * sizeof(T));
+            memset(&(base_impl::m_data[base_impl::m_size]), 0, 
+                    (CAPACITY - base_impl::m_size) * sizeof(T));
         }
 
         fixed_set(fixed_set<T, CAPACITY> &&set) noexcept
         {
-            m_size = std::move(set.m_size);
-            for (size_t i = 0; i < m_size; i++)
+            base_impl::m_size = std::move(set.base_impl::m_size);
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
-                m_data[i] = std::move(set.m_data[i]);
+                base_impl::m_data[i] = std::move(set.base_impl::m_data[i]);
             }
         }
 
@@ -62,7 +66,7 @@ namespace DSA
             {
                 throw duplicate_element("Entry is already in the set.");
             }
-            m_data[m_size++] = entry;
+            base_impl::m_data[base_impl::m_size++] = entry;
         }
 
         virtual void add(T &&entry)
@@ -75,7 +79,7 @@ namespace DSA
             {
                 throw duplicate_element("Entry is already in the set.");
             }
-            m_data[m_size++] = std::move(entry);
+            base_impl::m_data[base_impl::m_size++] = std::move(entry);
         }
 
         virtual T remove()
@@ -84,12 +88,12 @@ namespace DSA
             {
                 throw empty_container("Set is empty.");
             }
-            return m_data[--m_size];
+            return base_impl::m_data[--base_impl::m_size];
         }
 
         virtual T *remove(const size_t &num)
         {
-            if (0 > (ptrdiff_t)m_size - (ptrdiff_t)num)
+            if (0 > (ptrdiff_t)base_impl::m_size - (ptrdiff_t)num)
             {
                 throw illegal_argument("");
             }
@@ -100,17 +104,17 @@ namespace DSA
 
             // TODO Rename this:
             T *cur_data = new T[num];
-            size_t new_size = m_size - num;
-            memcpy(cur_data, &(m_data[new_size]), num * sizeof(T));
-            memset(&(m_data[new_size]), 0, num * sizeof(T));
-            m_size = new_size;
+            size_t new_size = base_impl::m_size - num;
+            memcpy(cur_data, &(base_impl::m_data[new_size]), num * sizeof(T));
+            memset(&(base_impl::m_data[new_size]), 0, num * sizeof(T));
+            base_impl::m_size = new_size;
             return cur_data;
         }
 
         virtual void remove(const T &entry)
         {
             size_t index = index_of(entry);
-            m_data[index] = m_data[--m_size];
+            base_impl::m_data[index] = base_impl::m_data[--base_impl::m_size];
         }
 
         virtual bool contains(const T &entry) const

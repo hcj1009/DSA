@@ -10,20 +10,21 @@ namespace DSA
     class d_linked_container
         : virtual public base_container<T>
     {
+        typedef base_container<T> base_impl;
     protected:
         d_node<T> *m_head;
         d_node<T> *m_tail;
 
         d_node<T> *node_at(const size_t &index) const
         {
-            if (index >= m_size)
+            if (index >= base_impl::m_size)
             {
                 throw index_error("Index out of bounds.");
             }
 
             // When index is on the left side of the linked chain.
             d_node<T> *cur_node;
-            if (index <= (float)m_size / 2)
+            if (index <= (float)base_impl::m_size / 2)
             {
                 cur_node = m_head;
                 for (size_t i = 0; i < index; i++)
@@ -35,7 +36,7 @@ namespace DSA
             else
             {
                 cur_node = m_tail;
-                for (size_t i = 0; i < m_size - index - 1; i++)
+                for (size_t i = 0; i < base_impl::m_size - index - 1; i++)
                 {
                     cur_node = cur_node->prev();
                 }
@@ -72,7 +73,7 @@ namespace DSA
             }
             new_node->set_next(m_head);     // new_node->prev == nullptr
             m_head = new_node;
-            m_size++;
+            base_impl::m_size++;
         }
 
         void insert_back(const T &entry)
@@ -81,7 +82,7 @@ namespace DSA
             new_node->set_prev(m_tail);
             m_tail->set_next(new_node);
             m_tail = new_node;
-            m_size++;
+            base_impl::m_size++;
         }
 
         void insert_entry(const size_t &index, const T &entry)
@@ -91,8 +92,8 @@ namespace DSA
             {
                 insert_front(entry);
             }
-            // Insert entry to the back. (m_size must not equal to 0)
-            else if (m_size == index)
+            // Insert entry to the back. (base_impl::m_size must not equal to 0)
+            else if (base_impl::m_size == index)
             {
                 insert_back(entry);
             }
@@ -108,12 +109,12 @@ namespace DSA
                     new_node->prev()->set_next(new_node);
                 }
                 old_node.set_prev(new_node);
-                m_size++;
+                base_impl::m_size++;
             }
         }
 
     public:
-        d_linked_container() : base_container()
+        d_linked_container() : base_container<T>()
         {
             m_head = nullptr;
             m_tail = nullptr;
@@ -127,7 +128,7 @@ namespace DSA
 
         virtual void clear()
         {
-            base_container<T>::clear();
+            base_impl::clear();
             m_head = nullptr;
             m_tail = nullptr;
         }
@@ -140,7 +141,7 @@ namespace DSA
             d_node<T> *forward_node = m_head;
             d_node<T> *backward_node = m_tail;
 
-            for (int i = 0; i < m_size / 2; i++)
+            for (int i = 0; i < base_impl::m_size / 2; i++)
             {
                 if (entry == forward_node->data())
                 {
@@ -148,9 +149,8 @@ namespace DSA
                 }
                 if (entry == backward_node->data())
                 {
-                    return m_size - index - 1;
+                    return base_impl::m_size - i - 1;
                 }
-                index++;
                 forward_node = forward_node->next();
                 backward_node = backward_node->prev();
             }

@@ -8,7 +8,7 @@
 using namespace DSA;
 using DSA::utility::timer;
 
-const size_t ITEM_COUNT = 1000;
+const size_t ITEM_COUNT = 10000;
 const size_t LOOP_COUNT = 10;
 
 void disp_msg(const std::string &msg)
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_vector);
     /**/
 
-    /* STL std::list *
+    /* STL std::list */
     disp_msg("std::list<std::string>");
     std::list<std::string> test_std_list;
     double total_std_list = 0;
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     disp_time(total_array_list);
     /**/
 
-    /** DSA s_linked_list *
+    /** DSA s_linked_list */
     disp_msg("DSA::s_linked_list<string>");
     s_linked_list<string> test_linked_list;
     double total_linked_list = 0;
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
     disp_time(total_linked_list);
     /**/
 
-    /** std::stack *
+    /** std::stack */
     disp_msg("std::stack<string>");
     std::stack<string> test_std_stack;
     double total_std_stack = 0;
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     }
     disp_time(total_std_stack);
 
-    /* DSA array_stack *
+    /* DSA array_stack */
     disp_msg("DSA::array_stack<string>");
     array_stack<string> test_array_stack;
     double total_array_stack = 0;
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     disp_time(total_array_stack);
     /**/
 
-    /* DSA linked_stack *
+    /* DSA linked_stack */
     disp_msg("DSA::linked_stack<string>");
     linked_stack<string> test_linked_stack;
     double total_linked_stack = 0;
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     disp_time(total_linked_stack);
     /**/
 
-    /* STL std::queue *
+    /* STL std::queue */
     disp_msg("std::queue<string>");
     std::queue<string> test_std_queue;
     double total_std_queue = 0;
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     disp_time(total_array_queue);
     /**/
 
-    /* DSA linked_queue *
+    /* DSA linked_queue */
     disp_msg("DSA::linked_queue<string>");
     linked_queue<string> test_linked_queue;
     double total_linked_queue = 0;

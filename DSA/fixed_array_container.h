@@ -10,12 +10,13 @@ namespace DSA
     class fixed_array_container :
         virtual public base_container<T>
     {
+        typedef base_container<T> base_impl;
     protected:
         T m_data[CAPACITY];
 
         inline size_t index_of(const T &entry) const
         {
-            for (size_t i = 0; i < m_size; i++)
+            for (size_t i = 0; i < base_impl::m_size; i++)
             {
                 if (entry == m_data[i])
                 {
@@ -46,7 +47,7 @@ namespace DSA
 
         virtual bool full() const
         {
-            return (m_size == CAPACITY);
+            return (base_impl::m_size == CAPACITY);
         }
 
         virtual bool contains(const T &entry) const

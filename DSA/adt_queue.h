@@ -11,7 +11,7 @@ namespace DSA
     {
     public:
         // Default constructor.
-        adt_queue() : adt_container() {}
+        adt_queue() : adt_container<T>() {}
 
         // Default destructor.
         virtual ~adt_queue() {}

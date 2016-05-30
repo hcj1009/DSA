@@ -12,9 +12,10 @@ namespace DSA
         : public adt_stack<T>
         , public s_linked_container<T>
     {
+        typedef s_linked_container<T> base_impl;
         typedef std::shared_ptr<s_node<T>> node_ptr;
     public:
-        linked_stack() : adt_stack<T>() {}
+        linked_stack() : base_impl() {}
 
         linked_stack(const linked_stack<T> &stack)
         {
@@ -38,29 +39,29 @@ namespace DSA
         // Get the entry on the top of the stack.
         virtual T peek() const
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot pop from an empty stack.");
             }
-            return m_head->data();
+            return base_impl::m_head->data();
         }
 
         // Push an entry to the top of the stack.
         virtual void push(const T &entry)
         {
-            insert_front(entry);
+            base_impl::insert_front(entry);
         }
 
         // Pop the top entry from the stack.
         virtual T pop()
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot pop from an empty stack.");
             }
-            node_ptr top_node = m_head;
-            m_head = std::move(m_head->next());
-            m_size--;
+            node_ptr top_node = base_impl::m_head;
+            base_impl::m_head = std::move(base_impl::m_head->next());
+            base_impl::m_size--;
             return top_node->data();
         }
 

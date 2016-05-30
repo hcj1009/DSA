@@ -11,7 +11,7 @@ namespace DSA
     {
     public:
         // Default constructor of the stack.
-        adt_stack() : adt_container() {}
+        adt_stack() : adt_container<T>() {}
 
         // Default destructor of the stack.
         virtual ~adt_stack() {}

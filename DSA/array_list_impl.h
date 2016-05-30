@@ -5,8 +5,7 @@ namespace DSA
 {
     // Default constructor of the list.
     template <class T>
-    array_list<T>::array_list(const size_t &base_capacity
-        = base_impl::DEFAULT_BASE_CAPACITY)
+    array_list<T>::array_list(const size_t &base_capacity)
         : dynamic_array_container<T>(base_capacity) {}
 
     // Builda list based on a given list.
@@ -39,8 +38,7 @@ namespace DSA
     template <class T>
     array_list<T>::array_list(const T entries[],
         const size_t &size,
-        const size_t &base_capacity
-        = base_impl::DEFAULT_BASE_CAPACITY)
+        const size_t &base_capacity)
     {
         base_impl::m_base_capacity = base_capacity;
         base_impl::m_capacity = base_impl::capacity_of(size);

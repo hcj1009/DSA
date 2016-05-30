@@ -9,14 +9,15 @@ namespace DSA
     template <class T>
     class linked_deque : public d_linked_container<T>
     {
+        typedef d_linked_container<T> base_impl;
     public:
-        linked_deque() : d_linked_container() {}
+        linked_deque() : d_linked_container<T>() {}
 
         linked_deque(const linked_deque<T> &deque)
         {
-            m_head = deque.m_head;
-            m_tail = deque.m_tail;
-            m_size = deque.m_size;
+            base_impl::m_head = deque.base_impl::m_head;
+            base_impl::m_tail = deque.base_impl::m_tail;
+            base_impl::m_size = deque.base_impl::m_size;
         }
 
         virtual ~linked_deque() {}
@@ -44,22 +45,22 @@ namespace DSA
 
         virtual T pop_front()
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot pop entry from an empty deque.");
             }
             d_node<T> *cur_node = remove(0);
-            m_size--;
+            base_impl::m_size--;
             return cur_node->data();
         }
 
         virtual T front() const
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot get entry from an empty deque.");
             }
-            return m_head->data();
+            return base_impl::m_head->data();
         }
 
         virtual void push_back(const T &entry)
@@ -70,22 +71,22 @@ namespace DSA
 
         virtual T pop_back()
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot pop entry from an empty deque.");
             }
             return T();
-            // return remove(--m_size)->data();
+            // return remove(--base_impl::m_size)->data();
         }
 
         virtual T back() const
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot get entry from an empty deque.");
             }
             return T();
-            // return m_tail->data();
+            // return base_impl::m_tail->data();
         }
 
         virtual bool contains(const T &entry) const

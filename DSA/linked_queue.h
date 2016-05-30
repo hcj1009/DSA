@@ -11,6 +11,7 @@ namespace DSA
         : public adt_queue<T>
         , public s_linked_container<T>
     {
+        typedef s_linked_container<T> base_impl;
         typedef std::shared_ptr<s_node<T>> node_ptr;
     protected:
         node_ptr m_tail;    // Optimization for enqueue to the back.
@@ -24,17 +25,18 @@ namespace DSA
         // Copy constructor.
         linked_queue(const linked_queue<T> &queue)
         {
-            m_head = node_ptr(queue.m_head);
+            base_impl::m_head 
+                = node_ptr(queue.base_impl::m_head);
             m_tail = node_ptr(queue.m_tail);
-            m_size = queue.m_size;
+            base_impl::m_size = queue.base_impl::m_size;
         }
 
         // Move constructor.
         linked_queue(linked_queue<T> &&queue) noexcept
         {
-            m_head = queue.m_head;
+            base_impl::m_head = queue.base_impl::m_head;
             m_tail = queue.m_tail;
-            m_size = queue.m_size;
+            base_impl::m_size = queue.base_impl::m_size;
         }
 
         virtual ~linked_queue() {}
@@ -60,9 +62,9 @@ namespace DSA
             node_ptr new_node
                 = node_ptr(new s_node<T>(entry));
             // Empty list case.
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
-                m_head = new_node;
+                base_impl::m_head = new_node;
                 m_tail = new_node;
             }
             // Normal cases.
@@ -71,36 +73,37 @@ namespace DSA
                 m_tail->set_next(new_node);
                 m_tail = new_node;
             }
-            m_size++;
+            base_impl::m_size++;
         }
 
         // Get the entry from the front of the queue.
         virtual T dequeue()
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot get back entry: \
-queue is empty.");
+                        queue is empty.");
             }
-            node_ptr front_node = m_head;
-            m_head = front_node->next();
+            node_ptr front_node = base_impl::m_head;
+            base_impl::m_head = front_node->next();
             front_node->set_next(node_ptr());
-            m_size--;
+            base_impl::m_size--;
             return front_node->data();
         }
 
         virtual T front() const
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
-                throw empty_container("Cannot get front entry: queue is empty.");
+                throw empty_container("Cannot get front entry: \
+                        queue is empty.");
             }
-            return m_head->data();
+            return base_impl::m_head->data();
         }
 
         virtual T back() const
         {
-            if (0 == m_size)
+            if (0 == base_impl::m_size)
             {
                 throw empty_container("Cannot get back entry: queue is empty.");
             }
