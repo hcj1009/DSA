@@ -28,7 +28,9 @@
     <ClInclude Include="array_list.h" />
     <ClInclude Include="array_list_impl.h" />
     <ClInclude Include="array_queue.h" />
+    <ClInclude Include="array_queue_impl.h" />
     <ClInclude Include="array_stack.h" />
+    <ClInclude Include="array_stack_impl.h" />
     <ClInclude Include="base_container.h" />
     <ClInclude Include="base_container_impl.h" />
     <ClInclude Include="dsa.h" />

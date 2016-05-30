@@ -123,6 +123,12 @@
     <ClInclude Include="d_linked_container_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="array_queue_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="array_stack_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
