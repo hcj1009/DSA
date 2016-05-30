@@ -12,6 +12,8 @@ namespace DSA
         : public adt_queue<T>
         , public dynamic_array_container<T>
     {
+        typedef std::shared_ptr<T> entry_ptr;
+        typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     protected:
         size_t m_front;
         size_t m_back;
@@ -29,7 +31,7 @@ namespace DSA
             if (increase_index(m_back, 2) == m_front)
             {
                 size_t new_capacity = 2 * m_capacity;
-                data_t new_data = data_t(new std::shared_ptr<T>[new_capacity]);
+                data_ptr new_data = data_ptr(new entry_ptr[new_capacity]);
                 for (size_t i = 0; i < m_size; i++)
                 {
                     new_data[i] = m_data[increase_index(m_front, i)];
@@ -50,7 +52,7 @@ namespace DSA
             m_capacity = m_base_capacity;
             m_front = 0;
             m_back = m_capacity;
-            m_data = data_t(new std::shared_ptr<T>[m_capacity + 1]);
+            m_data = data_ptr(new entry_ptr[m_capacity + 1]);
         }
 
         array_queue(const array_queue<T> &queue)
@@ -60,7 +62,7 @@ namespace DSA
             m_size = queue.m_size;
             m_front = queue.m_front;
             m_back = queue.m_back;
-            m_data = data_t(new std::shared_ptr<T>[m_capacity]);
+            m_data = data_ptr(new entry_ptr[m_capacity]);
             for (size_t i = 0; i < m_size; i++)
             {
                 m_data[i] = std::shared_ptr<T>(queue.m_data[i]);
@@ -124,7 +126,7 @@ namespace DSA
         {
             ensure_capacity();
             m_back = increase_index(m_back, 1);
-            m_data[m_back].reset(new T(entry));
+            m_data[m_back] = entry_ptr(new T(entry));
             m_size++;
         }
 
@@ -147,7 +149,7 @@ queue is empty.");
         {
             base_container<T>::clear();
             m_capacity = m_base_capacity;
-            m_data = data_t(new std::shared_ptr<T>[m_capacity + 1]);
+            m_data = data_ptr(new entry_ptr[m_capacity + 1]);
             m_front = 0;
             m_back = m_capacity;
         }

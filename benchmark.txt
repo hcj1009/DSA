@@ -1,0 +1,37 @@
+Testing std::vector<string>
+Total time: 8.80493s
+Average time: 0.880493s
+
+Testing std::list<string>
+Total time: 0.158372s
+Average time: 0.0158372s
+
+Testing DSA::array_list<string>
+Total time: 3.6166s
+Average time: 0.36166s
+
+Testing DSA::s_linked_list<string>
+Total time: 0.264437s
+Average time: 0.0264437s
+
+Testing std::stack<string>
+Total time: 0.10498s
+Average time: 0.010498s
+
+Testing DSA::array_stack<string>
+Total time: 0.180116s
+Average time: 0.0180116s
+
+Testing DSA::linked_stack<string>
+Total time: 0.162196s
+Average time: 0.0162196s
+
+Testing std::queue<string>
+Total time: 0.107101s
+Average time: 0.0107101s
+
+Testing DSA::array_queue<string>
+Total time: 0.167519s
+Average time: 0.0167519s
+
+Press any key to continue . . .

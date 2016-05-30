@@ -12,7 +12,7 @@ using namespace DSA;
 using DSA::utility::timer;
 
 const size_t ITEM_COUNT = 1000;
-const size_t LOOP_COUNT = 100;
+const size_t LOOP_COUNT = 10;
 
 void disp_msg(const string &msg)
 {
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_vector);
     /**/
 
-    /* STL std::list */
+    /* STL std::list *
     disp_msg("std::list<string>");
     std::list<std::string> test_std_list;
     double total_std_list = 0;
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_list);
     /**/
 
-    /** DSA array_list */
+    /** DSA array_list *
     disp_msg("DSA::array_list<string>");
     array_list<string> test_array_list;
     double total_array_list = 0;
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     disp_time(total_array_list);
     /**/
 
-    /** DSA s_linked_list */
+    /** DSA s_linked_list *
     disp_msg("DSA::s_linked_list<string>");
     s_linked_list<string> test_linked_list;
     double total_linked_list = 0;
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_queue);
     /**/
 
-    /* DSA array_queue *
+    /* DSA array_queue */
     disp_msg("DSA::array_queue<string>");
     array_queue<string> test_array_queue;
     double total_array_queue = 0;
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
     /**/
 
     /* DSA linked_queue *
-    disp_msg("DSA::array_queue<string>");
+    disp_msg("DSA::linked_queue<string>");
     linked_queue<string> test_linked_queue;
     double total_linked_queue = 0;
     for (size_t i = 0; i < LOOP_COUNT; i++)

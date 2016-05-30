@@ -13,13 +13,14 @@ namespace DSA
     class dynamic_array_container
         : virtual public base_container<T>
     {
+        typedef std::shared_ptr<T> entry_ptr;
+        typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     protected:
-        typedef std::unique_ptr<std::shared_ptr<T>[]> data_t;
         // Natural log 2, used in function capacity_of(const size_t &)
         const double LOG2 = 0.6931471805599453;
         static const size_t DEFAULT_BASE_CAPACITY = 10;
 
-        data_t m_data;
+        data_ptr m_data;
         size_t m_capacity;
         size_t m_base_capacity;
 
@@ -39,7 +40,7 @@ namespace DSA
             {
                 m_capacity = m_size < 2 * m_capacity
                     ? 2 * m_capacity : capacity_of(m_size);
-                data_t new_data = data_t(new std::shared_ptr<T>[m_capacity]);
+                data_ptr new_data = data_ptr(new entry_ptr[m_capacity]);
                 for (size_t i = 0; i < m_size; i++)
                 {
                     new_data[i] = std::move(m_data[i]);
@@ -86,12 +87,12 @@ than 0 after shifting.");
             if (new_capacity > m_capacity)
             {
                 m_capacity = new_capacity;
-                data_t new_data = 
-                    data_t (new std::shared_ptr<T>[m_capacity]);
+                data_ptr new_data = 
+                    data_ptr (new entry_ptr[m_capacity]);
                 for (size_t i = 0; i < m_size; i++)
                 {
                     size_t in = i < index ? i : i + disp;
-                    new_data[in] = std::move(m_data[i]);
+                    new_data[in] = m_data[i];
                 }
                 m_data = std::move(new_data);
             }
@@ -123,7 +124,7 @@ than 0 after shifting.");
         {
             m_base_capacity = base_capacity;
             m_capacity = m_base_capacity;
-            m_data = data_t(new std::shared_ptr<T>[m_capacity]);
+            m_data = data_ptr(new entry_ptr[m_capacity]);
         }
 
         virtual ~dynamic_array_container() { }
@@ -137,8 +138,7 @@ than 0 after shifting.");
         {
             base_container<T>::clear();
             m_capacity = m_base_capacity;
-            m_data = data_t
-                (new std::shared_ptr<T>[m_capacity]);
+            m_data = data_ptr (new entry_ptr[m_capacity]);
         }
 
         // Return if the container contains a given entry.

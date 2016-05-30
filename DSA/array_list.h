@@ -12,6 +12,8 @@ namespace DSA
         : public adt_list<T>
         , public dynamic_array_container<T>
     {
+        typedef std::shared_ptr<T> entry_ptr;
+        typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     public:
         // Default constructor of the list.
         array_list(const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
@@ -23,7 +25,7 @@ namespace DSA
             m_base_capacity = list.m_base_capacity;
             m_capacity = list.m_capacity;
             m_size = list.m_size;
-            m_data = data_t(new std::shared_ptr<T>[m_capacity]);
+            m_data = data_ptr(new entry_ptr[m_capacity]);
             for (size_t i = 0; i < m_size; i++)
             {
                 m_data[i] = std::shared_ptr<T>(list.m_data[i]);
@@ -47,7 +49,7 @@ namespace DSA
             m_base_capacity = base_capacity;
             m_capacity = capacity_of(size);
             m_size = size;
-            m_data = data_t(new shared_ptr<T>[m_capacity]);
+            m_data = data_ptr(new shared_ptr<T>[m_capacity]);
             for (size_t i = 0; i < m_size; i++)
             {
                 m_data[i].reset(new T(entries[i]));
@@ -248,7 +250,7 @@ namespace DSA
         {
             if (rhs.m_capacity != m_capacity)
             {
-                m_data.reset(new std::shared_ptr<T>[m_capacity = rhs.m_capacity]);
+                m_data.reset(new entry_ptr[m_capacity = rhs.m_capacity]);
             }
             m_base_capacity = rhs.m_base_capacity;
             m_size = rhs.m_size;

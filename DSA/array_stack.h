@@ -12,6 +12,8 @@ namespace DSA
         : public adt_stack<T>
         , public dynamic_array_container<T>
     {
+        typedef std::shared_ptr<T> entry_ptr;
+        typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     public:
         array_stack(const size_t &base_capacity = DEFAULT_BASE_CAPACITY)
             : dynamic_array_container(base_capacity) {}
@@ -21,7 +23,7 @@ namespace DSA
             m_base_capacity = stack.m_base_capacity;
             m_capacity = stack.m_capacity;
             m_size = stack.m_size;
-            m_data = data_t(new std::shared_ptr<T>[m_capacity]);
+            m_data = data_ptr(new entry_ptr[m_capacity]);
             for (size_t i = 0; i < m_size; i++)
             {
                 m_data[i] = std::shared_ptr<T>(stack.m_data[i]);
@@ -110,7 +112,7 @@ namespace DSA
             if (stack.m_capacity > m_capacity)
             {
                 m_capacity = stack.m_capacity;
-                m_data = data_t(new std::shared_ptr<T>[m_capacity]);
+                m_data = data_ptr(new entry_ptr[m_capacity]);
             }
             m_base_capacity = stack.m_base_capacity;
             m_size = stack.m_size;
