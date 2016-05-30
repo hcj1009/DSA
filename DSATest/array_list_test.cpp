@@ -390,6 +390,7 @@ namespace DSATest
             Assert::AreEqual((size_t)160, test_list2.capacity());
         }
  
+        /*
         TEST_METHOD(test_addition_operator)
         {
             array_list<string> test_list1;

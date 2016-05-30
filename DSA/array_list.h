@@ -17,9 +17,8 @@ namespace DSA
         typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     public:
         // Default constructor of the list.
-        array_list(const size_t &base_capacity
-            = base_impl::DEFAULT_BASE_CAPACITY)
-            : dynamic_array_container<T>(base_capacity);
+        array_list(const size_t &base_capacity 
+            = base_impl::DEFAULT_BASE_CAPACITY);
         // Builda list based on a given list.
         array_list(const array_list<T> &list);
         // Move constructor: build a list based on a given list (rvalue).
@@ -64,9 +63,8 @@ namespace DSA
         // Cases when the right-hand expression is rvalue.
         virtual array_list<T> &operator= (array_list<T> &&rhs);
         array_list<T> &operator+= (const T &rhs);
-        //friend array_list<T> operator+ (const array_list<T> &lhs, const T &rhs);
     };
 }
 
-//#include "array_list_impl.h"
+#include "array_list_impl.h"
 #endif

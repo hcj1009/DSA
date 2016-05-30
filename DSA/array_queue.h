@@ -12,6 +12,7 @@ namespace DSA
         : public adt_queue<T>
         , public dynamic_array_container<T>
     {
+        typedef dynamic_array_container<T> base_impl;
         typedef std::shared_ptr<T> entry_ptr;
         typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
     protected:
