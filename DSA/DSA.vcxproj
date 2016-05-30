@@ -41,6 +41,7 @@
     <ClInclude Include="fixed_array_container.h" />
     <ClInclude Include="fixed_set.h" />
     <ClInclude Include="linked_deque.h" />
+    <ClInclude Include="linked_queue.h" />
     <ClInclude Include="linked_stack.h" />
     <ClInclude Include="dsa_list.h" />
     <ClInclude Include="s_linked_container.h" />

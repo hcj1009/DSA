@@ -19,7 +19,7 @@ namespace DSA
     public:
         // Default constructor of the lsit.
         s_linked_list()
-            : s_linked_container()
+            : s_linked_container<T>()
             , m_tail() {}
 
         s_linked_list(const s_linked_list<T> &list)
@@ -31,9 +31,9 @@ namespace DSA
 
         s_linked_list(s_linked_list<T> &&list) noexcept
         {
-            m_head = std::move(list.m_head);
-            m_tail = std::move(list.m_tail);
-            m_size = std::move(list.m_size);
+            m_head = list.m_head;
+            m_tail = list.m_tail;
+            m_size = list.m_size;
         }
 
         // Build a list based on a given array of entries.

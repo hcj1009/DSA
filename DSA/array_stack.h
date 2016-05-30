@@ -114,14 +114,10 @@ namespace DSA
             }
             m_base_capacity = stack.m_base_capacity;
             m_size = stack.m_size;
-            // Fix this:
-                /*
             for (size_t i = 0; i < m_size; i++)
             {
-                // 
                 m_data[i] = stack.m_data[i];
             }
-            */
             return *this;
         }
 

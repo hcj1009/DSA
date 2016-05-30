@@ -29,12 +29,10 @@ namespace DSA
             if (increase_index(m_back, 2) == m_front)
             {
                 size_t new_capacity = 2 * m_capacity;
-                data_t new_data =
-                    data_t(new std::shared_ptr<T>[new_capacity]);
+                data_t new_data = data_t(new std::shared_ptr<T>[new_capacity]);
                 for (size_t i = 0; i < m_size; i++)
                 {
-                    new_data[i] = std::move
-                    (m_data[increase_index(m_front, i)]);
+                    new_data[i] = m_data[increase_index(m_front, i)];
                 }
                 m_data = std::move(new_data);
                 m_front = 0;

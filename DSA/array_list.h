@@ -266,10 +266,7 @@ namespace DSA
             m_base_capacity = std::move(rhs.m_base_capacity);
             m_capacity = std::move(rhs.m_capacity);
             m_size = std::move(rhs.m_size);
-            for (size_t i = 0; i < m_size; i++)
-            {
-                m_data[i] = std::move(rhs.m_data[i]);
-            }
+            m_data = std::move(rhs.m_data);
             return *this;
         }
 

@@ -47,5 +47,8 @@
     <ClCompile Include="s_linked_list_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="linked_queue_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

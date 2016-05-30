@@ -328,6 +328,7 @@ namespace DSATest
             Assert::AreEqual((string)"String 7", test_list.get(5));
         }
 
+        /*
         TEST_METHOD(test_to_array)
         {
             array_list<string> test_list;
@@ -343,8 +344,8 @@ namespace DSATest
                 Assert::AreEqual(to_string(i), test_array[i]);
             }
         }
+        */
 
-        /*
         TEST_METHOD(test_assignment_operator)
         {
             array_list<string> test_list1;
@@ -361,13 +362,14 @@ namespace DSATest
             Assert::AreEqual((size_t)10, test_list2.capacity());
 
             test_list2 = test_list1;
+
             Assert::IsFalse(test_list1.empty());
             Assert::AreEqual((size_t)100, test_list1.size());
             Assert::AreEqual((size_t)160, test_list1.capacity());
             Assert::IsFalse(test_list2.empty());
             Assert::AreEqual((size_t)100, test_list2.size());
             Assert::AreEqual((size_t)160, test_list2.capacity());
-
+            
             for (size_t i = 0; i < 100; i++)
             {
                 Assert::AreEqual(to_string(i), test_list1.get(i));
@@ -383,9 +385,6 @@ namespace DSATest
             Assert::AreEqual((size_t)10, test_list2.capacity());
 
             test_list2 = move(test_list1);
-            Assert::IsTrue(test_list1.empty());
-            Assert::AreEqual((size_t)0, test_list1.size());
-            Assert::AreEqual((size_t)160, test_list1.capacity());
             Assert::IsFalse(test_list2.empty());
             Assert::AreEqual((size_t)100, test_list2.size());
             Assert::AreEqual((size_t)160, test_list2.capacity());
