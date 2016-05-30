@@ -43,25 +43,25 @@ namespace DSA
         // Return if the stack is empty.
         virtual bool empty() const
         {
-            return dynamic_array_container<T>::empty();
+            return base_impl::empty();
         }
 
         // Get the size of the stack.
         virtual size_t size() const
         {
-            return dynamic_array_container<T>::size();
+            return base_impl::size();
         }
 
         // Get the capacity of the stack.
         virtual size_t capacity() const
         {
-            return dynamic_array_container<T>::capacity();
+            return base_impl::capacity();
         }
 
         // Remove all the entries from the list, and free the memory.
         virtual void clear()
         {
-            dynamic_array_container<T>::clear();
+            base_impl::clear();
         }
 
         // Get the entry on the top of the stack.
@@ -104,7 +104,7 @@ namespace DSA
         // Return if the stack contains a given entry.
         virtual bool contains(const T &entry) const
         {
-            return dynamic_array_container<T>::contains(entry);
+            return base_impl::contains(entry);
         }
 
         array_stack& operator=(const array_stack<T> &stack)

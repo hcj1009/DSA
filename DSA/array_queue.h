@@ -86,19 +86,19 @@ namespace DSA
         // Return if the queue is empty.
         virtual bool empty() const
         {
-            return dynamic_array_container<T>::empty();
+            return base_impl::empty();
         }
 
         // Get the size of the queue.
         virtual size_t size() const
         {
-            return dynamic_array_container<T>::size();
+            return base_impl::size();
         }
 
         // Get the capacity of the queue.
         virtual size_t capacity() const
         {
-            return dynamic_array_container<T>::capacity();
+            return base_impl::capacity();
         }
 
         // Get the first entry in the queue.

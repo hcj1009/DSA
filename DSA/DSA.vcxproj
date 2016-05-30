@@ -26,6 +26,7 @@
     <ClInclude Include="adt_set.h" />
     <ClInclude Include="adt_stack.h" />
     <ClInclude Include="array_list.h" />
+    <ClInclude Include="array_list_impl.h" />
     <ClInclude Include="array_queue.h" />
     <ClInclude Include="array_stack.h" />
     <ClInclude Include="base_container.h" />
