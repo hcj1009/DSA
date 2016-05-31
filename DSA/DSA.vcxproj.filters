@@ -135,6 +135,9 @@
     <ClInclude Include="linked_queue_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="linked_stack_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
