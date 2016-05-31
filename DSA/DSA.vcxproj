@@ -53,6 +53,7 @@
     <ClInclude Include="linked_stack.h" />
     <ClInclude Include="dsa_list.h" />
     <ClInclude Include="linked_stack_impl.h" />
+    <ClInclude Include="mixed_container.h" />
     <ClInclude Include="std_container.h" />
     <ClInclude Include="s_linked_container.h" />
     <ClInclude Include="s_linked_container_impl.h" />

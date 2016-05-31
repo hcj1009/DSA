@@ -25,12 +25,11 @@ namespace DSA
         d_linked_container();
         virtual ~d_linked_container();
         inline virtual void clear();
-        // TODO Optimize this:
-        // Get the index of a given entry.
-        // Throw no_such_element exception when the given entry is not found.
         inline virtual size_t index_of(const T &entry) const;
         inline virtual bool contains(const T &entry) const;
     };
 }
+
+#include "d_linked_container_impl.h"
 
 #endif

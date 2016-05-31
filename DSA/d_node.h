@@ -21,39 +21,43 @@ namespace DSA
             m_next = nullptr;
         }
 
-        d_node(const node_ptr &prev, const T &data, const node_ptr &next)
+        d_node(const node_ptr &prev,
+            const T &data, 
+            const node_ptr &next)
         {
             m_data = data;
             m_prev = prev;
             m_next = next;
         }
 
-        virtual T data() const
+        virtual ~d_node() {}
+
+        inline virtual T data() const
         {
             return m_data;
         }
 
-        virtual void set_data(const T &data)
+        inline virtual void set_data(const T &data)
         {
             m_data = data;
         }
 
-        virtual node_ptr next()
+        inline virtual node_ptr next()
         {
             return m_next;
         }
 
-        virtual void set_next(const node_ptr &next)
+        inline virtual void set_next(const node_ptr &next)
         {
             m_next = next;
         }
 
-        virtual d_node<T> *&prev()
+        inline virtual d_node<T> *&prev()
         {
             return m_prev;
         }
 
-        virtual void set_prev(const node_ptr &prev)
+        inline virtual void set_prev(const node_ptr &prev)
         {
             m_prev = prev;
         }

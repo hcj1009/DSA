@@ -1,18 +1,20 @@
 #ifndef D_LINKED_CONTAINER_IMPL_H
 #define D_LINKED_CONTAINER_IMPL_H
 
-namespace
+namespace DSA
 {
     template <class T>
-    d_node<T> *d_linked_container<T>::node_at(const size_t &index) const
+    std::shared_ptr<d_node<T>> 
+    //node_ptr
+        d_linked_container<T>::node_at(const size_t &index) const
     {
         if (index >= base_impl::m_size)
         {
             throw index_error("Index out of bounds.");
         }
 
+        node_ptr cur_node;
         // When index is on the left side of the linked chain.
-        d_node<T> *d_linked_container<T>::cur_node;
         if (index <= (float)base_impl::m_size / 2)
         {
             cur_node = m_head;
@@ -34,9 +36,10 @@ namespace
     }
 
     template <class T>
-    d_node<T> *d_linked_container<T>::node_of(const T &entry) const
+    std::shared_ptr<d_node<T>> 
+        d_linked_container<T>::node_of(const T &entry) const
     {
-        d_node<T> *cur_node = m_head;
+        node_ptr cur_node = m_head;
         while (cur_node)
         {
             if (entry == cur_node->data())
@@ -51,7 +54,7 @@ namespace
     template <class T>
     void d_linked_container<T>::insert_front(const T &entry)
     {
-        d_node<T> *new_node = new d_node<T>(entry);
+        node_ptr new_node = node_ptr(new T(entry));
         if (m_head)
         {
             m_head->set_prev(new_node);
@@ -70,7 +73,7 @@ namespace
     template <class T>
     void d_linked_container<T>::insert_back(const T &entry)
     {
-        d_node<T> *new_node = new d_node<T>(entry);
+        node_ptr new_node = node_ptr(new T(entry));
         new_node->set_prev(m_tail);
         m_tail->set_next(new_node);
         m_tail = new_node;
@@ -78,7 +81,8 @@ namespace
     }
 
     template <class T>
-    void d_linked_container<T>::insert_entry(const size_t &index, const T &entry)
+    void d_linked_container<T>::insert_entry
+    (const size_t &index, const T &entry)
     {
         // Insert entry to the front.
         if (0 == index)
@@ -93,39 +97,36 @@ namespace
         // General cases.
         else
         {
-            d_node<T> *new_node = new d_node<T>(entry);
-            d_node<T> &old_node = *node_at(index);
-            new_node->set_prev(old_node.prev());
+            node_ptr new_node = node_ptr(new T(entry));
+            node_ptr old_node = node_at(index);
+            new_node->set_prev(old_node->prev());
             new_node->set_next(old_node);
             if (!new_node->prev())
             {
                 new_node->prev()->set_next(new_node);
             }
-            old_node.set_prev(new_node);
+            old_node->set_prev(new_node);
             base_impl::m_size++;
         }
     }
 
     template <class T>
-    d_linked_container<T>::d_linked_container() : base_container<T>()
+    d_linked_container<T>::d_linked_container() 
+        : base_container<T>()
     {
-        m_head = nullptr;
-        m_tail = nullptr;
+        m_head = node_ptr();
+        m_tail = node_ptr();
     }
 
     template <class T>
-    d_linked_container<T>::~d_linked_container()
-    {
-        delete m_head;
-        delete m_tail;
-    }
+    d_linked_container<T>::~d_linked_container() {}
 
     template <class T>
     void d_linked_container<T>::clear()
     {
         base_impl::clear();
-        m_head = nullptr;
-        m_tail = nullptr;
+        m_head = node_ptr();
+        m_tail = node_ptr();
     }
 
     // TODO Optimize this:
@@ -134,8 +135,8 @@ namespace
     template <class T>
     size_t d_linked_container<T>::index_of(const T &entry) const
     {
-        d_node<T> *forward_node = m_head;
-        d_node<T> *backward_node = m_tail;
+        node_ptr forward_node = m_head;
+        node_ptr backward_node = m_tail;
 
         for (int i = 0; i < base_impl::m_size / 2; i++)
         {
@@ -152,13 +153,14 @@ namespace
         }
 
         throw no_such_element("Cannot get the index of an entry that \
-is not in the list.");
+                is not in the container.");
     }
 
 
     template <class T>
     bool d_linked_container<T>::contains(const T &entry) const
     {
+        /* Avoid try catch overhead *
         try
         {
             index_of(entry);
@@ -168,6 +170,25 @@ is not in the list.");
             return false;
         }
         return true;
+        /**/
+
+        node_ptr forward_node = m_head;
+        node_ptr backward_node = m_tail;
+
+        for (int i = 0; i < base_impl::m_size / 2; i++)
+        {
+            if (entry == forward_node->data())
+            {
+                return true;
+            }
+            if (entry == backward_node->data())
+            {
+                return true;
+            }
+            forward_node = forward_node->next();
+            backward_node = backward_node->prev();
+        }
+        return false;
     }
 }
 

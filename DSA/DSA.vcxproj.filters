@@ -138,6 +138,9 @@
     <ClInclude Include="linked_stack_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mixed_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
