@@ -12,7 +12,7 @@ namespace DSA
     {
         typedef base_container<T> base_impl;
         typedef std::shared_ptr<d_node<T>> node_ptr;
-    public:
+    protected:
         node_ptr m_head;
         node_ptr m_tail;
         inline node_ptr node_at(const size_t &index) const;
@@ -22,12 +22,12 @@ namespace DSA
         inline void insert_node(const size_t &index, const node_ptr &node);
         inline void remove_node(const size_t &index);
         inline void remove_node(const node_ptr &node);
+        inline size_t index_of(const T &entry) const;
 
     public:
         d_linked_container();
         virtual ~d_linked_container();
         inline virtual void clear();
-        inline virtual size_t index_of(const T &entry) const;
         inline virtual bool contains(const T &entry) const;
     };
 }
