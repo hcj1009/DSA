@@ -1,6 +1,8 @@
 #ifndef D_LINKED_CONTAINER_IMPL_H
 #define D_LINKED_CONTAINER_IMPL_H
 
+#include "dsa_except.h"
+
 namespace DSA
 {
     template <class T>
@@ -54,69 +56,97 @@ namespace DSA
     template <class T>
     void d_linked_container<T>::insert_front(const T &entry)
     {
-        node_ptr new_node = node_ptr(new T(entry));
-        if (m_head)
-        {
-            m_head->set_prev(new_node);
-        }
-        // If m_head is nullptr, then m_tail must be nullptr,
-        // container must be empty.
-        else
-        {
-            m_tail = new_node;
-        }
-        new_node->set_next(m_head);     // new_node->prev == nullptr
-        m_head = new_node;
-        base_impl::m_size++;
+        insert_entry(0, entry);
     }
 
     template <class T>
     void d_linked_container<T>::insert_back(const T &entry)
     {
-        node_ptr new_node = node_ptr(new T(entry));
-        new_node->set_prev(m_tail);
-        m_tail->set_next(new_node);
-        m_tail = new_node;
-        base_impl::m_size++;
+        insert_entry(base_impl::m_size, entry);
     }
 
+    // TODO Implement iterator version.
+    // insert_node(iterator iter, node_ptr node)
+
     template <class T>
-    void d_linked_container<T>::insert_entry
-    (const size_t &index, const T &entry)
+    void d_linked_container<T>::insert_node
+    (const size_t &index, const node_ptr &node)
     {
         // Insert entry to the front.
         if (0 == index)
         {
-            insert_front(entry);
+            if (m_head)
+            {
+                m_head->set_prev(node);
+            }
+            // If m_head is nullptr, then m_tail must be nullptr,
+            // container must be empty.
+            else
+            {
+                m_tail = node;
+            }
+            node->set_next(m_head);     // new_node->prev == nullptr
+            m_head = node;
         }
         // Insert entry to the back. (base_impl::m_size must not equal to 0)
         else if (base_impl::m_size == index)
         {
-            insert_back(entry);
+            node->set_prev(m_tail);
+            m_tail->set_next(node);
+            m_tail = node;
         }
         // General cases.
         else
         {
-            node_ptr new_node = node_ptr(new T(entry));
             node_ptr old_node = node_at(index);
-            new_node->set_prev(old_node->prev());
-            new_node->set_next(old_node);
-            if (!new_node->prev())
+            node->set_prev(old_node->prev());
+            node->set_next(old_node);
+            if (!node->prev())
             {
-                new_node->prev()->set_next(new_node);
+                node->prev()->set_next(node);
             }
-            old_node->set_prev(new_node);
-            base_impl::m_size++;
+            old_node->set_prev(node);
         }
+        base_impl::m_size++;
+    }
+
+    template <class T>
+    void d_linked_container<T>::remove_node
+    (const size_t &index)
+    {
+        node_ptr node = node_at(index);
+        remove_node(node);
+    }
+
+    template <class T>
+    void d_linked_container<T>::remove_node
+    (const node_ptr &node)
+    {
+        node_ptr prev_node = node->prev();
+        node_ptr next_node = node->next();
+        // Normal cases
+        if (prev_node)
+        {
+            prev_node->set_next(next_node);
+        }
+        else    // prev_node == nullptr, node is the head.
+        {
+            m_head = next_node;
+        }
+        if (next_node)
+        {
+            next_node->set_prev(prev_node);
+        }
+        else    // next_node == nullptr, node is the tail.
+        {
+            m_tail = prev_node;
+        }
+        base_impl::m_size--;
     }
 
     template <class T>
     d_linked_container<T>::d_linked_container() 
-        : base_container<T>()
-    {
-        m_head = node_ptr();
-        m_tail = node_ptr();
-    }
+        : base_container<T>(), m_head(), m_tail() {}
 
     template <class T>
     d_linked_container<T>::~d_linked_container() {}

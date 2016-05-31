@@ -12,14 +12,16 @@ namespace DSA
     {
         typedef base_container<T> base_impl;
         typedef std::shared_ptr<d_node<T>> node_ptr;
-    protected:
+    public:
         node_ptr m_head;
         node_ptr m_tail;
         inline node_ptr node_at(const size_t &index) const;
         inline node_ptr node_of(const T &entry) const;
         inline void insert_front(const T &entry);
         inline void insert_back(const T &entry);
-        inline void insert_entry(const size_t &index, const T &entry);
+        inline void insert_node(const size_t &index, const node_ptr &node);
+        inline void remove_node(const size_t &index);
+        inline void remove_node(const node_ptr &node);
 
     public:
         d_linked_container();

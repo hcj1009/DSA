@@ -1,6 +1,8 @@
 #ifndef D_NODE_H
 #define D_NODE_H
 
+#include <memory>
+
 namespace DSA
 {
     // Doubly linked node
@@ -14,21 +16,12 @@ namespace DSA
         node_ptr m_next;
 
     public:
-        d_node(const T &data)
-        {
-            m_data = data;
-            m_prev = nullptr;
-            m_next = nullptr;
-        }
+        d_node(const T &data) : m_data(data), m_prev(), m_next() {}
 
         d_node(const node_ptr &prev,
             const T &data, 
             const node_ptr &next)
-        {
-            m_data = data;
-            m_prev = prev;
-            m_next = next;
-        }
+            : m_data(data), m_prev(prev), m_next(next) {}
 
         virtual ~d_node() {}
 
@@ -52,7 +45,7 @@ namespace DSA
             m_next = next;
         }
 
-        inline virtual d_node<T> *&prev()
+        inline virtual node_ptr prev()
         {
             return m_prev;
         }
