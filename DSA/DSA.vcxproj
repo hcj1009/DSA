@@ -49,6 +49,7 @@
     <ClInclude Include="linked_deque.h" />
     <ClInclude Include="linked_deque_impl.h" />
     <ClInclude Include="linked_queue.h" />
+    <ClInclude Include="linked_queue_impl.h" />
     <ClInclude Include="linked_stack.h" />
     <ClInclude Include="dsa_list.h" />
     <ClInclude Include="std_container.h" />
