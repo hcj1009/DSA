@@ -56,8 +56,8 @@
     <ClInclude Include="mixed_container.h" />
     <ClInclude Include="mixed_container_impl.h" />
     <ClInclude Include="std_container.h" />
-    <ClInclude Include="s_linked_container.h" />
-    <ClInclude Include="s_linked_container_impl.h" />
+    <ClInclude Include="singly_linked_container.h" />
+    <ClInclude Include="singly_linked_container_impl.h" />
     <ClInclude Include="s_linked_list.h" />
     <ClInclude Include="s_node.h" />
     <ClInclude Include="dsa_sort.h" />
