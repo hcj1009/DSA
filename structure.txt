@@ -15,7 +15,7 @@ adt_sequence_container
 -- circular_array_container
 -- mixed_array_container
 -- singly_linked_container
--- doubly_linked_container
+-- doubly_linked_container+
 
 // Adaptors:
 -- stack: mixed_array_container

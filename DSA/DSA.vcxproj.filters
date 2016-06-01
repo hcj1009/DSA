@@ -51,9 +51,6 @@
     <ClInclude Include="linked_deque.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="d_linked_container.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dynamic_array_container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -111,9 +108,6 @@
     <ClInclude Include="dynamic_array_container_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="d_linked_container_impl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="array_queue_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -142,6 +136,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="singly_linked_container_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="doubly_linked_container_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="doubly_linked_container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

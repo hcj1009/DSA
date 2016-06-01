@@ -1,42 +1,27 @@
-#ifndef SINGLY_LINKED_CONTAINER_H
-#define SINGLY_LINKED_CONTAINER_H
+#ifndef DOUBLY_LINKED_CONTAINER_H
+#define DOUBLT_LINKED_CONTAINER_H
 
 #include "dsa_except.h"
-#include "adt_sequence_container.h"
-#include "s_node.h"
+#include"adt_sequence_container.h"
+#include "d_node.h"
 
 namespace DSA
 {
-    // Sequence container implemented by a singly linked chain.
-    // Each linked node contains a pointer pointing to its next node.
-    // 
     template <class T>
-    class singly_linked_container
-        : virtual public adt_sequence_container<T>
+    class doubly_linked_container
     {
-        typedef std::shared_ptr<s_node<T>> node_ptr;
+        typedef base_container<T> base_impl;
+        typedef std::shared_ptr<d_node<T>> node_ptr;
     protected:
-        // Pointer to the first node of the linked chain.
-        node_ptr m_head;
         size_t m_size;
-
-        // Tail reference disabled by default.
-#ifdef SINGLY_LINKED_CONTAINER_TAIL_REFERENCE_FLAG
-        // Pointer to the last node of the linked chain.
+        node_ptr m_head;
         node_ptr m_tail;
-#endif
-
-        // Helper function node_at(const size_t &index)
-        // Get the node at a given position (index) in the linked chain.
-        inline virtual node_ptr node_at(const size_t &index) const;
-
-        // Helper function node_of(const T &entry) const
-        // Get the node that contains a given entry in the linked chain.
-        inline virtual node_ptr node_of(const T &entry) const;
+        inline node_ptr node_at(const size_t &index) const;
+        inline node_ptr node_of(const T &entry) const;
 
     public:
-        singly_linked_container();
-        virtual ~singly_linked_container();
+        doubly_linked_container();
+        virtual ~doubly_linked_container();
 
         // Return if the container is empty.
         // A container is empty when it does not contain any entry.
@@ -89,7 +74,7 @@ namespace DSA
     };
 
     template <class T>
-    struct sequence_container_traits<singly_linked_container<T>>
+    struct sequence_container_traits
     {
     public:
         const static bool is_sequence_container = true;
@@ -107,6 +92,6 @@ namespace DSA
     };
 }
 
-#include "singly_linked_container_impl.h"
+#include "doubly_linked_container_impl.h"
 
 #endif

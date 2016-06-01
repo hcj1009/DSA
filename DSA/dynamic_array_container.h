@@ -151,6 +151,8 @@ namespace DSA
         const static bool support_entry_remove = true;
         const static bool support_index_of = true;
         const static bool support_at = true;
+        const static bool support_reserve = true;
+        const static bool support_shrink = true;
     };
 }
 

@@ -40,8 +40,8 @@
     <ClInclude Include="dsa_stack.h" />
     <ClInclude Include="dynamic_array_container.h" />
     <ClInclude Include="dynamic_array_container_impl.h" />
-    <ClInclude Include="d_linked_container.h" />
-    <ClInclude Include="d_linked_container_impl.h" />
+    <ClInclude Include="doubly_linked_container.h" />
+    <ClInclude Include="doubly_linked_container_impl.h" />
     <ClInclude Include="d_node.h" />
     <ClInclude Include="dsa_except.h" />
     <ClInclude Include="fixed_array_container.h" />

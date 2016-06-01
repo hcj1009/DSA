@@ -66,6 +66,8 @@ namespace DSA
         const static bool support_entry_remove = false;
         const static bool support_index_of = false;
         const static bool support_at = false;
+        const static bool support_reserve = false;
+        const static bool support_shrink = false;
     };
 }
 
