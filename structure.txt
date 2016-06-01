@@ -1,0 +1,39 @@
+adt_sequence_container
+
+// sub-Interfaces:
+    // Last-In-First-Out
+-- adt_stack
+    // First-In-First-Out
+-- adt_queue
+    // Double ended queue
+-- adt_deque
+    // Random access
+-- adt_list
+
+// Adaptees:
+** dynamic_array_container
+-- circular_array_container
+-- mixed_array_container
+-- singly_linked_container
+-- doubly_linked_container
+
+// Adaptors:
+-- stack: mixed_array_container
+-- linked_stack: singly_linked_container
+-- queue: mixed_array_container
+-- linked_queue: singly_linked_container
+-- deque: mixed_array_container
+-- linked_deque: doubly_linked_container
+-- vector: dynamic_array_container
+-- list: doubly_linked_container
+-- forward_list: singly_linked_container
+-- array_list: circular_array_container
+
+
+
+adt_associative_container
+-- 
+
+adt_tree
+
+adt_graph

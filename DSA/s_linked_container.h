@@ -7,6 +7,9 @@
 
 namespace DSA
 {
+    // Sequence container implemented by a singly linked chain.
+    // Each linked node contains a pointer pointing to its next node.
+    // 
     template <class T>
     class s_linked_container
         : virtual public base_container<T>
@@ -14,13 +17,33 @@ namespace DSA
         typedef base_container<T> base_impl;
         typedef std::shared_ptr<s_node<T>> node_ptr;
     protected:
+        // Pointer to the head of the linked chain.
         node_ptr m_head;
+
+        // Helper function node_at(const size_t &index)
         // Get the node at a given position (index) in the linked chain.
-        inline node_ptr node_at(const size_t &index) const;
+        inline virtual node_ptr node_at(const size_t &index) const;
+
+        // Helper function node_of(const T &entry) const
         // Get the node that contains a given entry in the linked chain.
-        inline node_ptr node_of(const T &entry) const;
-        inline void insert_front(const T &entry);
-        inline void insert_entry(const size_t &index, const T &entry);
+        inline virtual node_ptr node_of(const T &entry) const;
+
+        inline virtual T entry_at(const size_t &index) const;
+
+        // Insert a given entry to the front of the container.
+        inline virtual void insert_front(const T &entry);
+
+        // Insert a given entry to the back of the container.
+        inline virtual void insert_back(const T &entry);
+
+        // Insert a given entry to a given position in the container.
+        // If index == 0, call insert_front(entry);
+        // If index == m_size, call insert_back(entry);
+        // Else, get the node at the previous position of the given index,
+        // change linked nodes' prev/next pointers accordingly.
+        inline virtual void insert_entry(const size_t &index, const T &entry);
+
+
 
     public:
         s_linked_container();

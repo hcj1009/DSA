@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="adt_container.h" />
+    <ClInclude Include="adt_sequence_container.h" />
     <ClInclude Include="adt_deque.h" />
     <ClInclude Include="adt_list.h" />
     <ClInclude Include="adt_queue.h" />
