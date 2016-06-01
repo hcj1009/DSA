@@ -46,11 +46,11 @@ namespace DSA
 #ifdef SINGLY_LINKED_CONTAINER_TAIL_REFERENCE_FLAG
     template <class T>
     singly_linked_container<T>::singly_linked_container()
-        : m_head(), m_tail() {}
+        : m_size(0), m_head(), m_tail() {}
 #else
     template <class T>
     singly_linked_container<T>::singly_linked_container()
-        : m_head() {}
+        : m_size(0), m_head() {}
 #endif
 
     template <class T>
@@ -73,7 +73,9 @@ namespace DSA
     {
         m_size = 0;
         m_head.reset();
+#ifdef SINGLY_LINKED_CONTAINER_TAIL_REFERENCE_FLAG
         m_tail.reset();
+#endif
     }
 
     template <class T>
@@ -133,7 +135,7 @@ namespace DSA
     template <class T>
     T singly_linked_container<T>::pop_front()
     {
-        node_ptr cur_node = node_at(index);
+        node_ptr cur_node = m_head;
         T cur_entry = cur_node->data();
         m_head = cur_node->next();
 #ifdef SINGLY_LINKED_CONTAINER_TAIL_REFERENCE_FLAG
@@ -178,6 +180,20 @@ namespace DSA
 #endif
             node_ptr prev_node = m_head;
             while (prev_node->next())
+            {
+                if (entry == prev_node->next()->data())
+                {
+                    node_ptr cur_node = prev_node->next();
+                    prev_node->set_next(cur_node->next());
+#ifdef SINGLY_LINKED_CONTAINER_TAIL_REFERENCE_FLAG
+                    if (!cur_node->next())
+                    {
+                        m_tail = prev_node;
+                    }
+#endif
+                    m_size--;
+                }
+            }
         }
         throw no_such_element("Cannot find such entry in the container.");
     }
@@ -204,7 +220,7 @@ namespace DSA
                 m_tail = prev_node;
             }
 #endif
-            m_size++;
+            m_size--;
             return cur_entry;
         }
     }
@@ -263,6 +279,19 @@ is not in the list.");
             cur_node = cur_node->next();
         }
         return false;
+    }
+
+    template <class T>
+    T *singly_linked_container<T>::to_array() const
+    {
+        T *entries = new T[m_size];
+        node_ptr cur_node = m_head;
+        for (size_t i = 0; i < m_size; i++)
+        {
+            entries[i] = cur_node->data();
+            cur_node = cur_node->next();
+        }
+        return entries;
     }
 }
 
