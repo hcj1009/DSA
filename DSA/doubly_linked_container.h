@@ -10,7 +10,6 @@ namespace DSA
     template <class T>
     class doubly_linked_container
     {
-        typedef base_container<T> base_impl;
         typedef std::shared_ptr<d_node<T>> node_ptr;
     protected:
         size_t m_size;
@@ -74,7 +73,7 @@ namespace DSA
     };
 
     template <class T>
-    struct sequence_container_traits
+    struct sequence_container_traits<doubly_linked_container<T>>
     {
     public:
         const static bool is_sequence_container = true;

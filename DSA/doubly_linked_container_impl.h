@@ -85,9 +85,16 @@ namespace DSA
         node_ptr new_node = node_ptr(new d_node<T>(entry));
         // If m_head is nullptr, then m_tail must be nullptr,
         // container must be empty.
-        m_head ? m_head->set_prev(new_node) : m_tail = new_node;
-        node->set_next(m_head);     // new_node->prev == nullptr
-        m_head = node;
+        if (m_head)
+        {
+            m_head->set_prev(new_node);
+        }
+        else
+        {
+            m_tail = new_node;
+        }
+        new_node->set_next(m_head);     // new_node->prev == nullptr
+        m_head = new_node;
         m_size++;
     }
 
@@ -146,10 +153,18 @@ namespace DSA
                 container!");
         }
         node_ptr front_node = m_head;
-        T front_entry = m_head->data();
-        front_node->set_next(node_ptr());
+        T front_entry = front_node->data();
+        front_node->next().reset();
         m_head = m_head->next();
-        m_head ? m_head->set_prev(node_ptr()) : m_tail.reset() ;
+        if (m_head)
+        {
+            m_head->prev().reset();
+        }
+        else
+        {
+            m_tail.reset();
+        }
+        m_size--;
         return front_entry;
     }
 
@@ -163,9 +178,18 @@ namespace DSA
         }
         node_ptr back_node = m_tail;
         T back_entry = m_tail->data();
-        back_node->set_prev(node_ptr());
+        back_node->prev().reset();
         m_tail = m_tail->prev();
-        m_tail ? m_tail->set_next(node_ptr()) : m_head.reset();
+        if (m_tail)
+        {
+            m_tail->next().reset();
+        }
+        else
+        {
+            m_head.reset();
+        }
+        m_size--;
+        return back_entry;
     }
 
     template <class T>
