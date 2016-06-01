@@ -10,7 +10,7 @@ namespace DSA
     {
     public:
         // Default constructor of the container.
-        adt_container() = default;
+        adt_sequence_container() = default;
 
         // Return if the container is empty.
         // A container is empty when it does not contain any entry.

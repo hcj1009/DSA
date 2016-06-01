@@ -3,14 +3,6 @@
 
 namespace DSA
 {
-    template <class T>
-    const size_t
-        dynamic_array_container<T>::DEFAULT_BASE_CAPACITY;
-
-    template <class T>
-    const float
-        dynamic_array_container<T>::DEFAULT_GROWTH_FACTOR;
-
     // Helper function to determine the capacity needed to hold a
     // given size of list.
     template <class T>
@@ -23,14 +15,14 @@ namespace DSA
             ? m_capacity : size < m_growth_factor * m_capacity
             ? 2 * m_capacity : 
             (size_t)pow(m_growth_factor, ceil(log((double)size \
-            / m_base_capacity) / quick_log(m_growth_factor))) * m_base_capacity;
+            / m_base_capacity) / log(m_growth_factor))) * m_base_capacity;
 #elif defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_BASE_CAPACITY_FLAG)
         // When base_capacity is user defined.
         return size < m_capacity
             ? m_capacity : size < DEFAULT_GROWTH_FACTOR * m_capacity
             ? 2 * m_capacity :
             (size_t)pow(DEFAULT_GROWTH_FACTOR, ceil(log((double)size \
-            / m_base_capacity) / quick_log(DEFAULT_GROWTH_FACTOR))) 
+            / m_base_capacity) / DEFAULT_LOG)) 
             * m_base_capacity;
 #elif defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG)
         // When growth factor is user defined.
@@ -38,13 +30,13 @@ namespace DSA
             ? m_capacity : size < DEFAULT_GROWTH_FACTOR * m_capacity
             ? 2 * m_capacity :
             (size_t)pow(m_growth_factor, ceil(log((double)size \
-            / DEFAULT_BASE_CAPACITY) / quick_log(m_growth_factor))) 
+            / DEFAULT_BASE_CAPACITY) / log(m_growth_factor))) 
             * DEFAULT_BASE_CAPACITY;
 #else
         // Optimize for default situations.
         return (size_t)pow(DEFAULT_GROWTH_FACTOR, ceil(log((double)size \
-            / DEFAULT_BASE_CAPACITY) / quick_log(DEFAULT_GROWTH_FACTOR))) 
-            * m_base_capacity;
+            / DEFAULT_BASE_CAPACITY) / DEFAULT_LOG)) 
+            * DEFAULT_BASE_CAPACITY;
 #endif
     }
 
@@ -128,10 +120,8 @@ namespace DSA
     && defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG)
     template <class T>
     dynamic_array_container<T>::dynamic_array_container
-    (const size_t &base_capacity
-        = DEFAULT_BASE_CAPACITY,
-        const float &growth_factor
-        = DEFAULT_GROWTH_FACTOR)
+    (const size_t &base_capacity,
+        const float &growth_factor)
         : m_data()
         , m_size(0)
         , m_capacity(base_capacity)
@@ -140,8 +130,7 @@ namespace DSA
 #elif defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_BASE_CAPACITY_FLAG)
     template <class T>
     dynamic_array_container<T>::dynamic_array_container
-    (const size_t &base_capacity
-        = DEFAULT_BASE_CAPACITY)
+    (const size_t &base_capacity)
         : m_data()
         , m_size(0)
         , m_capacity(base_capacity)
@@ -149,8 +138,7 @@ namespace DSA
 #elif defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG)
     template <class T>
     dynamic_array_container<T>::dynamic_array_container
-    (const float &growth_factor
-        = DEFAULT_GROWTH_FACTOR)
+    (const float &growth_factor)
         : m_data()
         , m_size(0)
         , m_capacity(DEFAULT_BASE_CAPACITY)
@@ -171,23 +159,29 @@ namespace DSA
     }
 
 #ifdef DYNAMIC_ARRAY_CONTAINER_CUSTOM_BASE_CAPACITY_FLAG
-    inline virtual size_t dynamic_array_container<T>::base_capacity() const
+    template <class T>
+    size_t dynamic_array_container<T>::base_capacity() const
     {
         return m_base_capacity;
     }
-    inline virtual void dynamic_array_container<T>::set_base_capacity
+
+    template <class T>
+    void dynamic_array_container<T>::set_base_capacity
     (const size_t &base_capacity)
     {
         m_base_capacity = base_capacity;
     }
 #endif
 #ifdef DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG
-    inline virtual size_t dynamic_array_container<T>::growth_factor() const
+    template <class T>
+    float dynamic_array_container<T>::growth_factor() const
     {
         return m_growth_factor;
     }
-    inline virtual void dynamic_array_container<T>::set_growth_facotr
-    (const size_t &growth_factor)
+    
+    template <class T>
+    void dynamic_array_container<T>::set_growth_facotr
+    (const float &growth_factor)
     {
         m_growth_factor = growth_factor;
     }

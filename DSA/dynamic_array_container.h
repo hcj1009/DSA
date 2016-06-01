@@ -18,8 +18,9 @@ namespace DSA
         typedef std::unique_ptr<entry_ptr[]> data_ptr;
     protected:
         // Natural log 2, used in function capacity_of(const size_t &)
-        static const size_t DEFAULT_BASE_CAPACITY = 10;
-        static const float DEFAULT_GROWTH_FACTOR = 1.5;
+#define DEFAULT_BASE_CAPACITY 10
+#define DEFAULT_GROWTH_FACTOR 1.5
+#define DEFAULT_LOG 0.4054651081081644
 
         data_ptr m_data;
         size_t m_size;
@@ -37,7 +38,7 @@ namespace DSA
             // Return pre-calculated natural log 2 if input is 
             // EFAULT_GROWTH_FACTOR.
             // Node: change this when changing DEFAULT_GROWTH_FACTOR;
-            return DEFAULT_BASE_CAPACITY == a ? 0.4054651081081644f : log(a);
+            return DEFAULT_BASE_CAPACITY == a ? DEFAULT_LOG : log(a);
         }
 
         // Helper function to determine the capacity needed to hold a
@@ -78,8 +79,8 @@ namespace DSA
         inline virtual void set_base_capacity(const size_t &base_capacity);
 #endif
 #ifdef DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG
-        inline virtual size_t growth_factor() const;
-        inline virtual void set_growth_facotr(const size_t &growth_factor);
+        inline virtual float growth_factor() const;
+        inline virtual void set_growth_facotr(const float &growth_factor);
 #endif
         // Return if the container is empty.
         // A container is empty when it does not contain any entry.
