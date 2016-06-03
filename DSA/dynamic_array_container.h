@@ -92,16 +92,15 @@ namespace DSA
         // Return if the container contains a given entry.
         inline virtual bool contains(const T &entry) const;
 
-        inline virtual iterator begin();
+        // inline virtual iterator begin();
 
-        inline virtual iterator end();
+        // inline virtual iterator end();
 
         inline virtual T *to_array() const;
 
     protected:
         // Natural log 2, used in function capacity_of(const size_t &)
-        static constexpr float GROWTH_FACTOR_LOG
-            = log(DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR);
+        float GROWTH_FACTOR_LOG = log(DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR);
 
         data_ptr m_data;
         size_t m_size;
@@ -120,6 +119,9 @@ namespace DSA
     class dynamic_array_container<T>::iterator
         : public std::iterator<std::random_access_iterator_tag, T>
     {
+        typedef size_t size_type;
+        typedef T& reference;
+        typedef T* pointer;
     public:
         iterator();
         iterator(const iterator& iter);

@@ -51,7 +51,7 @@ namespace DSA
         reserve(const size_t &capacity)
     {
         m_capacity = capacity;
-        data_ptr new_data = data_ptr(new T[m_capacity]);
+        auto new_data = data_ptr(new T[m_capacity]);
         for (size_t i = 0; i < m_size; i++)
         {
             new_data[i] = std::move(m_data[i]);
@@ -65,7 +65,7 @@ namespace DSA
         shrink()
     {
         m_capacity = m_size;
-        data_ptr new_data = data_ptr(new T[m_capacity]);
+        auto new_data = data_ptr(new T[m_capacity]);
         for (size_t i = 0; i < m_size; i++)
         {
             new_data[i] = std::move(m_data[i]);
@@ -101,14 +101,14 @@ namespace DSA
     T dynamic_array_container<T>::
         pop_front()
     {
-        remove(0);
+        return remove(0);
     }
 
     template <class T>
     T dynamic_array_container<T>::
         pop_back()
     {
-        remove(m_size - 1);
+        return remove(m_size - 1);
     }
 
     template <class T>
@@ -119,7 +119,7 @@ namespace DSA
         {
             throw index_error("Index out of bounds!");
         }
-        T entry = std::move(m_data[index]);
+        auto entry = std::move(m_data[index]);
         shift(index + 1, -1);
         return entry;
     }
@@ -130,7 +130,7 @@ namespace DSA
     {
         // Get the index of the given entry.
         // Throw no_such_element exception if the entry does not exist.
-        size_t index = index_of(entry);
+        auto index = index_of(entry);
         remove(index);
     }
 
@@ -176,11 +176,11 @@ namespace DSA
     T* dynamic_array_container<T>::
         to_array() const
     {
-        T *entries = new T[m_size];
-        std::copy(m_data, &(m_data[m_size - 1]), entries);
+        auto entries = new T[m_size];
+        //std::copy(m_data, &(m_data[m_size - 1]), entries);
         return entries;
     }
-
+    /*
     template <class T>
     dynamic_array_container<T>::iterator dynamic_array_container<T>::
         begin()
@@ -197,7 +197,7 @@ namespace DSA
         iter += m_size - 1;
         return iter;
     }
-
+    */
 //----------------------------------------------------------------------------
 //                          Operator Overloads
 //----------------------------------------------------------------------------
@@ -206,9 +206,6 @@ namespace DSA
 //----------------------------------------------------------------------------
 //                      Private/Protected Functions
 //----------------------------------------------------------------------------
-    template <class T>
-    static constexpr float dynamic_array_container<T>::
-        GROWTH_FACTOR_LOG;
 
     // Helper function to determine the capacity needed to hold a
     // given size of list.
@@ -244,17 +241,16 @@ namespace DSA
                 smaller than 0 after shifting.");
         }
 
-        size_t new_size = m_size + disp;
-        size_t new_capacity = capacity_of(m_size);
+        auto new_size = m_size + disp;
+        auto new_capacity = capacity_of(m_size);
 
         if (new_capacity > m_capacity)
         {
             m_capacity = new_capacity;
-            data_ptr new_data =
-                data_ptr(new entry_ptr[m_capacity]);
+            auto new_data = data_ptr(new T[m_capacity]);
             for (size_t i = 0; i < m_size; ++i)
             {
-                size_t in = i < index ? i : i + disp;
+                auto in = i < index ? i : i + disp;
                 new_data[in] = std::move(m_data[i]);
             }
             m_data = std::move(new_data);
@@ -286,121 +282,167 @@ namespace DSA
 //----------------------------------------------------------------------------
 
     template <class T>
-    class dynamic_array_container<T>::iterator
-        : public std::iterator<std::random_access_iterator_tag, T>
-    {
-    public:
+    dynamic_array_container<T>::iterator::
         iterator() : m_iter(&(m_data[0])) {}
 
+    template <class T>
+    dynamic_array_container<T>::iterator::
         iterator(const iterator &iter)
-            : m_iter(iter.m_iter) {}
+        : m_iter(iter.m_iter) {}
 
+    template <class T>
+    dynamic_array_container<T>::iterator::
         ~iterator() {}
 
-        iterator& operator=(const iterator &rhs)
-        {
-            m_iter = rhs.m_iter;
-        }
+    template <class T>
+    typename dynamic_array_container<T>::iterator&
+        dynamic_array_container<T>::iterator::
+        operator=(const iterator &rhs)
+    {
+        m_iter = rhs.m_iter;
+        return *this;
+    }
 
-        bool operator==(const iterator &rhs) const
-        {
-            return m_iter == rhs.m_iter;
-        }
+    template <class T>
+    bool dynamic_array_container<T>::iterator::
+        operator==(const iterator &rhs) const
+    {
+        return m_iter == rhs.m_iter;
+    }
 
-        bool operator!=(const iterator &rhs) const
-        {
-            return m_iter != rhs.m_iter;
-        }
+    template <class T>
+    bool dynamic_array_container<T>::iterator::
+        operator!=(const iterator &rhs) const
+    {
+        return m_iter != rhs.m_iter;
+    }
 
-        bool operator<(const iterator &rhs) const
-        {
-            return m_iter < rhs.m_iter;
-        }
+    template <class T>
+    bool dynamic_array_container<T>::iterator::
+        operator<(const iterator &rhs) const
+    {
+        return m_iter < rhs.m_iter;
+    }
 
-        bool operator>(const iterator &rhs) const
-        {
-            return m_iter > rhs.m_iter;
-        }
+    template <class T>
+    bool dynamic_array_container<T>::iterator::
+        operator>(const iterator &rhs) const
+    {
+        return m_iter > rhs.m_iter;
+    }
 
-        bool operator<=(const iterator &rhs) const
-        {
-            return m_iter <= rhs.m_iter;
-        }
+    template <class T>
+    bool dynamic_array_container<T>::iterator::
+        operator<=(const iterator &rhs) const
+    {
+        return m_iter <= rhs.m_iter;
+    }
 
-        bool operator>=(const iterator &rhs) const
-        {
-            return m_iter >= rhs.m_iter;
-        }
+    template <class T>
+    bool dynamic_array_container<T>::iterator::
+        operator>=(const iterator &rhs) const
+    {
+        return m_iter >= rhs.m_iter;
+    }
 
-        iterator& operator++()
+    template <class T>
+    typename dynamic_array_container<T>::iterator& 
+        dynamic_array_container<T>::iterator::
+        operator++()
+    {
+        if (m_iter != m_data[m_size - 1])
         {
-            if (m_iter != m_data[m_size - 1])
-            {
-                ++m_iter;
-            }
-            m_iter != &(m_data[m_size - 1]) ? ++m_iter : m_iter = nullptr;
+            ++m_iter;
         }
+        m_iter != &(m_data[m_size - 1]) ? ++m_iter : m_iter = nullptr;
+    }
 
-        iterator operator++(int)
-        {
-            dynamic_array_container<T>::iterator old_iter = *this;
-            ++*this;
-            return old_iter;
-        }
+    template <class T>
+    typename dynamic_array_container<T>::iterator
+        dynamic_array_container<T>::iterator::
+        operator++(int)
+    {
+        auto old_iter = *this;
+        ++*this;
+        return old_iter;
+    }
 
-        iterator& operator--()
-        {
-            m_iter != &(m_data[0]) ? --m_iter : m_iter = nullptr;
-        }
+    template <class T>
+    typename dynamic_array_container<T>::iterator&
+        dynamic_array_container<T>::iterator::
+    operator--()
+    {
+        m_iter != &(m_data[0]) ? --m_iter : m_iter = nullptr;
+    }
 
-        iterator operator--(int)
-        {
-            iterator old_iter = *this;
-            --*this;
-            return old_iter;
-        }
+    template <class T>
+    typename dynamic_array_container<T>::iterator
+        dynamic_array_container<T>::iterator::
+        operator--(int)
+    {
+        auto old_iter = *this;
+        --*this;
+        return old_iter;
+    }
 
-        iterator& operator+=(size_type size)
-        {
-            m_iter += size;
-            return *this;
-        }
+    template <class T>
+    typename dynamic_array_container<T>::iterator&
+        dynamic_array_container<T>::iterator::
+        operator+=(size_type size)
+    {
+        m_iter += size;
+        return *this;
+    }
 
-        iterator operator+(size_type size) const
-        {
-            iterator old_iter = *this;
-            old_iter += size;
-            return old_iter;
-        }
+    template <class T>
+    typename dynamic_array_container<T>::iterator
+        dynamic_array_container<T>::iterator::
+        operator+(size_type size) const
+    {
+        auto old_iter = *this;
+        old_iter += size;
+        return old_iter;
+    }
 
-        iterator& operator-=(size_type size)
-        {
-            m_iter -= size;
-            return *this;
-        }
+    template <class T>
+    typename dynamic_array_container<T>::iterator&
+        dynamic_array_container<T>::iterator::
+        operator-=(size_type size)
+    {
+        m_iter -= size;
+        return *this;
+    }
 
-        iterator operator-(size_type size) const
-        {
-            iterator old_iter = *this;
-            old_iter -= size;
-            return old_iter;
-        }
+    template <class T>
+    typename dynamic_array_container<T>::iterator
+        dynamic_array_container<T>::iterator::
+        operator-(size_type size) const
+    {
+        auto old_iter = *this;
+        old_iter -= size;
+        return old_iter;
+    }
 
-        reference operator*() const
-        {
-            return &m_iter;
-        }
+    template <class T>
+    T& dynamic_array_container<T>::iterator::
+        operator*() const
+    {
+        return &m_iter;
+    }
 
-        pointer operator->() const
-        {
-            return m_iter;
-        }
+    template <class T>
+    T* dynamic_array_container<T>::iterator::
+        operator->() const
+    {
+        return m_iter;
+    }
 
-        reference operator[](size_type index) const
-        {
+    template <class T>
+    T& dynamic_array_container<T>::iterator::
+        operator[](size_type index) const
+    {
 
-        }
-    };
+    }
 }
 
 #endif

@@ -2,8 +2,9 @@
 #include <string>
 
 #include "timer.h"
-#include "dsa.h"
-#include "std_container.h"
+//#include "dsa.h"
+//#include "std_container.h"
+#include "dynamic_array_container.h"
 
 using namespace DSA;
 using DSA::utility::timer;
@@ -27,7 +28,7 @@ int main(int argc, char *argv[])
 {
     timer t;
 
-    /* STL std::vector */
+    /* STL std::vector *
     disp_msg("std::vector<std::string>");
     std::vector<std::string> test_std_vector;
     double total_std_vector = 0;
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_vector);
     /**/
 
-    /* STL std::list */
+    /* STL std::list *
     disp_msg("std::list<std::string>");
     std::list<std::string> test_std_list;
     double total_std_list = 0;
@@ -68,7 +69,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_list);
     /**/
 
-    /** DSA array_list */
+    /** DSA array_list *
     disp_msg("DSA::array_list<std::string>");
     array_list<std::string> test_array_list;
     double total_array_list = 0;
@@ -88,7 +89,7 @@ int main(int argc, char *argv[])
     disp_time(total_array_list);
     /**/
 
-    /** DSA s_linked_list */
+    /** DSA s_linked_list *
     disp_msg("DSA::s_linked_list<string>");
     s_linked_list<string> test_linked_list;
     double total_linked_list = 0;
@@ -108,7 +109,7 @@ int main(int argc, char *argv[])
     disp_time(total_linked_list);
     /**/
 
-    /** std::stack */
+    /** std::stack *
     disp_msg("std::stack<string>");
     std::stack<string> test_std_stack;
     double total_std_stack = 0;
@@ -127,7 +128,7 @@ int main(int argc, char *argv[])
     }
     disp_time(total_std_stack);
 
-    /* DSA array_stack */
+    /* DSA array_stack *
     disp_msg("DSA::array_stack<string>");
     array_stack<string> test_array_stack;
     double total_array_stack = 0;
@@ -147,7 +148,7 @@ int main(int argc, char *argv[])
     disp_time(total_array_stack);
     /**/
 
-    /* DSA linked_stack */
+    /* DSA linked_stack *
     disp_msg("DSA::linked_stack<string>");
     linked_stack<string> test_linked_stack;
     double total_linked_stack = 0;
@@ -167,7 +168,7 @@ int main(int argc, char *argv[])
     disp_time(total_linked_stack);
     /**/
 
-    /* STL std::queue */
+    /* STL std::queue *
     disp_msg("std::queue<string>");
     std::queue<string> test_std_queue;
     double total_std_queue = 0;
@@ -207,7 +208,7 @@ int main(int argc, char *argv[])
     disp_time(total_array_queue);
     /**/
 
-    /* DSA linked_queue */
+    /* DSA linked_queue *
     disp_msg("DSA::linked_queue<string>");
     linked_queue<string> test_linked_queue;
     double total_linked_queue = 0;
@@ -227,6 +228,8 @@ int main(int argc, char *argv[])
     disp_time(total_linked_queue);
 
     /**/
+
+    dynamic_array_container<std::string>test_container;
 
 #ifdef __linux__
     std::cout << "Press enter to continue...";
