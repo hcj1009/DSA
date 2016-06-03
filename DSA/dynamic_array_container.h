@@ -7,6 +7,16 @@
 #include "dsa_except.h"
 #include "adt_sequence_container.h"
 
+#ifndef DISABLE_INLINE
+#define INLINE inline
+#endif
+#ifndef DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY
+#define DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY 10
+#endif
+#ifndef DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR
+#define DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR 1.5
+#endif
+
 namespace DSA
 {
     template <class T>
@@ -14,77 +24,19 @@ namespace DSA
         : virtual public adt_sequence_container<T>
     {
         typedef std::ptrdiff_t ptrdiff_t;
-        typedef std::shared_ptr<T> entry_ptr;
-        typedef std::unique_ptr<entry_ptr[]> data_ptr;
-    protected:
-        // Natural log 2, used in function capacity_of(const size_t &)
-#define DEFAULT_BASE_CAPACITY 10
-#define DEFAULT_GROWTH_FACTOR 1.5
-#define DEFAULT_LOG 0.4054651081081644
-
-        data_ptr m_data;
-        size_t m_size;
-        size_t m_capacity;
-        
-        // Do not allow user specified base capacity and growth factor.
-#ifdef DYNAMIC_ARRAY_CONTAINER_CUSTOM_BASE_CAPACITY_FLAG
-        size_t m_base_capacity;
-#endif
-#ifdef DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG
-        float m_growth_factor;
-#endif
-        inline virtual float quick_log(const float &a)
-        {
-            // Return pre-calculated natural log 2 if input is 
-            // EFAULT_GROWTH_FACTOR.
-            // Node: change this when changing DEFAULT_GROWTH_FACTOR;
-            return DEFAULT_BASE_CAPACITY == a ? DEFAULT_LOG : log(a);
-        }
-
-        // Helper function to determine the capacity needed to hold a
-        // given size of list.
-        inline virtual size_t capacity_of(const size_t &size) const;
-
-        // Helper function to enlarge the capacity when the container is full.
-        inline virtual void ensure_capacity();
-
-        // Helper function to shift a range of entries starting at a
-        // given index with a given displacement.
-        inline virtual void shift(const size_t &index, const ptrdiff_t &disp);
-
+        typedef std::unique_ptr<T[]> data_ptr;
     public:
+        class iterator;
+
         // Construct a dynamic array container with default
         // base capacity (10) and growth factor (1.5).
-
-#if defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_BASE_CAPACITY_FLAG) \
-    && defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG)
-        dynamic_array_container(const size_t &base_capacity 
-            = DEFAULT_BASE_CAPACITY,
-            const float &growth_factor 
-            = DEFAULT_GROWTH_FACTOR);
-#elif defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_BASE_CAPACITY_FLAG)
-        dynamic_array_container(const size_t &base_capacity
-            = DEFAULT_BASE_CAPACITY);
-#elif defined(DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG)
-        dynamic_array_container(const float &growth_factor
-            = DEFAULT_GROWTH_FACTOR);
-#else
         dynamic_array_container();
-#endif
 
         virtual ~dynamic_array_container();
 
-#ifdef DYNAMIC_ARRAY_CONTAINER_CUSTOM_BASE_CAPACITY_FLAG
-        inline virtual size_t base_capacity() const;
-        inline virtual void set_base_capacity(const size_t &base_capacity);
-#endif
-#ifdef DYNAMIC_ARRAY_CONTAINER_CUSTOM_GROWTH_FACTOR_FLAG
-        inline virtual float growth_factor() const;
-        inline virtual void set_growth_facotr(const float &growth_factor);
-#endif
         // Return if the container is empty.
         // A container is empty when it does not contain any entry.
-        inline virtual bool empty() const;
+        inline bool empty() const;
 
         // Get the number of entries in the container.
         inline virtual size_t size() const;
@@ -92,10 +44,16 @@ namespace DSA
         // Get the capacity of the container.
         // Node that capacity represents how many item the container
         // can hold, not how many item it has.
-        inline virtual size_t capacity() const;
+        inline size_t capacity() const;
 
         // Remove all the entries from the container, and free the memory.
         inline virtual void clear();
+
+        // Allocate memory for a given amount of entries.
+        inline virtual void reserve(const size_t &capacity);
+
+        // Free unused memory occupied by the array.
+        inline virtual void shrink();
 
         // Insert a given entry to the front of the container.
         // Same as insert_entry(0, entry);
@@ -134,7 +92,61 @@ namespace DSA
         // Return if the container contains a given entry.
         inline virtual bool contains(const T &entry) const;
 
+        inline virtual iterator begin();
+
+        inline virtual iterator end();
+
         inline virtual T *to_array() const;
+
+    protected:
+        // Natural log 2, used in function capacity_of(const size_t &)
+        static constexpr float GROWTH_FACTOR_LOG
+            = log(DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR);
+
+        data_ptr m_data;
+        size_t m_size;
+        size_t m_capacity;
+
+        // Helper function to determine the capacity needed to hold a
+        // given size of list.
+        inline size_t capacity_of(const size_t &size) const;
+
+        // Helper function to shift a range of entries starting at a
+        // given index with a given displacement.
+        virtual void shift(const size_t &index, const ptrdiff_t &disp);
+    };
+
+    template <class T>
+    class dynamic_array_container<T>::iterator
+        : public std::iterator<std::random_access_iterator_tag, T>
+    {
+    public:
+        iterator();
+        iterator(const iterator& iter);
+        ~iterator();
+        iterator& operator=(const iterator& rhs);
+        bool operator==(const iterator& rhs) const;
+        bool operator!=(const iterator& rhs) const;
+        bool operator<(const iterator& rhs) const;
+        bool operator>(const iterator& rhs) const;
+        bool operator<=(const iterator& rhs) const;
+        bool operator>=(const iterator& rhs) const;
+        iterator& operator++();
+        iterator operator++(int);
+        iterator& operator--();
+        iterator operator--(int);
+        iterator& operator+=(size_type size);
+        iterator operator+(size_type size) const;
+        // friend iterator operator+(size_type size, const iterator& rhs);
+        iterator& operator-=(size_type size);
+        iterator operator-(size_type size) const;
+        //difference_type operator-(iterator size) const;
+        reference operator*() const;
+        pointer operator->() const;
+        reference operator[](size_type index) const;
+    private:
+        T *m_iter;
+        friend class dynamic_array_container<T>;
     };
 
     template <class T>
@@ -157,5 +169,8 @@ namespace DSA
 }
 
 #include "dynamic_array_container_impl.h"
+
+#undef DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY
+#undef DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR
 
 #endif

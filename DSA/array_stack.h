@@ -2,22 +2,21 @@
 #define ARRAY_STACK_H
 
 #include "adt_stack.h"
-#include "dynamic_array_container.h"
+#include "singly_linked_container.h"
 
 namespace DSA
 {
     // Array implementation of LIFO Stack data structure.
-    template <class T>
+    template <class T, class Container
+        = singly_linked_container<T>>
     class array_stack
         : public adt_stack<T>
-        , public dynamic_array_container<T>
     {
-        typedef dynamic_array_container<T> base_impl;
-        typedef std::shared_ptr<T> entry_ptr;
-        typedef std::unique_ptr<std::shared_ptr<T>[]> data_ptr;
+    protected:
+        Container cont;
+
     public:
-        array_stack(const size_t &base_capacity
-            = base_impl::DEFAULT_BASE_CAPACITY);
+        array_stack();
         array_stack(const array_stack<T> &stack);
         array_stack(array_stack<T> &&stack) noexcept;
         virtual ~array_stack();
