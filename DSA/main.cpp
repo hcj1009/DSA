@@ -10,7 +10,7 @@
 using DSA::dynamic_array_container;
 using DSA::utility::timer;
 
-const size_t ITEM_COUNT = 10;
+const size_t ITEM_COUNT = 10000;
 const size_t LOOP_COUNT = 10;
 
 
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     timer t;
 
-    /* STL std::vector *
+    /* STL std::vector */
     disp_msg("std::vector<std::string>");
     std::vector<std::string> test_std_vector;
     test_std_vector.reserve(ITEM_COUNT);
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_vector);
     /**/
 
-    /* STL std::list *
+    /* STL std::list */
     disp_msg("std::list<std::string>");
     std::list<std::string> test_std_list;
     double total_std_list = 0;
