@@ -43,9 +43,10 @@ namespace DSA
     void dynamic_array_container<T>::
         clear()
     {
-        m_data.reset();
+        //delete[] m_data;
         m_size = 0;
         m_capacity = DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY;
+        m_data = data_ptr(new T[m_capacity]);
     }
 
     template <class T>
@@ -53,13 +54,19 @@ namespace DSA
         reserve(const size_t &capacity)
     {
         m_capacity = capacity;
-        auto new_data = data_ptr(new T[m_capacity]);
+        auto old_data = m_data.release();
+        auto new_data = new T[m_capacity];
+        memcpy(new_data, old_data, m_size * sizeof(T));
+        //std::copy(begin(), end(), new_data);
+        /*
         for (size_t i = 0; i < m_size; i++)
         {
-            new_data[i] = std::move(m_data[i]);
+            std::swap(std::move(new_data[i]), std::move(m_data[i]));
         }
-        m_data.reset();
-        m_data = std::move(new_data);
+        */
+        m_data.reset(old_data);
+        //delete[] m_data;
+        m_data.reset(new_data);
     }
 
     template <class T>
@@ -73,6 +80,7 @@ namespace DSA
             new_data[i] = std::move(m_data[i]);
         }
         m_data.reset();
+        //delete[] m_data;
         m_data = std::move(new_data);
     }
 
@@ -80,7 +88,7 @@ namespace DSA
     void dynamic_array_container<T>::
         push_front(const T &entry)
     {
-        shift(0, 1);
+        unchecked_shift(0, 1);
         m_data[0] = entry;
     }
 
@@ -88,7 +96,7 @@ namespace DSA
     void dynamic_array_container<T>::
         push_back(const T &entry)
     {
-        shift(m_size, 1);
+        unchecked_shift(m_size, 1);
         m_data[m_size - 1] = entry;
     }
 
@@ -124,7 +132,7 @@ namespace DSA
             throw index_error("Index out of bounds!");
         }
         auto entry = std::move(m_data[index]);
-        shift(index + 1, -1);
+        unchecked_shift(index + 1, -1);
         return entry;
     }
 
@@ -233,35 +241,28 @@ namespace DSA
         return new_capacity;
     }
 
-    // Helper function to shift a range of entries starting at a
-    // given index with a given displacement.
     template <class T>
     void dynamic_array_container<T>::
-        shift(const size_t &index, const ptrdiff_t &disp)
+        shift_left(const size_t &index)
     {
-        // Index out of bounds error comes first.
-        if (index > m_size)
-            throw index_error("Index out of bounds!");
-        if (0 == disp)
-            return;
-        if (0 > index + disp)
-            throw illegal_argument("Invalid displacement: index/indeces \
-                smaller than 0 after shifting.");
 
+    }
+
+    template <class T>
+    void dynamic_array_container<T>::
+        shift_right(const size_t &index)
+    {
+        
+    }
+
+    template <class T>
+    void dynamic_array_container<T>::
+        unchecked_shift(const size_t &index, const ptrdiff_t &disp)
+    {
         auto new_size = m_size + disp;
         auto new_capacity = capacity_of(new_size);
-        if (new_capacity > m_capacity)
-        {
-            m_capacity = new_capacity;
-            auto new_data = data_ptr(new T[m_capacity]);
-            for (size_t i = 0; i < m_size; ++i)
-            {
-                auto in = i < index ? i : i + disp;
-                new_data[in] = std::move(m_data[i]);
-            }
-            m_data = std::move(new_data);
-        }
-        else
+        
+        if (new_capacity <= m_capacity)
         {
             if (index == m_size)
             {
@@ -280,12 +281,40 @@ namespace DSA
             size_t dest = src + disp;
             for (size_t i = index; i < m_size; ++i)
             {
-                // Note m_data[n] is shared_ptr,
-                // need not move semantics.
-                m_data[dest + i * sign] = std::move(m_data[src + i * sign]);
+                m_data[dest + i * sign] = 
+                    std::move(std::move(m_data[src + i * sign]));
             }
         }
+        else
+        {
+            m_capacity = new_capacity;
+            auto new_data = data_ptr(new T[m_capacity]);
+            for (size_t i = 0; i < m_size; ++i)
+            {
+                auto in = i < index ? i : i + disp;
+                new_data[in] = std::move(m_data[i]);
+            }
+            m_data = std::move(new_data);
+        }
         m_size = new_size;
+    }
+
+    // Helper function to shift a range of entries starting at a
+    // given index with a given displacement.
+    template <class T>
+    void dynamic_array_container<T>::
+        shift(const size_t &index, const ptrdiff_t &disp)
+    {
+        // Index out of bounds error comes first.
+        if (index > m_size)
+            throw index_error("Index out of bounds!");
+        if (0 == disp)
+            return;
+        if (0 > index + disp)
+            throw illegal_argument("Invalid displacement: index/indeces \
+                smaller than 0 after shifting.");
+
+        unchecked_shift(index, disp);
     }
 
 //----------------------------------------------------------------------------

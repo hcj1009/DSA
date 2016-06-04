@@ -25,6 +25,7 @@ namespace DSA
     {
         typedef std::ptrdiff_t ptrdiff_t;
         typedef std::unique_ptr<T[]> data_ptr;
+        //typedef T* data_ptr;
     public:
         class iterator;
 
@@ -105,14 +106,22 @@ namespace DSA
         data_ptr m_data;
         size_t m_size;
         size_t m_capacity;
-    public:
+    
         // Helper function to determine the capacity needed to hold a
         // given size of list.
         inline size_t capacity_of(const size_t &size) const;
 
+        virtual inline void shift_left(const size_t &index);
+
+        virtual inline void shift_right(const size_t &index);
+
+        virtual inline void
+            unchecked_shift(const size_t &index, const ptrdiff_t &disp);
+
         // Helper function to shift a range of entries starting at a
         // given index with a given displacement.
-        virtual void shift(const size_t &index, const ptrdiff_t &disp);
+        virtual inline void 
+            shift(const size_t &index, const ptrdiff_t &disp);
     };
 
     template <class T>
@@ -120,8 +129,6 @@ namespace DSA
         : public std::iterator<std::random_access_iterator_tag, T>
     {
         typedef size_t size_type;
-        typedef T& reference;
-        typedef T* pointer;
     public:
         iterator(dynamic_array_container<T>& container);
         iterator(const iterator& iter);
@@ -141,9 +148,9 @@ namespace DSA
         iterator operator+(size_type size) const;
         iterator& operator-=(size_type size);
         iterator operator-(size_type size) const;
-        reference operator*() const;
-        pointer operator->() const;
-        reference operator[](size_type index) const;
+        T& operator*() const;
+        T* operator->() const;
+        T& operator[](size_type index) const;
     private:
         T* m_iter;
         dynamic_array_container<T>& m_container;
