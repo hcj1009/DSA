@@ -10,7 +10,8 @@
 using DSA::dynamic_array_container;
 using DSA::utility::timer;
 
-const size_t ITEM_COUNT = 383326;
+//const size_t ITEM_COUNT = 368345;
+const size_t ITEM_COUNT = 10000;
 const size_t LOOP_COUNT = 10;
 
 
@@ -234,7 +235,7 @@ int main(int argc, char *argv[])
     /**/
 
     /* DSA linked_queue */
-    // N^2 = 7.6s where N = 1000
+    // N^2 = 7.96s where N = 10000
     disp_msg("DSA::dynamic_array_container<string>");
     dynamic_array_container<string> test_dac;
     double total_linked_queue = 0;

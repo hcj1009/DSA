@@ -111,6 +111,7 @@ namespace DSA
         // given size of list.
         inline size_t capacity_of(const size_t &size) const;
 
+        virtual inline void ensure_capacity();
         virtual inline void shift_left(const size_t &index);
 
         virtual inline void shift_right(const size_t &index);

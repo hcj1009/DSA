@@ -54,17 +54,18 @@ namespace DSA
         reserve(const size_t &capacity)
     {
         m_capacity = capacity;
-        auto old_data = m_data.release();
+        //auto old_data = m_data.release();
         auto new_data = new T[m_capacity];
-        memcpy(new_data, old_data, m_size * sizeof(T));
+        //memcpy(new_data, old_data, m_size * sizeof(T));
         //std::copy(begin(), end(), new_data);
+        std::move(&(m_data[0]), &(m_data[m_size - 1]) + 1, &(new_data[0]));
         /*
         for (size_t i = 0; i < m_size; i++)
         {
-            std::swap(std::move(new_data[i]), std::move(m_data[i]));
+            new_data[i] = std::move(m_data[i]);
         }
         */
-        m_data.reset(old_data);
+        //m_data.reset(old_data);
         //delete[] m_data;
         m_data.reset(new_data);
     }
@@ -88,7 +89,7 @@ namespace DSA
     void dynamic_array_container<T>::
         push_front(const T &entry)
     {
-        unchecked_shift(0, 1);
+        shift_right(0);
         m_data[0] = entry;
     }
 
@@ -96,8 +97,8 @@ namespace DSA
     void dynamic_array_container<T>::
         push_back(const T &entry)
     {
-        unchecked_shift(m_size, 1);
-        m_data[m_size - 1] = entry;
+        ensure_capacity();
+        m_data[m_size++] = entry;
     }
 
     template <class T>
@@ -113,14 +114,17 @@ namespace DSA
     T dynamic_array_container<T>::
         pop_front()
     {
-        return remove(0);
+        auto& entry = std::move(m_data[0]);
+        shift_left(1);
+        return entry;
     }
 
     template <class T>
     T dynamic_array_container<T>::
         pop_back()
     {
-        return remove(m_size - 1);
+        auto& entry = std::move(m_data[--m_size]);
+        return entry;
     }
 
     template <class T>
@@ -243,16 +247,48 @@ namespace DSA
 
     template <class T>
     void dynamic_array_container<T>::
+        ensure_capacity()
+    {
+        if (m_size == m_capacity)
+        {
+            m_capacity *= DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR;
+            auto new_data = std::make_unique<T[]>(m_capacity);
+            std::move(&m_data[0], &m_data[m_size], &new_data[0]);
+            m_data = std::move(new_data);
+        }
+    }
+
+    template <class T>
+    void dynamic_array_container<T>::
         shift_left(const size_t &index)
     {
-
+        std::move(&m_data[index], &m_data[m_size], &m_data[index - 1]);
+        --m_size;
     }
 
     template <class T>
     void dynamic_array_container<T>::
         shift_right(const size_t &index)
     {
-        
+        if (index == m_size)
+        {
+            ensure_capacity();
+        }
+        else if (m_size < m_capacity)
+        {
+            std::move_backward(&m_data[index], 
+                &m_data[m_size],
+                &m_data[m_size + 1]);
+        }
+        else
+        {
+            m_capacity *= DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR;
+            auto new_data = std::make_unique<T[]>(m_capacity);
+            std::move(&m_data[0], &m_data[index], &new_data[0]);
+            std::move(&m_data[index], &m_data[m_size], &new_data[index + 1]);
+            m_data = std::move(new_data);
+        }
+        ++m_size;
     }
 
     template <class T>
