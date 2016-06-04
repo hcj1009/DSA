@@ -9,8 +9,10 @@ namespace DSA
     template <class T>
     dynamic_array_container<T>::
         dynamic_array_container()
-        : m_data(), m_size(0), m_capacity
-        (DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY) {}
+        : m_size(0), m_capacity (DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY)
+    {
+        m_data = data_ptr(new T[m_capacity]);
+    }
 
     template <class T>
     dynamic_array_container<T>::
@@ -64,7 +66,7 @@ namespace DSA
     void dynamic_array_container<T>::
         shrink()
     {
-        m_capacity = m_size;
+        m_capacity = capacity_of(m_size);
         auto new_data = data_ptr(new T[m_capacity]);
         for (size_t i = 0; i < m_size; i++)
         {
@@ -78,14 +80,16 @@ namespace DSA
     void dynamic_array_container<T>::
         push_front(const T &entry)
     {
-        insert(0, entry);
+        shift(0, 1);
+        m_data[0] = entry;
     }
 
     template <class T>
     void dynamic_array_container<T>::
         push_back(const T &entry)
     {
-        insert(m_size, entry);
+        shift(m_size, 1);
+        m_data[m_size - 1] = entry;
     }
 
     template <class T>
@@ -180,24 +184,26 @@ namespace DSA
         //std::copy(m_data, &(m_data[m_size - 1]), entries);
         return entries;
     }
-    /*
+
     template <class T>
-    dynamic_array_container<T>::iterator dynamic_array_container<T>::
+    typename dynamic_array_container<T>::iterator
+        dynamic_array_container<T>::
         begin()
     {
-        iterator iter;
+        iterator iter{*this};
         return iter;
     }
 
     template <class T>
-    dynamic_array_container<T>::iterator dynamic_array_container<T>::
+    typename dynamic_array_container<T>::iterator
+        dynamic_array_container<T>::
         end()
     {
-        iterator iter;
-        iter += m_size - 1;
+        iterator iter{*this};
+        iter += m_size;
         return iter;
     }
-    */
+
 //----------------------------------------------------------------------------
 //                          Operator Overloads
 //----------------------------------------------------------------------------
@@ -214,10 +220,17 @@ namespace DSA
         capacity_of(const size_t &size) const
     {
         // Optimize for default situations.
-        return (size_t)pow(DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR, \
-            ceil(log((double)size / DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY) \
-                / GROWTH_FACTOR_LOG))
-            * DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY;
+        size_t new_capacity = 0;
+        if (size <= m_capacity)
+            new_capacity = m_capacity;
+        else if (size <= 2 * m_capacity)
+            new_capacity = 2 * m_capacity;
+        else
+            new_capacity = (size_t)DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY \
+            * pow(DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR, ceil( \
+            log((double)size / DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY) \
+                / GROWTH_FACTOR_LOG));
+        return new_capacity;
     }
 
     // Helper function to shift a range of entries starting at a
@@ -228,22 +241,15 @@ namespace DSA
     {
         // Index out of bounds error comes first.
         if (index > m_size)
-        {
             throw index_error("Index out of bounds!");
-        }
         if (0 == disp)
-        {
             return;
-        }
         if (0 > index + disp)
-        {
             throw illegal_argument("Invalid displacement: index/indeces \
                 smaller than 0 after shifting.");
-        }
 
         auto new_size = m_size + disp;
-        auto new_capacity = capacity_of(m_size);
-
+        auto new_capacity = capacity_of(new_size);
         if (new_capacity > m_capacity)
         {
             m_capacity = new_capacity;
@@ -257,6 +263,11 @@ namespace DSA
         }
         else
         {
+            if (index == m_size)
+            {
+                m_size = new_size;
+                return;
+            }
             size_t src = 0;
             size_t cls = new_size;
             ptrdiff_t sign = 1;
@@ -283,12 +294,13 @@ namespace DSA
 
     template <class T>
     dynamic_array_container<T>::iterator::
-        iterator() : m_iter(&(m_data[0])) {}
+        iterator(dynamic_array_container<T>& container)
+        : m_container(container), m_iter(&(container.m_data[0])) {}
 
     template <class T>
     dynamic_array_container<T>::iterator::
         iterator(const iterator &iter)
-        : m_iter(iter.m_iter) {}
+        : m_container(iter.m_container), m_iter(iter.m_iter) {}
 
     template <class T>
     dynamic_array_container<T>::iterator::
@@ -299,6 +311,7 @@ namespace DSA
         dynamic_array_container<T>::iterator::
         operator=(const iterator &rhs)
     {
+        m_container = rhs.m_container;
         m_iter = rhs.m_iter;
         return *this;
     }
@@ -350,11 +363,11 @@ namespace DSA
         dynamic_array_container<T>::iterator::
         operator++()
     {
-        if (m_iter != m_data[m_size - 1])
+        if (m_iter != &(m_container.m_data[m_container.m_size - 1]) + 1)
         {
             ++m_iter;
         }
-        m_iter != &(m_data[m_size - 1]) ? ++m_iter : m_iter = nullptr;
+        return *this;
     }
 
     template <class T>
@@ -372,7 +385,11 @@ namespace DSA
         dynamic_array_container<T>::iterator::
     operator--()
     {
-        m_iter != &(m_data[0]) ? --m_iter : m_iter = nullptr;
+        if (m_iter != &(m_container.m_data[0]))
+        {
+            --m_iter;
+        }
+        return *this;
     }
 
     template <class T>
@@ -427,7 +444,7 @@ namespace DSA
     T& dynamic_array_container<T>::iterator::
         operator*() const
     {
-        return &m_iter;
+        return *m_iter;
     }
 
     template <class T>

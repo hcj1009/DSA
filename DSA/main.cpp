@@ -3,14 +3,16 @@
 
 #include "timer.h"
 //#include "dsa.h"
-//#include "std_container.h"
+#include <iterator>
+#include "std_container.h"
 #include "dynamic_array_container.h"
 
-using namespace DSA;
+using DSA::dynamic_array_container;
 using DSA::utility::timer;
 
-const size_t ITEM_COUNT = 10000;
+const size_t ITEM_COUNT = 10;
 const size_t LOOP_COUNT = 10;
+
 
 void disp_msg(const std::string &msg)
 {
@@ -31,13 +33,14 @@ int main(int argc, char *argv[])
     /* STL std::vector *
     disp_msg("std::vector<std::string>");
     std::vector<std::string> test_std_vector;
+    test_std_vector.reserve(ITEM_COUNT);
     double total_std_vector = 0;
     for (size_t i = 0; i < LOOP_COUNT; i++)
     {
         t.reset();
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_std_vector.insert(test_std_vector.end(),
+            test_std_vector.insert(test_std_vector.begin(),
                 std::to_string(i));
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
@@ -229,7 +232,28 @@ int main(int argc, char *argv[])
 
     /**/
 
-    dynamic_array_container<std::string>test_container;
+    /* DSA linked_queue */
+    disp_msg("DSA::dynamic_array_container<string>");
+    dynamic_array_container<string> test_dac;
+    double total_linked_queue = 0;
+    test_dac.reserve(ITEM_COUNT);
+    for (size_t i = 0; i < LOOP_COUNT; i++)
+    {
+        t.reset();
+        for (size_t i = 0; i < ITEM_COUNT; i++)
+        {
+            test_dac.push_front(std::to_string(i));
+        }
+        for (size_t i = 0; i < ITEM_COUNT; i++)
+        {
+            test_dac.pop_front();
+        }
+        total_linked_queue += t.elapsed();
+        //test_linked_queue.clear();
+    }
+    disp_time(total_linked_queue);
+
+    /**/
 
 #ifdef __linux__
     std::cout << "Press enter to continue...";

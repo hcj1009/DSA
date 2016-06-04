@@ -92,9 +92,9 @@ namespace DSA
         // Return if the container contains a given entry.
         inline virtual bool contains(const T &entry) const;
 
-        // inline virtual iterator begin();
+        inline virtual iterator begin();
 
-        // inline virtual iterator end();
+        inline virtual iterator end();
 
         inline virtual T *to_array() const;
 
@@ -105,7 +105,7 @@ namespace DSA
         data_ptr m_data;
         size_t m_size;
         size_t m_capacity;
-
+    public:
         // Helper function to determine the capacity needed to hold a
         // given size of list.
         inline size_t capacity_of(const size_t &size) const;
@@ -123,7 +123,7 @@ namespace DSA
         typedef T& reference;
         typedef T* pointer;
     public:
-        iterator();
+        iterator(dynamic_array_container<T>& container);
         iterator(const iterator& iter);
         ~iterator();
         iterator& operator=(const iterator& rhs);
@@ -139,16 +139,14 @@ namespace DSA
         iterator operator--(int);
         iterator& operator+=(size_type size);
         iterator operator+(size_type size) const;
-        // friend iterator operator+(size_type size, const iterator& rhs);
         iterator& operator-=(size_type size);
         iterator operator-(size_type size) const;
-        //difference_type operator-(iterator size) const;
         reference operator*() const;
         pointer operator->() const;
         reference operator[](size_type index) const;
     private:
-        T *m_iter;
-        friend class dynamic_array_container<T>;
+        T* m_iter;
+        dynamic_array_container<T>& m_container;
     };
 
     template <class T>
