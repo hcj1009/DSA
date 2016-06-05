@@ -136,7 +136,14 @@ namespace DSA
         {
             throw index_error("Index out of bounds!");
         }
-        index == m_size - 1 ? --m_size : shift_left(index + 1);
+        if (index == m_size - 1)
+        {
+            --m_size;
+        }
+        else
+        {
+            shift_left(index + 1)
+        }
     }
 
     template <class T>
