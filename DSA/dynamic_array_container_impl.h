@@ -9,10 +9,9 @@ namespace DSA
     template <class T>
     dynamic_array_container<T>::
         dynamic_array_container()
-        : m_size(0), m_capacity (DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY)
-    {
-        m_data = data_ptr(new T[m_capacity]);
-    }
+        : m_size(0)
+        , m_capacity (DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY)
+        , m_data(new T[m_capacity]) {}
 
     template <class T>
     dynamic_array_container<T>::
@@ -43,10 +42,9 @@ namespace DSA
     void dynamic_array_container<T>::
         clear()
     {
-        //delete[] m_data;
         m_size = 0;
         m_capacity = DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY;
-        m_data = data_ptr(new T[m_capacity]);
+        m_data.reset(new T[m_capacity]);
     }
 
     template <class T>
@@ -54,19 +52,8 @@ namespace DSA
         reserve(const size_t &capacity)
     {
         m_capacity = capacity;
-        //auto old_data = m_data.release();
         auto new_data = new T[m_capacity];
-        //memcpy(new_data, old_data, m_size * sizeof(T));
-        //std::copy(begin(), end(), new_data);
-        std::move(&(m_data[0]), &(m_data[m_size - 1]) + 1, &(new_data[0]));
-        /*
-        for (size_t i = 0; i < m_size; i++)
-        {
-            new_data[i] = std::move(m_data[i]);
-        }
-        */
-        //m_data.reset(old_data);
-        //delete[] m_data;
+        std::move(&m_data[0], &m_data[m_size], &new_data[0]);
         m_data.reset(new_data);
     }
 
@@ -75,14 +62,9 @@ namespace DSA
         shrink()
     {
         m_capacity = capacity_of(m_size);
-        auto new_data = data_ptr(new T[m_capacity]);
-        for (size_t i = 0; i < m_size; i++)
-        {
-            new_data[i] = std::move(m_data[i]);
-        }
-        m_data.reset();
-        //delete[] m_data;
-        m_data = std::move(new_data);
+        auto new_data = new T[m_capacity];
+        std::move(&m_data[0], &m_data[m_size], &new_data[0]);
+        m_data.reset(new_data);
     }
 
     template <class T>
@@ -105,8 +87,7 @@ namespace DSA
     void dynamic_array_container<T>::
         insert(const size_t &index, const T &entry)
     {
-        // Shift all the element starting from the index right.
-        shift(index, 1);
+        shift_right(index);
         m_data[index] = entry;
     }
 
@@ -114,16 +95,14 @@ namespace DSA
     T dynamic_array_container<T>::
         pop_front()
     {
-        auto& entry = std::move(m_data[0]);
-        shift_left(1);
-        return entry;
+        return remove(0);
     }
 
     template <class T>
     T dynamic_array_container<T>::
         pop_back()
     {
-        auto& entry = std::move(m_data[--m_size]);
+        auto entry = std::move(m_data[--m_size]);
         return entry;
     }
 
@@ -136,7 +115,7 @@ namespace DSA
             throw index_error("Index out of bounds!");
         }
         auto entry = std::move(m_data[index]);
-        unchecked_shift(index + 1, -1);
+        shift_left(index + 1);
         return entry;
     }
 
@@ -174,18 +153,18 @@ namespace DSA
     }
 
     template <class T>
-    // Return if the container contains a given entry.
     bool dynamic_array_container<T>::
         contains(const T &entry) const
     {
-        for (size_t i = 0; i < m_size; ++i)
+        try
         {
-            if (entry == m_data[i])
-            {
-                return true;
-            }
+            index_of(entry);
         }
-        return false;
+        catch (no_such_element e)
+        {
+            return false;
+        }
+        return true;
     }
 
     template <class T>
@@ -193,7 +172,7 @@ namespace DSA
         to_array() const
     {
         auto entries = new T[m_size];
-        //std::copy(m_data, &(m_data[m_size - 1]), entries);
+        std::copy(&m_data[0], &m_data[m_size - 1], &entries[0]);
         return entries;
     }
 
@@ -291,67 +270,6 @@ namespace DSA
         ++m_size;
     }
 
-    template <class T>
-    void dynamic_array_container<T>::
-        unchecked_shift(const size_t &index, const ptrdiff_t &disp)
-    {
-        auto new_size = m_size + disp;
-        auto new_capacity = capacity_of(new_size);
-        
-        if (new_capacity <= m_capacity)
-        {
-            if (index == m_size)
-            {
-                m_size = new_size;
-                return;
-            }
-            size_t src = 0;
-            size_t cls = new_size;
-            ptrdiff_t sign = 1;
-            if (0 < disp)
-            {
-                src = m_size + index - 1;
-                sign *= -1;
-                cls = index;
-            }
-            size_t dest = src + disp;
-            for (size_t i = index; i < m_size; ++i)
-            {
-                m_data[dest + i * sign] = 
-                    std::move(std::move(m_data[src + i * sign]));
-            }
-        }
-        else
-        {
-            m_capacity = new_capacity;
-            auto new_data = data_ptr(new T[m_capacity]);
-            for (size_t i = 0; i < m_size; ++i)
-            {
-                auto in = i < index ? i : i + disp;
-                new_data[in] = std::move(m_data[i]);
-            }
-            m_data = std::move(new_data);
-        }
-        m_size = new_size;
-    }
-
-    // Helper function to shift a range of entries starting at a
-    // given index with a given displacement.
-    template <class T>
-    void dynamic_array_container<T>::
-        shift(const size_t &index, const ptrdiff_t &disp)
-    {
-        // Index out of bounds error comes first.
-        if (index > m_size)
-            throw index_error("Index out of bounds!");
-        if (0 == disp)
-            return;
-        if (0 > index + disp)
-            throw illegal_argument("Invalid displacement: index/indeces \
-                smaller than 0 after shifting.");
-
-        unchecked_shift(index, disp);
-    }
 
 //----------------------------------------------------------------------------
 //                              Iterator
@@ -428,7 +346,7 @@ namespace DSA
         dynamic_array_container<T>::iterator::
         operator++()
     {
-        if (m_iter != &(m_container.m_data[m_container.m_size - 1]) + 1)
+        if (m_iter != &(m_container.m_data[m_container.m_size]))
         {
             ++m_iter;
         }

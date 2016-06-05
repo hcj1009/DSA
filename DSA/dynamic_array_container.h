@@ -7,9 +7,6 @@
 #include "dsa_except.h"
 #include "adt_sequence_container.h"
 
-#ifndef DISABLE_INLINE
-#define INLINE inline
-#endif
 #ifndef DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY
 #define DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY 10
 #endif
@@ -23,6 +20,7 @@ namespace DSA
     class dynamic_array_container
         : virtual public adt_sequence_container<T>
     {
+        typedef std::size_t size_t;
         typedef std::ptrdiff_t ptrdiff_t;
         typedef std::unique_ptr<T[]> data_ptr;
         //typedef T* data_ptr;
@@ -93,10 +91,13 @@ namespace DSA
         // Return if the container contains a given entry.
         inline virtual bool contains(const T &entry) const;
 
+        // Return an iterator pointing to the beginning of the container.
         inline virtual iterator begin();
 
+        // Return an iterator pointing to the end of the container.
         inline virtual iterator end();
 
+        // Return an array that contains all the entries in the container.
         inline virtual T *to_array() const;
 
     protected:
@@ -111,18 +112,14 @@ namespace DSA
         // given size of list.
         inline size_t capacity_of(const size_t &size) const;
 
+        // Expand the array when the container is full.
         virtual inline void ensure_capacity();
+
+        // Shift all entries after a given index left one position.
         virtual inline void shift_left(const size_t &index);
 
+        // Shift all entries after a given index right one position.
         virtual inline void shift_right(const size_t &index);
-
-        virtual inline void
-            unchecked_shift(const size_t &index, const ptrdiff_t &disp);
-
-        // Helper function to shift a range of entries starting at a
-        // given index with a given displacement.
-        virtual inline void 
-            shift(const size_t &index, const ptrdiff_t &disp);
     };
 
     template <class T>
@@ -155,24 +152,6 @@ namespace DSA
     private:
         T* m_iter;
         dynamic_array_container<T>& m_container;
-    };
-
-    template <class T>
-    struct sequence_container_traits<dynamic_array_container<T>>
-    {
-    public:
-        const static bool is_sequence_container = true;
-        const static bool support_push_front = true;
-        const static bool support_push_back = true;
-        const static bool support_insert = true;
-        const static bool support_pop_front = true;
-        const static bool support_pop_back = true;
-        const static bool support_index_remove = true;
-        const static bool support_entry_remove = true;
-        const static bool support_index_of = true;
-        const static bool support_at = true;
-        const static bool support_reserve = true;
-        const static bool support_shrink = true;
     };
 }
 

@@ -10,8 +10,8 @@
 using DSA::dynamic_array_container;
 using DSA::utility::timer;
 
-//const size_t ITEM_COUNT = 368345;
-const size_t ITEM_COUNT = 10000;
+const size_t ITEM_COUNT = 368345;
+//const size_t ITEM_COUNT = 10000;
 const size_t LOOP_COUNT = 10;
 
 
