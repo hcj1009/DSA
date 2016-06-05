@@ -11,7 +11,7 @@ using DSA::dynamic_array_container;
 using DSA::utility::timer;
 
 //const size_t ITEM_COUNT = 368345;
-const size_t ITEM_COUNT = 500000;
+const size_t ITEM_COUNT = 50000;
 const size_t LOOP_COUNT = 1000;
 
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 {
     timer t;
 
-    /* STL std::vector */
+    /* STL std::vector *
     disp_msg("std::vector<std::string>");
     std::vector<std::string> test_std_vector;
     test_std_vector.reserve(ITEM_COUNT);
@@ -253,6 +253,7 @@ int main(int argc, char *argv[])
         }
         total_dac += t.elapsed();
     }
+    test_dac.clear();
     test_dac.shrink();
     disp_time(total_dac);
 

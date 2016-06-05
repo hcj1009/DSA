@@ -12,12 +12,13 @@ namespace DSA
         : m_size(0)
         , m_capacity (DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY)
     {
-        m_data = std::make_unique<T[]>(m_capacity);
+        //m_data = std::make_unique<T[]>(m_capacity);
+        m_data = new T[m_capacity];
     }
 
     template <class T>
     dynamic_array_container<T>::
-        ~dynamic_array_container() { }
+        ~dynamic_array_container() { delete[] m_data; }
 
     template <class T>
     size_t dynamic_array_container<T>::
@@ -44,9 +45,11 @@ namespace DSA
     void dynamic_array_container<T>::
         clear()
     {
+        delete[] m_data;
         m_size = 0;
         m_capacity = DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY;
-        m_data.reset(new T[m_capacity]);
+        //m_data.reset(new T[m_capacity]);
+        m_data = new T[m_capacity];
     }
 
     template <class T>
@@ -56,7 +59,9 @@ namespace DSA
         m_capacity = capacity;
         auto new_data = new T[m_capacity];
         std::move(&m_data[0], &m_data[m_size], &new_data[0]);
-        m_data.reset(new_data);
+        // m_data.reset(new_data);
+        delete[] m_data;
+        m_data = new_data;
     }
 
     template <class T>
@@ -66,7 +71,9 @@ namespace DSA
         m_capacity = capacity_of(m_size);
         auto new_data = new T[m_capacity];
         std::move(&m_data[0], &m_data[m_size], &new_data[0]);
-        m_data.reset(new_data);
+        // m_data.reset(new_data);
+        delete[] m_data;
+        m_data = new_data;
     }
 
     template <class T>
@@ -260,7 +267,9 @@ namespace DSA
             m_capacity *= DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR;
             auto new_data = new T[m_capacity];
             std::move(&m_data[0], &m_data[m_size], &new_data[0]);
-            m_data.reset(new_data);
+            //m_data.reset(new_data);
+            delete[] m_data;
+            m_data = new_data;
         }
     }
 
@@ -289,10 +298,12 @@ namespace DSA
         else
         {
             m_capacity *= DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR;
-            auto new_data = std::make_unique<T[]>(m_capacity);
+            auto new_data = new T[m_capacity];
             std::move(&m_data[0], &m_data[index], &new_data[0]);
             std::move(&m_data[index], &m_data[m_size], &new_data[index + 1]);
-            m_data = std::move(new_data);
+            //m_data = std::move(new_data);
+            delete[] m_data;
+            m_data = new_data;
         }
         ++m_size;
     }

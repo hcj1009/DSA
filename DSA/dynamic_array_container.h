@@ -22,8 +22,8 @@ namespace DSA
     {
         typedef std::size_t size_t;
         typedef std::ptrdiff_t ptrdiff_t;
-        typedef std::unique_ptr<T[]> data_ptr;
-        //typedef T* data_ptr;
+        //typedef std::unique_ptr<T[]> data_ptr;
+        typedef T* data_ptr;
     public:
         class iterator;
 
