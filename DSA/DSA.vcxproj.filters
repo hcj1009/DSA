@@ -72,24 +72,6 @@
     <ClInclude Include="dsa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dsa_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dsa_except.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dsa_stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dsa_queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dsa_deque.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dsa_set.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dsa_sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -142,6 +124,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="doubly_linked_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="circular_array_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="circular_array_container_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dsa_exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

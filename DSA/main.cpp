@@ -10,9 +10,9 @@
 using DSA::dynamic_array_container;
 using DSA::utility::timer;
 
-const size_t ITEM_COUNT = 368345;
-//const size_t ITEM_COUNT = 10000;
-const size_t LOOP_COUNT = 10;
+//const size_t ITEM_COUNT = 368345;
+const size_t ITEM_COUNT = 500000;
+const size_t LOOP_COUNT = 1000;
 
 
 void disp_msg(const std::string &msg)
@@ -41,12 +41,12 @@ int main(int argc, char *argv[])
         t.reset();
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_std_vector.insert(test_std_vector.begin(),
+            test_std_vector.insert(test_std_vector.end(),
                 std::to_string(i));
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_std_vector.erase(test_std_vector.begin());
+            test_std_vector.erase(test_std_vector.end() - 1);
         }
         total_std_vector += t.elapsed();
     }
@@ -238,23 +238,23 @@ int main(int argc, char *argv[])
     // N^2 = 7.96s where N = 10000
     disp_msg("DSA::dynamic_array_container<string>");
     dynamic_array_container<string> test_dac;
-    double total_linked_queue = 0;
+    double total_dac = 0;
     test_dac.reserve(ITEM_COUNT);
     for (size_t i = 0; i < LOOP_COUNT; i++)
     {
         t.reset();
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_dac.push_front(std::to_string(i));
+            test_dac.push_back(std::to_string(i));
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_dac.pop_front();
+            test_dac.remove(test_dac.size() - 1);
         }
-        total_linked_queue += t.elapsed();
-        //test_linked_queue.clear();
+        total_dac += t.elapsed();
     }
-    disp_time(total_linked_queue);
+    test_dac.shrink();
+    disp_time(total_dac);
 
     /**/
 

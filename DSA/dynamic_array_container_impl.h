@@ -11,7 +11,9 @@ namespace DSA
         dynamic_array_container()
         : m_size(0)
         , m_capacity (DYNAMIC_ARRAY_CONTAINER_BASE_CAPACITY)
-        , m_data(new T[m_capacity]) {}
+    {
+        m_data = std::make_unique<T[]>(m_capacity);
+    }
 
     template <class T>
     dynamic_array_container<T>::
@@ -69,7 +71,7 @@ namespace DSA
 
     template <class T>
     void dynamic_array_container<T>::
-        push_front(const T &entry)
+        push_front(const T& entry)
     {
         shift_right(0);
         m_data[0] = entry;
@@ -77,15 +79,33 @@ namespace DSA
 
     template <class T>
     void dynamic_array_container<T>::
-        push_back(const T &entry)
+        push_front(T&& entry)
     {
-        ensure_capacity();
+        shift_right(0);
+        m_data[0] = std::move(entry);
+    }
+
+    template <class T>
+    void dynamic_array_container<T>::
+        push_back(const T& entry)
+    {
+        if (m_size == m_capacity)
+            ensure_capacity();
         m_data[m_size++] = entry;
     }
 
     template <class T>
     void dynamic_array_container<T>::
-        insert(const size_t &index, const T &entry)
+        push_back(T&& entry)
+    {
+        if (m_size == m_capacity)
+            ensure_capacity();
+        m_data[m_size++] = std::move(entry);
+    }
+
+    template <class T>
+    void dynamic_array_container<T>::
+        insert(const size_t& index, const T& entry)
     {
         shift_right(index);
         m_data[index] = entry;
@@ -95,7 +115,9 @@ namespace DSA
     T dynamic_array_container<T>::
         pop_front()
     {
-        return remove(0);
+        auto entry = std::move(m_data[0]);
+        remove(0);
+        return entry;
     }
 
     template <class T>
@@ -107,21 +129,19 @@ namespace DSA
     }
 
     template <class T>
-    T dynamic_array_container<T>::
-        remove(const size_t &index)
+    void dynamic_array_container<T>::
+        remove(const size_t& index)
     {
         if (index >= m_size)
         {
             throw index_error("Index out of bounds!");
         }
-        auto entry = std::move(m_data[index]);
-        shift_left(index + 1);
-        return entry;
+        index == m_size - 1 ? --m_size : shift_left(index + 1);
     }
 
     template <class T>
     void dynamic_array_container<T>::
-        remove(const T &entry)
+        remove(const T& entry)
     {
         // Get the index of the given entry.
         // Throw no_such_element exception if the entry does not exist.
@@ -131,7 +151,7 @@ namespace DSA
 
     template <class T>
     T dynamic_array_container<T>::
-        at(const size_t &index) const
+        at(const size_t& index) const
     {
         return m_data[index];
     }
@@ -140,7 +160,7 @@ namespace DSA
     // Throw no_such_element exception when the given entry is not found.
     template <class T>
     inline size_t dynamic_array_container<T>::
-        index_of(const T &entry) const
+        index_of(const T& entry) const
     {
         for (size_t i = 0; i < m_size; ++i)
         {
@@ -154,7 +174,7 @@ namespace DSA
 
     template <class T>
     bool dynamic_array_container<T>::
-        contains(const T &entry) const
+        contains(const T& entry) const
     {
         try
         {
@@ -208,7 +228,7 @@ namespace DSA
     // given size of list.
     template <class T>
     inline size_t dynamic_array_container<T>::
-        capacity_of(const size_t &size) const
+        capacity_of(const size_t& size) const
     {
         // Optimize for default situations.
         size_t new_capacity = 0;
@@ -231,15 +251,15 @@ namespace DSA
         if (m_size == m_capacity)
         {
             m_capacity *= DYNAMIC_ARRAY_CONTAINER_GROWTH_FACTOR;
-            auto new_data = std::make_unique<T[]>(m_capacity);
+            auto new_data = new T[m_capacity];
             std::move(&m_data[0], &m_data[m_size], &new_data[0]);
-            m_data = std::move(new_data);
+            m_data.reset(new_data);
         }
     }
 
     template <class T>
     void dynamic_array_container<T>::
-        shift_left(const size_t &index)
+        shift_left(const size_t& index)
     {
         std::move(&m_data[index], &m_data[m_size], &m_data[index - 1]);
         --m_size;
@@ -247,7 +267,7 @@ namespace DSA
 
     template <class T>
     void dynamic_array_container<T>::
-        shift_right(const size_t &index)
+        shift_right(const size_t& index)
     {
         if (index == m_size)
         {
@@ -388,7 +408,7 @@ namespace DSA
     template <class T>
     typename dynamic_array_container<T>::iterator&
         dynamic_array_container<T>::iterator::
-        operator+=(size_type size)
+        operator+=(size_t size)
     {
         m_iter += size;
         return *this;
@@ -397,7 +417,7 @@ namespace DSA
     template <class T>
     typename dynamic_array_container<T>::iterator
         dynamic_array_container<T>::iterator::
-        operator+(size_type size) const
+        operator+(size_t size) const
     {
         auto old_iter = *this;
         old_iter += size;
@@ -407,7 +427,7 @@ namespace DSA
     template <class T>
     typename dynamic_array_container<T>::iterator&
         dynamic_array_container<T>::iterator::
-        operator-=(size_type size)
+        operator-=(size_t size)
     {
         m_iter -= size;
         return *this;
@@ -416,7 +436,7 @@ namespace DSA
     template <class T>
     typename dynamic_array_container<T>::iterator
         dynamic_array_container<T>::iterator::
-        operator-(size_type size) const
+        operator-(size_t size) const
     {
         auto old_iter = *this;
         old_iter -= size;
@@ -439,7 +459,7 @@ namespace DSA
 
     template <class T>
     T& dynamic_array_container<T>::iterator::
-        operator[](size_type index) const
+        operator[](size_t index) const
     {
 
     }
