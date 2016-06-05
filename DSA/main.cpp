@@ -6,13 +6,15 @@
 #include <iterator>
 #include "std_container.h"
 #include "dynamic_array_container.h"
+#include "circular_array_container.h"
 
 using DSA::dynamic_array_container;
+using DSA::circular_array_container;
 using DSA::utility::timer;
 
 //const size_t ITEM_COUNT = 368345;
-const size_t ITEM_COUNT = 50000;
-const size_t LOOP_COUNT = 1000;
+const size_t ITEM_COUNT = 50;
+const size_t LOOP_COUNT = 10;
 
 
 void disp_msg(const std::string &msg)
@@ -234,9 +236,9 @@ int main(int argc, char *argv[])
 
     /**/
 
-    /* DSA linked_queue */
+    /* DSA dynamic_array_container *
     // N^2 = 7.96s where N = 10000
-    disp_msg("DSA::dynamic_array_container<string>");
+    disp_msg("DSA::dynamic_array_container<std::string>");
     dynamic_array_container<string> test_dac;
     double total_dac = 0;
     test_dac.reserve(ITEM_COUNT);
@@ -253,10 +255,31 @@ int main(int argc, char *argv[])
         }
         total_dac += t.elapsed();
     }
-    test_dac.clear();
-    test_dac.shrink();
     disp_time(total_dac);
+    /**/
 
+    /* DSA dynamic_array_container */
+    disp_msg("DSA::dynamic_array_container<std::string>");
+    circular_array_container<string> test_cac;
+    test_cac.reserve(ITEM_COUNT);
+    double total_cac = 0;
+    for (size_t i = 0; i < LOOP_COUNT; i++)
+    {
+        t.reset();
+        for (size_t i = 0; i < ITEM_COUNT; i++)
+        {
+            test_cac.push_front(std::to_string(i));
+        }
+        /*
+        for (size_t i = 0; i < ITEM_COUNT; i++)
+        {
+            test_cac.pop_back();
+        }
+        */
+        test_cac.clear();
+        total_cac += t.elapsed();
+    }
+    disp_time(total_cac);
     /**/
 
 #ifdef __linux__

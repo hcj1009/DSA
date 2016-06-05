@@ -35,7 +35,7 @@ namespace DSA
 
         // Return if the container is empty.
         // A container is empty when it does not contain any entry.
-        inline bool empty() const;
+        inline virtual bool empty() const;
 
         // Get the number of entries in the container.
         inline virtual size_t size() const;
@@ -43,7 +43,7 @@ namespace DSA
         // Get the capacity of the container.
         // Node that capacity represents how many item the container
         // can hold, not how many item it has.
-        inline size_t capacity() const;
+        inline virtual size_t capacity() const;
 
         // Remove all the entries from the container, and free the memory.
         inline virtual void clear();
@@ -124,6 +124,7 @@ namespace DSA
         virtual inline void shift_right(const size_t& index);
     };
 
+    /**/
     template <class T>
     class dynamic_array_container<T>::iterator
         : public std::iterator<std::random_access_iterator_tag, T>
