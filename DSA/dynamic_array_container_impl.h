@@ -142,7 +142,7 @@ namespace DSA
         }
         else
         {
-            shift_left(index + 1)
+            shift_left(index + 1);
         }
     }
 
