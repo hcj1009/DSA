@@ -270,13 +270,12 @@ int main(int argc, char *argv[])
         {
             test_cac.push_front(std::to_string(i));
         }
-        /*
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
             test_cac.pop_back();
         }
-        */
         test_cac.clear();
+		test_cac.reserve(ITEM_COUNT);
         total_cac += t.elapsed();
     }
     disp_time(total_cac);

@@ -62,6 +62,8 @@ namespace DSA
         // TODO Move data;
         delete[] m_data;
         m_data = new_data;
+		m_front = &m_data[0];
+		m_back = m_front;
     }
 
     template <class T>
@@ -83,7 +85,7 @@ namespace DSA
         if (m_size == m_capacity)
             ensure_capacity();
         *dec_ptr(m_front) = entry;
-        --m_size;
+        ++m_size;
     }
 
     template <class T>
@@ -92,8 +94,8 @@ namespace DSA
     {
         if (m_size == m_capacity)
             ensure_capacity();
-        *dec_ptr(m_front) = std::move(entry);
-        --m_size;
+		*dec_ptr(m_front) = std::move(entry);
+        ++m_size;
     }
 
     template <class T>
@@ -295,7 +297,7 @@ namespace DSA
         {
             ptr = &m_data[0];
         }
-        return ptr;
+		return ptr;
     }
 
     template <class T>
@@ -310,7 +312,7 @@ namespace DSA
         {
             ptr = &m_data[m_capacity - 1];
         }
-        return ptr;
+		return ptr;
     }
 
     template <class T>
@@ -360,7 +362,129 @@ namespace DSA
 //                                  Iterator
 //----------------------------------------------------------------------------
 
+	template <class T>
+	circular_array_container<T>::iterator::
+		iterator(circular_array_container<T>& container)
+		: m_container(container), m_iter(m_container.m_front) {}
 
+	template <class T>
+	circular_array_container<T>::iterator::
+		iterator(const iterator& iter)
+		: m_container(iter.m_container), m_iter(iter.m_iter) {}
+	
+	template <class T>
+	circular_array_container<T>::iterator::
+		~iterator() {}
+
+	template <class T>
+	typename circular_array_container<T>::iterator&
+		circular_array_container<T>::iterator::
+		operator=(const iterator& rhs)
+	{
+		m_container = rhs.m_container;
+		m_iter = rhs.m_iter;
+		return *this;
+	}
+
+	template <class T>
+	bool circular_array_container<T>::iterator::
+		operator==(const iterator& rhs) const
+	{
+		return (m_iter == rhs.m_iter);
+	}
+
+	template <class T>
+	bool circular_array_container<T>::iterator::
+		operator!=(const iterator& rhs) const
+	{
+		return (m_iter != rhs.m_iter);
+	}
+
+	template <class T>
+	bool circular_array_container<T>::iterator::
+		operator<(const iterator& rhs) const
+	{
+		return (m_iter < rhs.m_iter);
+	}
+
+	template <class T>
+	bool circular_array_container<T>::iterator::
+		operator>(const iterator& rhs) const
+	{
+		return (m_iter > rhs.m_iter);
+	}
+
+	template <class T>
+	bool circular_array_container<T>::iterator::
+		operator<=(const iterator& rhs) const
+	{
+		return (m_iter <= rhs.m_iter);
+	}
+
+	template <class T>
+	bool circular_array_container<T>::iterator::
+		operator>=(const iterator& rhs) const
+	{
+		return (m_iter >= rhs.m_iter);
+	}
+
+	template <class T>
+	typename circular_array_container<T>::iterator&
+		circular_array_container<T>::iterator::
+		operator++()
+	{
+		if ((m_container.m_back + 1) != ptr)
+		{
+			if (&m_container.m_data[m_container.m_capacity - 1] != ptr)
+			{
+				++ptr;
+			}
+			else
+			{
+				ptr = &m_container.m_data[0];
+			}
+		}
+		return *this;
+	}
+
+	template <class T>
+	typename circular_array_container<T>::iterator
+		circular_array_container<T>::iterator::
+		operator++(int)
+	{
+		iterator old_iter(*this);
+		++*this;
+		return old_iter;
+	}
+
+	template <class T>
+	typename circular_array_container<T>::iterator&
+		circular_array_container<T>::iterator::
+		operator--()
+	{
+		if (m_container.m_front != ptr)
+		{
+			if (&m_container.m_data[0] != ptr)
+			{
+				--ptr;
+			}
+			else
+			{
+				ptr = &m_container.m_data[];
+			}
+		}
+		return *this;
+	}
+
+	template <class T>
+	typename circular_array_container<T>::iterator
+		circular_array_container<T>::iterator::
+		operator--(int)
+	{
+		iterator old_iter(*this);
+		--*this;
+		return old_iter;
+	}
 }
 
 #endif

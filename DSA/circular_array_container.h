@@ -104,15 +104,15 @@ namespace DSA
         size_t m_size;
         size_t m_capacity;
 
-        inline data_ptr inc_ptr(data_ptr ptr);
-        inline data_ptr dec_ptr(data_ptr ptr);
+        inline T* inc_ptr(data_ptr ptr);
+        inline T* dec_ptr(data_ptr ptr);
         inline size_t capacity_of(const size_t& size) const noexcept;
         inline virtual void ensure_capacity();
         inline virtual void shift_left(data_ptr begin, data_ptr end);
         inline virtual void shift_right(data_ptr begin, data_ptr end);
     };
 
-    /**
+    /**/
     template <class T>
     class circular_array_container<T>::iterator
         : public std::iterator<std::random_access_iterator_tag, T>
