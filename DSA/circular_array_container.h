@@ -98,18 +98,22 @@ namespace DSA
         inline virtual T* to_array() const;
 
     protected:
+        float GROWTH_FACTOR_LOG = log(CIRCULAR_ARRAY_CONTAINER_GROWTH_FACTOR);
+
         data_ptr m_data;
-        data_ptr m_front;
-        data_ptr m_back;
+        size_t m_front;
+        size_t m_back;
         size_t m_size;
         size_t m_capacity;
 
-        inline T* inc_ptr(data_ptr ptr);
-        inline T* dec_ptr(data_ptr ptr);
+        inline void inc_index(size_t& index);
+        inline void inc_index(size_t& index, const size_t& increment);
+        inline void dec_index(size_t& index);
+        inline void dec_index(size_t& index, const size_t& decrement);
         inline size_t capacity_of(const size_t& size) const noexcept;
         inline virtual void ensure_capacity();
-        inline virtual void shift_left(data_ptr begin, data_ptr end);
-        inline virtual void shift_right(data_ptr begin, data_ptr end);
+        inline virtual void shift_left(const size_t& index);
+        inline virtual void shift_right(const size_t& index);
     };
 
     /**/

@@ -286,33 +286,40 @@ namespace DSA
 //----------------------------------------------------------------------------
 
     template <class T>
-    T* circular_array_container<T>::
-        inc_ptr(data_ptr ptr)
+    void circular_array_container<T>::
+        inc_index(size_t& index)
     {
-        if (&m_data[m_capacity - 1] != ptr)
-        {
-            ++ptr;
-        }
-        else
-        {
-            ptr = &m_data[0];
-        }
-		return ptr;
+        ++index;
+        index %= m_capacity;
     }
 
+
     template <class T>
-    T* circular_array_container<T>::
-        dec_ptr(data_ptr ptr)
+    void circular_array_container<T>::
+        inc_index(size_t& index, const size_t& increment)
     {
-        if (&m_data[0] != ptr)
-        {
-            --ptr;
-        }
-        else
-        {
-            ptr = &m_data[m_capacity - 1];
-        }
-		return ptr;
+        index += increment;
+        index %= m_capacity;
+    }
+
+
+    template <class T>
+    void circular_array_container<T>::
+        decc_index(size_t& index)
+    {
+        --index;
+        if (index < 0)
+            index = m_capacity + index;
+    }
+
+
+    template <class T>
+    void circular_array_container<T>::
+        dec_index(size_t& index, const size_t& decrement)
+    {
+        index -= decrement;
+        while (index < 0)
+            index = m_capacity + index;
     }
 
     template <class T>
@@ -346,14 +353,14 @@ namespace DSA
 
     template <class T>
     void circular_array_container<T>::
-        shift_left(data_ptr begin, data_ptr end)
+        shift_left(const size_t& index)
     {
 
     }
 
     template <class T>
     void circular_array_container<T>::
-        shift_right(data_ptr begin, data_ptr end)
+        shift_right(const size_t& index)
     {
 
     }
