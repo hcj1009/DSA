@@ -258,8 +258,8 @@ int main(int argc, char *argv[])
     disp_time(total_dac);
     /**/
 
-    /* DSA dynamic_array_container */
-    disp_msg("DSA::dynamic_array_container<std::string>");
+    /* DSA circular_array_container */
+    disp_msg("DSA::circular_array_container<std::string>");
     circular_array_container<string> test_cac;
     test_cac.reserve(ITEM_COUNT);
     double total_cac = 0;
@@ -268,17 +268,32 @@ int main(int argc, char *argv[])
         t.reset();
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_cac.push_front(std::to_string(i));
+            test_cac.push_back(std::to_string(i));
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
             test_cac.pop_back();
         }
+        total_cac += t.elapsed();
         test_cac.clear();
 		test_cac.reserve(ITEM_COUNT);
-        total_cac += t.elapsed();
     }
     disp_time(total_cac);
+
+
+    for (size_t i = 0; i < LOOP_COUNT; ++i)
+    {
+        test_cac.push_front(std::to_string(i));
+    }
+    for (size_t i = 0; i < LOOP_COUNT; ++i)
+    {
+        // test_cac.push_back(std::to_string(i));
+    }
+    std::string* array = test_cac.to_array();
+    for (size_t i = 0; i < LOOP_COUNT; ++i)
+    {
+        std::cout << array[i] << std::endl;
+    }
     /**/
 
 #ifdef __linux__

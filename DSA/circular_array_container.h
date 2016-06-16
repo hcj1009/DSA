@@ -1,10 +1,11 @@
 #ifndef CIRCULAR_ARRAY_CONTAINER_H
 #define CIRCULAR_ARRAY_CONTAINER_H
 
+#include <cmath>
 #include "dsa_exception.h"
 #include "adt_sequence_container.h"
 
-#ifndef CIRCULAR_ARRAY_CONTAINER_BASE_CAPACITY
+#ifndef CIRCULAR_ARRAY_CONTAINER_BASE_CAPACI
 #define CIRCULAR_ARRAY_CONTAINER_BASE_CAPACITY 10
 #endif
 #ifndef CIRCULAR_ARRAY_CONTAINER_GROWTH_FACTOR
@@ -18,6 +19,7 @@ namespace DSA
         : virtual public adt_sequence_container<T>
     {
         typedef std::size_t size_t;
+        typedef std::ptrdiff_t ptrdiff_t;
         typedef T* data_ptr;
     public:
         class iterator;
@@ -106,14 +108,34 @@ namespace DSA
         size_t m_size;
         size_t m_capacity;
 
-        inline void inc_index(size_t& index);
-        inline void inc_index(size_t& index, const size_t& increment);
-        inline void dec_index(size_t& index);
-        inline void dec_index(size_t& index, const size_t& decrement);
+        // Increase the index by a given increment (return a copy).
+        inline size_t index_inc(const size_t& index,
+                const size_t& inc = 1) const;
+
+        // Increase the index by a given increment (self increment).
+        inline size_t index_self_inc(size_t& index,
+                const size_t& inc = 1);
+
+        // Decrease the index by a given decrement (return a copy);
+        inline size_t index_dec(const size_t& index,
+                const size_t& dec = 1) const;
+
+        // Decrease the index by a given decrement (self decrement).
+        inline size_t index_self_dec(size_t& index,
+                const size_t& dec = 1);
+
+        inline bool index_gt(const size_t& index1, const size_t& index2);
+
+        // Return the distance between two indexes.
+        inline size_t distance(const size_t& index1, const size_t& index2);
+
         inline size_t capacity_of(const size_t& size) const noexcept;
         inline virtual void ensure_capacity();
-        inline virtual void shift_left(const size_t& index);
-        inline virtual void shift_right(const size_t& index);
+        inline virtual void ensure_capacity(const size_t& size);
+        inline virtual void shift_left(const size_t& index, 
+                const size_t& dis = 1);
+        inline virtual void shift_right(const size_t& index,
+                const size_t& dis = 1);
     };
 
     /**/
@@ -144,7 +166,7 @@ namespace DSA
         T* operator->() const;
         T& operator[](size_t index) const;
     private:
-        T* m_iter;
+        T* m_ptr;
         circular_array_container<T>& m_container;
     };
     /**/
