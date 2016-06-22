@@ -13,8 +13,8 @@ using DSA::circular_array_container;
 using DSA::utility::timer;
 
 //const size_t ITEM_COUNT = 368345;
-const size_t ITEM_COUNT = 50000;
-const size_t LOOP_COUNT = 10;
+const size_t ITEM_COUNT = 10000;
+const size_t LOOP_COUNT = 100;
 
 
 void disp_msg(const std::string &msg)
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_std_vector.erase(test_std_vector.end() - 1);
+            test_std_vector.erase(test_std_vector.end());
         }
         total_std_vector += t.elapsed();
     }
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     disp_time(total_std_vector);
     /**/
 
-    /* STL std::list *
+    /* STL std::list */
     disp_msg("std::list<std::string>");
     std::list<std::string> test_std_list;
     double total_std_list = 0;
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_std_list.pop_front();
+            test_std_list.pop_back();
         }
         total_std_list += t.elapsed();
     }
@@ -279,6 +279,30 @@ int main(int argc, char *argv[])
 		test_cac.reserve(ITEM_COUNT);
     }
     disp_time(total_cac);
+    /**/
+
+
+    /* DSA circular_array_container */
+    disp_msg("DSA::circular_array_container<std::string> (Front)");
+    circular_array_container<string> test_cac2;
+    test_cac2.reserve(ITEM_COUNT);
+    double total_cac2 = 0;
+    for (size_t i = 0; i < LOOP_COUNT; i++)
+    {
+        t.reset();
+        for (size_t i = 0; i < ITEM_COUNT; i++)
+        {
+            test_cac2.push_front(std::to_string(i));
+        }
+        for (size_t i = 0; i < ITEM_COUNT; i++)
+        {
+            test_cac2.pop_front();
+        }
+        total_cac2 += t.elapsed();
+        test_cac2.clear();
+		test_cac2.reserve(ITEM_COUNT);
+    }
+    disp_time(total_cac2);
     /**/
 
 #ifdef __linux__
