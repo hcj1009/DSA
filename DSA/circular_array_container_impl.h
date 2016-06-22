@@ -222,7 +222,18 @@ namespace DSA
         {
             throw index_error("Index out of bounds");
         }
-        shift_left(index + 1);
+		if (0 == index)
+		{
+			index_self_inc(m_front);
+		}
+		else if (m_size - 1 == index)
+		{
+			index_self_dec(m_back);
+		}
+		else
+		{
+			shift_left(index + 1);
+		}
         --m_size;
     }
 
@@ -316,7 +327,10 @@ namespace DSA
     size_t circular_array_container<T>::
         index_inc(const size_t& index, const size_t& inc) const
     {
-        return (index + inc) % m_capacity;
+		auto new_index = index + inc;
+		if (new_index >= m_capacity)
+			new_index %= m_capacity;
+		return new_index;
     }
     
     template <class T>
@@ -324,7 +338,8 @@ namespace DSA
         index_self_inc(size_t& index, const size_t& inc)
     {
 		index += inc;
-        index %= m_capacity;
+		if (index >= m_capacity)
+			index %= m_capacity;
         return index;
     }
 

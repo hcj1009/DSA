@@ -13,9 +13,21 @@ using DSA::circular_array_container;
 using DSA::utility::timer;
 
 //const size_t ITEM_COUNT = 368345;
-const size_t ITEM_COUNT = 10000;
+const size_t ITEM_COUNT = 50000;
 const size_t LOOP_COUNT = 100;
 
+#define DSA_TEST_PAUSE
+void pause()
+{
+#ifdef DSA_TEST_PAUSE
+#ifdef __linux__
+	std::cout << "Press enter to continue...";
+	std::cin.get();
+#elif _WIN32
+	system("pause");
+#endif
+#endif
+}
 
 void disp_msg(const std::string &msg)
 {
@@ -48,15 +60,16 @@ int main(int argc, char *argv[])
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_std_vector.erase(test_std_vector.end());
+            test_std_vector.erase(test_std_vector.end() - 1);
         }
         total_std_vector += t.elapsed();
     }
-    test_std_vector.shrink_to_fit();
     disp_time(total_std_vector);
+	pause();
+	test_std_vector.shrink_to_fit();
     /**/
 
-    /* STL std::list */
+    /* STL std::list *
     disp_msg("std::list<std::string>");
     std::list<std::string> test_std_list;
     double total_std_list = 0;
@@ -73,7 +86,9 @@ int main(int argc, char *argv[])
         }
         total_std_list += t.elapsed();
     }
+	test_std_list.clear();
     disp_time(total_std_list);
+	pause();
     /**/
 
     /** DSA array_list *
@@ -94,6 +109,7 @@ int main(int argc, char *argv[])
         total_array_list += t.elapsed();
     }
     disp_time(total_array_list);
+	pause();
     /**/
 
     /** DSA s_linked_list *
@@ -114,6 +130,7 @@ int main(int argc, char *argv[])
         total_linked_list += t.elapsed();
     }
     disp_time(total_linked_list);
+	pause();
     /**/
 
     /** std::stack *
@@ -134,6 +151,8 @@ int main(int argc, char *argv[])
         total_std_stack += t.elapsed();
     }
     disp_time(total_std_stack);
+	pause();
+	/**/
 
     /* DSA array_stack *
     disp_msg("DSA::array_stack<string>");
@@ -153,6 +172,7 @@ int main(int argc, char *argv[])
         total_array_stack += t.elapsed();
     }
     disp_time(total_array_stack);
+	pause();
     /**/
 
     /* DSA linked_stack *
@@ -173,6 +193,7 @@ int main(int argc, char *argv[])
         total_linked_stack += t.elapsed();
     }
     disp_time(total_linked_stack);
+	pause();
     /**/
 
     /* STL std::queue *
@@ -193,6 +214,7 @@ int main(int argc, char *argv[])
         total_std_queue += t.elapsed();
     }
     disp_time(total_std_queue);
+	pause();
     /**/
 
     /* DSA array_queue *
@@ -213,6 +235,7 @@ int main(int argc, char *argv[])
         total_array_queue += t.elapsed();
     }
     disp_time(total_array_queue);
+	pause();
     /**/
 
     /* DSA linked_queue *
@@ -233,7 +256,7 @@ int main(int argc, char *argv[])
         total_linked_queue += t.elapsed();
     }
     disp_time(total_linked_queue);
-
+	pause();
     /**/
 
     /* DSA dynamic_array_container *
@@ -256,6 +279,8 @@ int main(int argc, char *argv[])
         total_dac += t.elapsed();
     }
     disp_time(total_dac);
+	pause();
+	test_dac.clear();
     /**/
 
     /* DSA circular_array_container */
@@ -272,13 +297,13 @@ int main(int argc, char *argv[])
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_cac.pop_back();
+            test_cac.remove(test_cac.size() - 1);
         }
         total_cac += t.elapsed();
-        test_cac.clear();
-		test_cac.reserve(ITEM_COUNT);
     }
     disp_time(total_cac);
+	pause();
+	test_cac.clear();
     /**/
 
 
@@ -296,20 +321,14 @@ int main(int argc, char *argv[])
         }
         for (size_t i = 0; i < ITEM_COUNT; i++)
         {
-            test_cac2.pop_front();
+			test_cac2.remove(test_cac2.size() - 1);
         }
         total_cac2 += t.elapsed();
-        test_cac2.clear();
-		test_cac2.reserve(ITEM_COUNT);
     }
     disp_time(total_cac2);
+	pause();
+	test_cac2.clear();
     /**/
 
-#ifdef __linux__
-    std::cout << "Press enter to continue...";
-    std::cin.get();
-#elif _WIN32
-    system("pause");
-#endif
     return 0;
 }
