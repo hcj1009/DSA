@@ -61,6 +61,7 @@ namespace DSA
 
         // Insert a given entry to a given place in the container.
         inline virtual void insert(const size_t& index, const T& entry);
+		inline virtual void insert(const size_t& index, T&& entry);
 
         // Remove and return the object at the front of the container.
         inline virtual T pop_front();

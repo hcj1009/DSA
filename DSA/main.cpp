@@ -280,17 +280,21 @@ int main(int argc, char *argv[])
     }
     disp_time(total_cac);
 
-
-    for (size_t i = 0; i < LOOP_COUNT; ++i)
+	test_cac.shrink();
+    for (auto i = 9; i >= 0; --i)
     {
         test_cac.push_front(std::to_string(i));
     }
-    for (size_t i = 0; i < LOOP_COUNT; ++i)
+    for (auto i = 20; i <= 29; ++i)
     {
         test_cac.push_back(std::to_string(i));
     }
+	for (auto i = 19; i >= 10; --i)
+	{
+		test_cac.insert(10, std::to_string(i));
+	}
     std::string* array = test_cac.to_array();
-    for (size_t i = 0; i < LOOP_COUNT * 2; ++i)
+    for (size_t i = 0; i < test_cac.size(); ++i)
     {
         std::cout << array[i] << std::endl;
     }

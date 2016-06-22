@@ -148,10 +148,34 @@ namespace DSA
         else
         {
             shift_right(index);
-            m_data[index] = entry;
+            m_data[index_inc(m_front, index)] = entry;
             ++m_size;
         }
     }
+
+	template <class T>
+	void circular_array_container<T>::
+		insert(const size_t& index, T&& entry)
+	{
+		if (index > m_size)
+		{
+			throw index_error("Index out of bounds");
+		}
+		if (0 == index)
+		{
+			push_front(std::move(entry));
+		}
+		else if (m_size == index)
+		{
+			push_back(std::move(entry));
+		}
+		else
+		{
+			shift_right(index);
+			m_data[index_inc(m_front, index)] = std::move(entry);
+			++m_size;
+		}
+	}
 
     template <class T>
     T circular_array_container<T>::
@@ -276,7 +300,7 @@ namespace DSA
         auto dest_index = 0;
         while (dest_index < m_size)
         {
-            entries[src_index] = m_data[dest_index];
+            entries[dest_index] = m_data[src_index];
             ++dest_index;
             ++src_index;
             src_index %= m_capacity;
@@ -299,7 +323,8 @@ namespace DSA
     size_t circular_array_container<T>::
         index_self_inc(size_t& index, const size_t& inc)
     {
-        index += inc %= m_capapcity;
+		index += inc;
+        index %= m_capacity;
         return index;
     }
 
@@ -308,8 +333,8 @@ namespace DSA
         index_dec(const size_t& index, const size_t& dec) const
     {
         // TODO Fix the case when (dec - new_index) % m_capacity == 0;
-        auto new_index = new_index >= dec ? index - dec 
-            : m_capacity - (dec - new_index) % m_capacity;
+        auto new_index = index >= dec ? index - dec 
+            : m_capacity - (dec - index) % m_capacity;
         return new_index;
     }
 
@@ -366,6 +391,8 @@ namespace DSA
         }
         delete[] m_data;
         m_data = new_data;
+		m_front = 0;
+		m_back = m_size - 1;
     }
 
     template <class T>
@@ -381,6 +408,8 @@ namespace DSA
         }
         delete[] m_data;
         m_data = new_data;
+		m_front = 0;
+		m_back = m_size - 1;
     }
 
     template <class T>
@@ -397,12 +426,13 @@ namespace DSA
         {
             ensure_capacity(m_size + dis);
         }
+		auto r_index = index_inc(m_front, index);
         size_t dest_index, src_index;
-        if (m_size / 2 < index)
+        if (m_size / 2 > index)
         {
             dest_index = index_dec(m_front, dis);
             src_index = m_front;
-            while (src_index != index)
+            while (src_index != r_index)
             {
                 m_data[dest_index] = std::move(m_data[src_index]);
                 index_self_inc(dest_index);
@@ -414,7 +444,7 @@ namespace DSA
         {
             dest_index = index_inc(m_back, dis);
             src_index = m_back;
-            while (src_index != index + 1)
+            while (src_index != index_dec(r_index))
             {
                 m_data[dest_index] = std::move(m_data[src_index]);
                 index_self_dec(dest_index);
