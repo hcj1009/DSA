@@ -13,7 +13,7 @@ using DSA::circular_array_container;
 using DSA::utility::timer;
 
 //const size_t ITEM_COUNT = 368345;
-const size_t ITEM_COUNT = 50;
+const size_t ITEM_COUNT = 50000;
 const size_t LOOP_COUNT = 10;
 
 
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 {
     timer t;
 
-    /* STL std::vector *
+    /* STL std::vector */
     disp_msg("std::vector<std::string>");
     std::vector<std::string> test_std_vector;
     test_std_vector.reserve(ITEM_COUNT);
@@ -279,25 +279,6 @@ int main(int argc, char *argv[])
 		test_cac.reserve(ITEM_COUNT);
     }
     disp_time(total_cac);
-
-	test_cac.shrink();
-    for (auto i = 9; i >= 0; --i)
-    {
-        test_cac.push_front(std::to_string(i));
-    }
-    for (auto i = 20; i <= 29; ++i)
-    {
-        test_cac.push_back(std::to_string(i));
-    }
-	for (auto i = 19; i >= 10; --i)
-	{
-		test_cac.insert(10, std::to_string(i));
-	}
-    std::string* array = test_cac.to_array();
-    for (size_t i = 0; i < test_cac.size(); ++i)
-    {
-        std::cout << array[i] << std::endl;
-    }
     /**/
 
 #ifdef __linux__
