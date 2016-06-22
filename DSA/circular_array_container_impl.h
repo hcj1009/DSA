@@ -299,8 +299,7 @@ namespace DSA
     size_t circular_array_container<T>::
         index_self_inc(size_t& index, const size_t& inc)
     {
-        index += inc;
-        index %= m_capacity;
+        index += inc %= m_capapcity;
         return index;
     }
 
@@ -308,22 +307,24 @@ namespace DSA
     size_t circular_array_container<T>::
         index_dec(const size_t& index, const size_t& dec) const
     {
-        ptrdiff_t new_index = (ptrdiff_t)index;
-        new_index -= dec;
-        while (new_index < 0)
-            new_index += m_capacity;
-        return (size_t)new_index;
+        // TODO Fix the case when (dec - new_index) % m_capacity == 0;
+        auto new_index = new_index >= dec ? index - dec 
+            : m_capacity - (dec - new_index) % m_capacity;
+        return new_index;
     }
 
     template <class T>
     size_t circular_array_container<T>::
         index_self_dec(size_t& index, const size_t& dec)
     {
-        ptrdiff_t new_index = (ptrdiff_t)index;
-        new_index -= dec;
-        while (new_index < 0)
-            new_index += m_capacity;
-        index = (size_t)new_index;
+        if (index >= dec)
+        {
+            index -= dec;
+        }
+        else
+        {
+            index = m_capacity - (dec - index) % m_capacity;
+        }
         return index;
     }
 

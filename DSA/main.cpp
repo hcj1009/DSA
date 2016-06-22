@@ -287,10 +287,10 @@ int main(int argc, char *argv[])
     }
     for (size_t i = 0; i < LOOP_COUNT; ++i)
     {
-        // test_cac.push_back(std::to_string(i));
+        test_cac.push_back(std::to_string(i));
     }
     std::string* array = test_cac.to_array();
-    for (size_t i = 0; i < LOOP_COUNT; ++i)
+    for (size_t i = 0; i < LOOP_COUNT * 2; ++i)
     {
         std::cout << array[i] << std::endl;
     }
